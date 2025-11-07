@@ -1,0 +1,15 @@
+{
+  "name": "hostelcare",
+  "version": "1.0.0",
+  "description": "Hostel Facility Management System",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && node server.js",
+    "client": "cd client && npm start"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
+
