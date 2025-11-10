@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/firebase';
-import './Login.css';
+import './LoginAdmin.css';
 import logo from '../../assets/logo.png';
+import user from '../../assets/admin.png';
 
-export default function Login() {
+export default function LoginAdmin() {
 	const navigate = useNavigate();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -31,8 +32,8 @@ export default function Login() {
 				const idToken = await userCred.user.getIdToken();
 				// store token locally (optional)
 				localStorage.setItem('token', idToken);
-				// navigate to student dashboard
-				navigate('/student/dashboard');
+				// navigate to admin dashboard
+				navigate('/admin/dashboard');
 			} catch (err) {
 				// Firebase auth errors often have a code and message
 				const msg = (err && err.message) ? err.message : 'Login failed';
@@ -52,10 +53,10 @@ export default function Login() {
 
 			<div className="hc-right">
 				<div className="hc-form-card">
-					<h1 className="hc-title">Student Login Page</h1>
+					<h1 className="hc-title">Admin Login Page</h1>
 
 					<form onSubmit={handleSubmit} className="hc-form">
-						<label className="hc-label">STUDENT EMAIL</label>
+						<label className="hc-label">STAFF EMAIL</label>
 						<input
 							className="hc-input"
 							type="email"
@@ -84,7 +85,7 @@ export default function Login() {
 
 					<div className="hc-links">
 						<p>Don't have an account? <a href="/auth/register">Sign Up</a></p>
-						<p><a href="/auth/admin-login">Login As Admin</a></p>
+						<p><a href="/auth/login">Login As Student</a></p>
 					</div>
 				</div>
 			</div>
