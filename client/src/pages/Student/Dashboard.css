@@ -1,0 +1,193 @@
+/* Styles for Student Dashboard */
+.container {
+  padding: 24px;
+  font-family: Inter, Arial, sans-serif;
+  background: #F9FAFB;
+}
+
+/* Remove the top padding for the dashboard page so the full-bleed topbar sits flush */
+.student-dashboard.container { padding-top: 0; }
+
+/* hide any global header if present in the app so dashboard appears without top logo/name */
+.app-header, .topbar, .navbar, header.app-header { display: none !important; }
+
+.dashboard-topbar {
+  /* make topbar span the full viewport width (bleed to edges) */
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0; /* ensure no top gap */
+  margin-bottom: 26px;
+  gap: 18px;
+  padding: 14px 40px; /* larger horizontal padding so content isn't flush to viewport */
+  background: #fff;
+  border-radius: 0; /* full-bleed usually has no corner radius */
+  box-shadow: 0 2px 8px rgba(16,24,40,0.04);
+  min-height: 84px;
+}
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.login-name { font-size: 16px; font-weight: 600; color: #0f172a; margin: 0 8px; }
+.topbar-logo { width: 64px; height: 64px; object-fit: contain; }
+.topbar-title { display: flex; flex-direction: column; }
+.topbar-title .app-name { font-size: 24px; font-weight: 700; color: #0f172a; }
+.topbar-title .app-sub { font-size: 14px; color: #6b7280; margin-top: 4px; }
+
+.user-wrap { position: relative; }
+.user-avatar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  background: transparent; /* remove purple gradient */
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+.avatar-initial { color: #374151; font-weight: 700; }
+.avatar-initial { color: #fff; font-weight: 700; }
+.avatar-caret {
+  font-size: 16px;
+  color: #6b7280;
+  opacity: 0.95;
+  margin-left: 8px; /* ensure caret is to the right of the image */
+}
+.avatar-image { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; display: block; }
+.user-menu {
+  position: absolute;
+  right: 0;
+  top: 56px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(16,24,40,0.12);
+  z-index: 30;
+  min-width: 160px;
+  overflow: hidden;
+}
+.user-menu .menu-item {
+  display: block;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.user-menu .menu-item:hover { background: #f9fafb; }
+
+.page-title {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #1f2937;
+}
+
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 18px;
+  flex: 1;
+  box-shadow: 0 1px 2px rgba(16,24,40,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.stat-value.green { color: #16a34a; }
+.stat-value.orange { color: #ea580c; }
+
+.stat-badge {
+  align-self: flex-end;
+  background: #eef2ff;
+  color: #4f46e5;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.stat-badge.done { background: #ecfdf5; color: #16a34a; }
+.stat-badge.active { background: #fff7ed; color: #f97316; }
+
+.cta-banner {
+  background: #5b21b6; /* purple */
+  color: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.cta-text h3 { margin: 0 0 6px 0; }
+.cta-text p { margin: 0; opacity: 0.95; }
+
+.btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary { background: #fff; color: black; }
+.btn-primary.outline { background: #7c3aed; color: #fff; }
+.btn-ghost { background: #fff; color: #374151; border: 1px solid #e5e7eb; }
+.btn-feedback { background: black; color: #fff; }
+
+.section-title {
+  margin: 12px 0 10px 0;
+  font-size: 16px;
+}
+
+.complaint-list { display: flex; flex-direction: column; gap: 12px; }
+
+.complaint-card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(16,24,40,0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.complaint-main { display: flex; flex-direction: column; }
+.complaint-title { font-weight: 600; color: #111827; }
+.complaint-id { color: #6b7280; font-size: 13px; margin-top: 6px; }
+
+.complaint-actions { display: flex; gap: 10px; align-items: center; }
+.pill { padding: 6px 10px; border-radius: 12px; font-size: 13px; }
+.status-pending { background: #fff7ed; color: #c2410c; }
+.status-resolved { background: #ecfdf5; color: #166534; }
+
+/* Responsive */
+@media (max-width: 800px) {
+  .stats-row { flex-direction: column; }
+  .cta-banner { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .login-name { display: none; }
+}

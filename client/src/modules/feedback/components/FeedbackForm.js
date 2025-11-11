@@ -1,0 +1,137 @@
+import React, { useState } from 'react';
+import './FeedbackForm.css';
+
+const StarRating = ({ rating, setRating }) => {
+  return (
+    <div className="star-rating">
+      {[...Array(5)].map((_, index) => {
+        const ratingValue = index + 1;
+        return (
+          <button
+            type="button"
+            key={ratingValue}
+            className={`star-button ${ratingValue <= rating ? 'filled' : ''}`}
+            onClick={() => setRating(ratingValue)}
+            aria-label={`${ratingValue} star`}
+          >
+            &#9733; {/* This is a star character */}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+export default function FeedbackModal({ open, onClose, complaintId }) {
+  const [satisfaction, setSatisfaction] = useState(0);
+  const [professionalism, setProfessionalism] = useState(0);
+  const [effectiveness, setEffectiveness] = useState(0);
+  const [easeOfUse, setEaseOfUse] = useState(0);
+  const [comments, setComments] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  if (!open) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    if (!satisfaction || !professionalism || !effectiveness || !easeOfUse) {
+      setError('Please fill required star rating fields.');
+      return;
+    };
+    setLoading(true);
+
+    const feedbackData = {
+      complaintId,
+      satisfaction,
+      professionalism,
+      effectiveness,
+      easeOfUse,
+      comments,
+    };
+    
+    try {
+    console.log('Submitting feedback:', feedbackData);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    console.log('Feedback submitted successfully!');
+    handleClose();
+  } catch (apiError) {
+    console.error('Failed to submit feedback:', apiError);
+      setError(apiError.message || 'An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setSatisfaction(0);
+    setProfessionalism(0);
+    setEffectiveness(0);
+    setEaseOfUse(0);
+    setComments('');
+    setError(null);
+    setLoading(false);
+    onClose(); // Call the original onClose prop from Dashboard
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content feedback-modal">
+        {/* Use handleClose to reset state */}
+        <button className="modal-close-btn" onClick={handleClose} aria-label="Close modal">
+          &times;
+        </button>
+        
+        <h2 className="modal-title">Feedback & Rating</h2>
+        
+        <form onSubmit={handleSubmit} className="feedback-form">
+          {/* ... (Your form-group divs for stars go here) ... */}
+          
+          <div className="form-group">
+            <label>How satisfied are you with the maintenance service provided? *</label>
+            <StarRating rating={satisfaction} setRating={setSatisfaction} />
+          </div>
+          <div className="form-group">
+            <label>How would you rate the staff&#39;s professionalism and communication? *</label>
+            <StarRating rating={professionalism} setRating={setProfessionalism} />
+          </div>
+          <div className="form-group">
+            <label>How effective was the resolution of your complaint? *</label>
+            <StarRating rating={effectiveness} setRating={setEffectiveness} />
+          </div>
+          <div className="form-group">
+            <label>How easy was it to use the HostelCare system to submit your complaint? *</label>
+            <StarRating rating={easeOfUse} setRating={setEaseOfUse} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="feedback-comments">
+              Tell us more about your experience or any suggestions for improvement
+            </label>
+            <textarea
+              id="feedback-comments"
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}
+              placeholder="e.g., The staff fixed the issue quickly and was very polite."
+              rows="4"
+            />
+          </div>
+
+          {/* --- ADDED ---: Display the error message */}
+          {error && <div className="form-error-message">{error}</div>}
+
+          <div className="modal-actions">
+            {/* Disable buttons while loading */}
+            <button type="button" className="btn btn-secondary" onClick={handleClose} disabled={loading}>
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {/* Show loading text */}
+              {loading ? 'Submitting...' : 'Submit'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
