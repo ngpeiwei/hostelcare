@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/firebase';
-import './Login.css';
-import logo from '../../assets/logo.png';
+import './LoginStudent.css';
+import logoImage from '../../assets/logo.png';
 
 
 export default function Login() {
@@ -47,7 +47,7 @@ export default function Login() {
 		<div className="hc-login-root">
 			<div className="hc-left">
 				<div className="hc-logo-wrap">
-					<img src={logo} alt="HostelCare logo" className="hc-logo" />
+					<img src={logoImage} alt="HostelCare logo" className="hc-logo" />
 				</div>
 			</div>
 

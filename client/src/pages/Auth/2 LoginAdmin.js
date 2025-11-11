@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/firebase';
 import './LoginAdmin.css';
-import logo from '../../assets/logo.png';
-import user from '../../assets/admin.png';
+import logoImage from '../../assets/logo.png';
 
 export default function LoginAdmin() {
 	const navigate = useNavigate();
@@ -47,7 +46,7 @@ export default function LoginAdmin() {
 		<div className="hc-login-root">
 			<div className="hc-left">
 				<div className="hc-logo-wrap">
-					<img src={logo} alt="HostelCare logo" className="hc-logo" />
+					<img src={logoImage} alt="HostelCare logo" className="hc-logo" />
 				</div>
 			</div>
 

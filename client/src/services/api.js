@@ -2,8 +2,9 @@
 const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 async function request(method, path, body, config = {}) {
+  const isForm = typeof FormData !== 'undefined' && body instanceof FormData;
   const headers = Object.assign(
-    { 'Content-Type': 'application/json' },
+    isForm ? {} : { 'Content-Type': 'application/json' },
     config.headers || {}
   );
 
@@ -14,7 +15,8 @@ async function request(method, path, body, config = {}) {
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
     headers,
-    body: body ? JSON.stringify(body) : undefined,
+    // if sending FormData, pass it directly; otherwise stringify JSON
+    body: body ? (isForm ? body : JSON.stringify(body)) : undefined,
   });
 
   let data = null;
