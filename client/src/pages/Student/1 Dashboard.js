@@ -4,8 +4,14 @@ import logo from '../../assets/logo.png';
 import userImg from '../../assets/user.jpg';
 import './Dashboard.css';
 import ComplaintModal from '../../modules/complaints/components/ComplaintModal';
+import FeedbackModal from '../../modules/feedback/components/FeedbackForm'; 
 
 const sampleComplaints = [
+	{
+		id: 'C003',
+		title: 'Mirror Broken',
+		status: 'Resolved',
+	},
 	{
 		id: 'C002',
 		title: 'Table lamp is not working',
@@ -23,6 +29,8 @@ export default function Dashboard() {
 	const navigate = useNavigate();
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const [feedbackComplaintId, setFeedbackComplaintId] = useState(null);
 
 	// try to read logged-in user's name from localStorage (inferred key: 'user' or 'userName')
 	const userName = (() => {
@@ -108,6 +116,9 @@ export default function Dashboard() {
 			</div>
 
 			<ComplaintModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+			<FeedbackModal open={!!feedbackComplaintId} onClose={() => setFeedbackComplaintId(null)}
+             complaintId={feedbackComplaintId} // Pass the complaint ID
+            />
 
 			<h3 className="section-title">Your Complaints</h3>
 
@@ -121,7 +132,11 @@ export default function Dashboard() {
 						<div className="complaint-actions">
 							<div className={`pill status-${c.status.toLowerCase()}`}>{c.status}</div>
 							<button className="btn btn-ghost">View Details</button>
-							<button className="btn btn-primary outline">Track Progress</button>
+							{c.status.toLowerCase() === 'resolved'? (
+								<button className="btn btn-feedback" onClick={() => setFeedbackComplaintId(c.id)}> Give Feedback</button>
+							) : (
+								<button className="btn btn-primary outline">Track Progress</button>
+							)}
 						</div>
 					</div>
 				))}

@@ -157,6 +157,7 @@
 .btn-primary { background: #fff; color: black; }
 .btn-primary.outline { background: #7c3aed; color: #fff; }
 .btn-ghost { background: #fff; color: #374151; border: 1px solid #e5e7eb; }
+.btn-feedback { background: black; color: #fff; }
 
 .section-title {
   margin: 12px 0 10px 0;
