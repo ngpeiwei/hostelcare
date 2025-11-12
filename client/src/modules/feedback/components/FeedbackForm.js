@@ -22,7 +22,7 @@ const StarRating = ({ rating, setRating }) => {
   );
 };
 
-export default function FeedbackModal({ open, onClose, complaintId }) {
+export default function FeedbackModal({ open, onClose, complaintId, onSubmitSuccess }) {
   const [satisfaction, setSatisfaction] = useState(0);
   const [professionalism, setProfessionalism] = useState(0);
   const [effectiveness, setEffectiveness] = useState(0);
@@ -31,13 +31,14 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+
   if (!open) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     if (!satisfaction || !professionalism || !effectiveness || !easeOfUse) {
-      setError('Please fill required star rating fields.');
+      setError('Please fill required fields.');
       return;
     };
     setLoading(true);
@@ -55,7 +56,8 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
     console.log('Submitting feedback:', feedbackData);
     await new Promise(resolve => setTimeout(resolve, 1500));
     console.log('Feedback submitted successfully!');
-    handleClose();
+    // handleClose();
+    onSubmitSuccess();
   } catch (apiError) {
     console.error('Failed to submit feedback:', apiError);
       setError(apiError.message || 'An error occurred. Please try again.');
@@ -87,21 +89,23 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
         
         <form onSubmit={handleSubmit} className="feedback-form">
           {/* ... (Your form-group divs for stars go here) ... */}
-          
+          {/* --- ADDED ---: Display the error message */}
+          {error && <div className="form-error-message">{error}</div>}
+
           <div className="form-group">
-            <label>How satisfied are you with the maintenance service provided? *</label>
+            <label>How satisfied are you with the maintenance service provided? <span className="required-asterisk">*</span></label>
             <StarRating rating={satisfaction} setRating={setSatisfaction} />
           </div>
           <div className="form-group">
-            <label>How would you rate the staff&#39;s professionalism and communication? *</label>
+            <label>How would you rate the staff&#39;s professionalism and communication? <span className="required-asterisk">*</span></label>
             <StarRating rating={professionalism} setRating={setProfessionalism} />
           </div>
           <div className="form-group">
-            <label>How effective was the resolution of your complaint? *</label>
+            <label>How effective was the resolution of your complaint? <span className="required-asterisk">*</span></label>
             <StarRating rating={effectiveness} setRating={setEffectiveness} />
           </div>
           <div className="form-group">
-            <label>How easy was it to use the HostelCare system to submit your complaint? *</label>
+            <label>How easy was it to use the HostelCare system to submit your complaint? <span className="required-asterisk">*</span></label>
             <StarRating rating={easeOfUse} setRating={setEaseOfUse} />
           </div>
           <div className="form-group">
@@ -117,17 +121,14 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
             />
           </div>
 
-          {/* --- ADDED ---: Display the error message */}
-          {error && <div className="form-error-message">{error}</div>}
-
-          <div className="modal-actions">
+          <div className="feedback-form-actions">
             {/* Disable buttons while loading */}
-            <button type="button" className="btn btn-secondary" onClick={handleClose} disabled={loading}>
+            <button type="button" className="btn btn-cancel" onClick={handleClose} disabled={loading}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary" disabled={loading}>
+            <button type="submit" className="btn btn-submit" disabled={loading}>
               {/* Show loading text */}
-              {loading ? 'Submitting...' : 'Submit'}
+              {loading ? 'Submitting...' : 'Submit Feedback'}
             </button>
           </div>
         </form>
