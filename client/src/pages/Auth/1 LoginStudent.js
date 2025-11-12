@@ -86,6 +86,7 @@ export default function Login() {
 					<div className="hc-links">
 						<p>Don't have an account? <a href="/auth/register">Sign Up</a></p>
 						<p><a href="/auth/LoginAdmin">Login As Admin</a></p>
+						<p><a href="/auth/LoginStaff">Login As Maintenance Staff</a></p>
 					</div>
 				</div>
 			</div>
