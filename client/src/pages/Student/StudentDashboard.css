@@ -176,7 +176,12 @@
   flex-direction: column;
   gap: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; 
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .stat-label {
@@ -206,7 +211,7 @@
 
 /* Submit Ticket Banner */
 .cta-banner {
-  background: #5b21b6; /* purple */
+  background: #5b21b6; 
   color: #fff;
   border-radius: 10px;
   padding: 24px;
@@ -214,6 +219,12 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta-banner:hover {
+  transform: scale(1.02); /* smaller pop */
+  box-shadow: 0 6px 16px rgba(91, 33, 182, 0.25);
 }
 
 .cta-text h3 { margin: 0 0 6px 0; }
@@ -224,13 +235,25 @@
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
-  /* font-weight: 600; */
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-submitTicket { background: #fff; color: black; font-weight: 600; }
+.btn-submitTicket:hover { background-color: #f0f0f0; } 
+
 .btn-trackProgress { background: #7c3aed; color: #fff; }
+.btn-trackProgress:hover { background-color: #6d28d9; } 
+
 .btn-viewDetails{ background: #fff; color: #374151; border: 1px solid #e5e7eb; }
+.btn-viewDetails:hover { background-color: #f9fafb; }
+
 .btn-feedback { background: black; color: #fff; }
+.btn-feedback:hover { background-color: #333; }
 
 /* Complaint List */
 .complaint-list { display: flex; flex-direction: column; gap: 12px; }
@@ -244,7 +267,12 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; 
+}
+
+.complaint-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .complaint-main { display: flex; flex-direction: column; }

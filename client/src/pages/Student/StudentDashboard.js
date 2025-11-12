@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/user.jpg';
 import './StudentDashboard.css';
-import ComplaintModal from '../../modules/complaints/components/ComplaintModal';
+import ComplaintModal from '../../modules/complaints/components/ComplaintForm';
 import FeedbackModal from '../../modules/feedback/components/FeedbackForm'; 
 
 const sampleComplaints = [
@@ -28,7 +28,6 @@ const sampleComplaints = [
 const StudentDashboard = () => {
 	const [complaints, setComplaints] = useState([]);
 	const navigate = useNavigate();
-	const [isModalOpen, setIsModalOpen] = useState(false);
 	const dropdownRef = useRef(null);
 	const [showDropdown, setShowDropdown] = useState(false);
 
@@ -41,6 +40,7 @@ const StudentDashboard = () => {
 		navigate('/auth/login');
 	};
 
+	const [isComplaintOpen, setIsComplaintOpen] = useState(false);
 	const [isFeedbackOpen, setIsFeedbackOpen] = useState(null);
 
 	useEffect(() => {
@@ -53,7 +53,7 @@ const StudentDashboard = () => {
 	const pending = complaints.filter((c) => c.status === 'Pending').length;
 
 	return (
-		<div className={`student-dashboard ${isModalOpen ? 'blurred' : ''}`}>
+		<div className={`student-dashboard`}>
 			{/* Header */}
 			<div className="dashboard-header">
 				<div className="header-left">
@@ -112,11 +112,11 @@ const StudentDashboard = () => {
 						<h3>Have an Issue to Report?</h3>
 						<p>Help make your hostel better by reporting issues</p>
 					</div>
-					<button className="btn btn-submitTicket" onClick={() => setIsModalOpen(true)}> + Submit A Ticket</button>
+					<button className="btn btn-submitTicket" onClick={() => setIsComplaintOpen(true)}> + Submit A Ticket</button>
 				</div>
-
-				<ComplaintModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
+					
+				{/* Modal */}
+				<ComplaintModal open={isComplaintOpen} onClose={() => setIsComplaintOpen(false)} />
 				<FeedbackModal open={!!isFeedbackOpen} onClose={() => setIsFeedbackOpen(null)}
              		complaintId={isFeedbackOpen}/>
 
