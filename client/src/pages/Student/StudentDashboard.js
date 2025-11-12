@@ -5,6 +5,7 @@ import userImage from '../../assets/user.jpg';
 import './StudentDashboard.css';
 import ComplaintModal from '../../modules/complaints/components/ComplaintModal';
 import FeedbackModal from '../../modules/feedback/components/FeedbackForm'; 
+import SuccessModal from '../../modules/feedback/components/FeedbackSuccess';
 
 const sampleComplaints = [
 	{
@@ -42,6 +43,11 @@ const StudentDashboard = () => {
 	};
 
 	const [isFeedbackOpen, setIsFeedbackOpen] = useState(null);
+	const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+	const handleFeedbackSuccess = () => {
+        setIsFeedbackOpen(null);   // Close the feedback modal
+        setIsSuccessOpen(true);
+	};
 
 	useEffect(() => {
 		// TODO: replace with real API call (complaintService.getByUser)
@@ -117,8 +123,10 @@ const StudentDashboard = () => {
 
 				<ComplaintModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-				<FeedbackModal open={!!isFeedbackOpen} onClose={() => setIsFeedbackOpen(null)}
-             		complaintId={isFeedbackOpen}/>
+				<FeedbackModal open={!!isFeedbackOpen} onClose={() => setIsFeedbackOpen(null)} complaintId={isFeedbackOpen}
+                onSubmitSuccess={handleFeedbackSuccess} />
+
+				<SuccessModal open={isSuccessOpen} onClose={() => setIsSuccessOpen(false)}/>
 
 				{/* Complaint List */}
 				<div className="complaint-list">

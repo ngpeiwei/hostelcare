@@ -22,7 +22,7 @@ const StarRating = ({ rating, setRating }) => {
   );
 };
 
-export default function FeedbackModal({ open, onClose, complaintId }) {
+export default function FeedbackModal({ open, onClose, complaintId, onSubmitSuccess }) {
   const [satisfaction, setSatisfaction] = useState(0);
   const [professionalism, setProfessionalism] = useState(0);
   const [effectiveness, setEffectiveness] = useState(0);
@@ -30,6 +30,7 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
   const [comments, setComments] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
 
   if (!open) return null;
 
@@ -55,7 +56,8 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
     console.log('Submitting feedback:', feedbackData);
     await new Promise(resolve => setTimeout(resolve, 1500));
     console.log('Feedback submitted successfully!');
-    handleClose();
+    // handleClose();
+    onSubmitSuccess();
   } catch (apiError) {
     console.error('Failed to submit feedback:', apiError);
       setError(apiError.message || 'An error occurred. Please try again.');

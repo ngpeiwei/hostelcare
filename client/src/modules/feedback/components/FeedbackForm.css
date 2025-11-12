@@ -17,9 +17,9 @@
     border-radius: 8px;
     width: 600px;
     height: 720px;
-    max-width: 1000px; /* Increase the max-width */
+    max-width: 1000px;
     box-sizing: border-box;
-    max-height: 600vh; /* Adjust max-height if needed */
+    max-height: 600vh;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     position: relative;
   }
@@ -84,20 +84,18 @@
     padding: 0;
     cursor: pointer;
     font-size: 40px;
-    color: #ccc; /* Empty star color */
+    color: #ccc;
     transition: color 0.2s;
   }
   
   .star-button.filled {
-    color: #fadb14; /* Filled star color */
+    color: #fadb14;
   }
   
   .star-button:hover {
     transform: scale(1.1);
   }
   
-  
-  /* Modal action buttons */
   .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -126,7 +124,7 @@
     }
   }
 
-  /* Complaint button */
+  /* Feedback button */
   .feedback-form-actions{ display:flex; gap:8px; margin-top:30px; width:100%; }
 
   /* Make both action buttons split the available width equally (50/50) */
@@ -162,7 +160,7 @@
   .feedback-form-actions .btn-submit:hover{ background:#0a0a0a; box-shadow: 0 8px 20px rgba(0,0,0,0.18); transform:translateY(-1px); }
 
   .form-error-message {
-    color: #9b111e; /* Red color for errors */
+    color: #9b111e;
     background-color: #fbeae9;
     /* border: 1px solid #f6c8c6; */
     border-radius: 6px;
