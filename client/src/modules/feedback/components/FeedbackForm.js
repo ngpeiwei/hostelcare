@@ -93,19 +93,19 @@ export default function FeedbackModal({ open, onClose, complaintId, onSubmitSucc
           {error && <div className="form-error-message">{error}</div>}
 
           <div className="form-group">
-            <label>How satisfied are you with the maintenance service provided? *</label>
+            <label>How satisfied are you with the maintenance service provided? <span className="required-asterisk">*</span></label>
             <StarRating rating={satisfaction} setRating={setSatisfaction} />
           </div>
           <div className="form-group">
-            <label>How would you rate the staff&#39;s professionalism and communication? *</label>
+            <label>How would you rate the staff&#39;s professionalism and communication? <span className="required-asterisk">*</span></label>
             <StarRating rating={professionalism} setRating={setProfessionalism} />
           </div>
           <div className="form-group">
-            <label>How effective was the resolution of your complaint? *</label>
+            <label>How effective was the resolution of your complaint? <span className="required-asterisk">*</span></label>
             <StarRating rating={effectiveness} setRating={setEffectiveness} />
           </div>
           <div className="form-group">
-            <label>How easy was it to use the HostelCare system to submit your complaint? *</label>
+            <label>How easy was it to use the HostelCare system to submit your complaint? <span className="required-asterisk">*</span></label>
             <StarRating rating={easeOfUse} setRating={setEaseOfUse} />
           </div>
           <div className="form-group">

@@ -11,13 +11,13 @@
     z-index: 1000;
     }
     
-    /* You can re-use .modal-content or make a specific one */
     .modal-content.success-card {
       background: #fff;
       padding: 32px 24px;
       border-radius: 12px;
-      width: 90%;
-      max-width: 400px; /* Smaller than the feedback modal */
+      width: 500px;
+      height: 400px;
+      max-width: 1000px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       position: relative;
       
@@ -33,30 +33,30 @@
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      background-color: #A5D6A7; /* Light green */
+      background-color: #5cbf5f; /* Light green */
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 24px;
+      margin-bottom: 30px;
     }
     
     .success-icon {
-      font-size: 60px;
+      font-size: 80px;
       color: white;
       line-height: 1;
       font-weight: bold;
     }
-    
+
     .success-message {
       font-size: 18px;
-      font-weight: 600;
-      color: #333;
-      margin-top: 0;
-      margin-bottom: 32px;
-    }
+      font-weight: 0;
+      color: #166534; /* Changed to green */
+      margin-top: 0px;
+      margin-bottom: 50px;
+      background-color: white;
+      }
     
-    /* Base button styles (copy from your .btn) */
-    .btn-submit {
+    .btn-ok {
       padding: 10px 16px;
       border-radius: 999px;
       font-size: 14px;
@@ -64,15 +64,13 @@
       cursor: pointer;
     }
     
-    /* Style the OK button */
     .success-ok-btn {
-      width: 100%;
-      /* Purple color from your image */
-      background: #6D28D9; 
-      border: 1px solid #6D28D9;
+      width: 30%;
+      background: #7c3aed; 
+      border: 1px solid #7c3aed;
       color: white;
     }
     .success-ok-btn:hover {
-      background: #5B21B6; /* Darker purple */
-      border-color: #5B21B6;
+      background: #6d28d9;
+      border-color: #6d28d9;
     }

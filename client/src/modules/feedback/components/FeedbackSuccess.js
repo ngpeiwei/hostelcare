@@ -12,15 +12,12 @@ export default function ({ open, onClose }) {
           <div className="success-icon">&#10004;</div>
         </div>
         
-        <h2 className="success-message">
-          Your complaint has submitted successfully!
-        </h2>
+        <div className="success-message">
+          Your feedback has submitted successfully!
+        </div>
         
         <button 
-          type="button" 
-          className="btn-submit success-ok-btn" 
-          onClick={onClose}
-        >
+          type="button" className="btn-ok success-ok-btn" onClick={onClose}>
           OK
         </button>
       </div>
