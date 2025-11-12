@@ -37,7 +37,7 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
     e.preventDefault();
     setError(null);
     if (!satisfaction || !professionalism || !effectiveness || !easeOfUse) {
-      setError('Please fill required star rating fields.');
+      setError('Please fill required fields.');
       return;
     };
     setLoading(true);
@@ -87,7 +87,9 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
         
         <form onSubmit={handleSubmit} className="feedback-form">
           {/* ... (Your form-group divs for stars go here) ... */}
-          
+          {/* --- ADDED ---: Display the error message */}
+          {error && <div className="form-error-message">{error}</div>}
+
           <div className="form-group">
             <label>How satisfied are you with the maintenance service provided? *</label>
             <StarRating rating={satisfaction} setRating={setSatisfaction} />
@@ -117,17 +119,14 @@ export default function FeedbackModal({ open, onClose, complaintId }) {
             />
           </div>
 
-          {/* --- ADDED ---: Display the error message */}
-          {error && <div className="form-error-message">{error}</div>}
-
-          <div className="modal-actions">
+          <div className="feedback-form-actions">
             {/* Disable buttons while loading */}
-            <button type="button" className="btn btn-secondary" onClick={handleClose} disabled={loading}>
+            <button type="button" className="btn btn-cancel" onClick={handleClose} disabled={loading}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary" disabled={loading}>
+            <button type="submit" className="btn btn-submit" disabled={loading}>
               {/* Show loading text */}
-              {loading ? 'Submitting...' : 'Submit'}
+              {loading ? 'Submitting...' : 'Submit Feedback'}
             </button>
           </div>
         </form>
