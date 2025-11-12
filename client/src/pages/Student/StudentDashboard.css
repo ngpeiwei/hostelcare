@@ -230,6 +230,7 @@
 .btn-submitTicket { background: #fff; color: black; font-weight: 600; }
 .btn-trackProgress { background: #7c3aed; color: #fff; }
 .btn-viewDetails{ background: #fff; color: #374151; border: 1px solid #e5e7eb; }
+.btn-feedback { background: black; color: #fff; }
 
 /* Complaint List */
 .complaint-list { display: flex; flex-direction: column; gap: 12px; }

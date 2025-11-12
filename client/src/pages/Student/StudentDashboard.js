@@ -4,8 +4,14 @@ import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/user.jpg';
 import './StudentDashboard.css';
 import ComplaintModal from '../../modules/complaints/components/ComplaintModal';
+import FeedbackModal from '../../modules/feedback/components/FeedbackForm'; 
 
 const sampleComplaints = [
+	{
+		id: 'C003',
+		title: 'Mirror Broken',
+		status: 'Resolved',
+	},
 	{
 		id: 'C002',
 		title: 'Table lamp is not working',
@@ -34,6 +40,8 @@ const StudentDashboard = () => {
 		// Navigate to the student login route defined in App.js
 		navigate('/auth/login');
 	};
+
+	const [isFeedbackOpen, setIsFeedbackOpen] = useState(null);
 
 	useEffect(() => {
 		// TODO: replace with real API call (complaintService.getByUser)
@@ -109,6 +117,9 @@ const StudentDashboard = () => {
 
 				<ComplaintModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
+				<FeedbackModal open={!!isFeedbackOpen} onClose={() => setIsFeedbackOpen(null)}
+             		complaintId={isFeedbackOpen}/>
+
 				{/* Complaint List */}
 				<div className="complaint-list">
 					<h3 className="section-title">Your Complaints</h3>
@@ -136,7 +147,11 @@ const StudentDashboard = () => {
 							<div className="complaint-actions">
 								<div className={`pill status-${c.status.toLowerCase()}`}>{c.status}</div>
 								<button className="btn btn-viewDetails">View Details</button>
-								<button className="btn btn-trackProgress">Track Progress</button>
+								{c.status.toLowerCase() === 'resolved'? (
+									<button className="btn btn-feedback" onClick={() => setIsFeedbackOpen(c.id)}> Give Feedback</button>
+								) : (
+									<button className="btn btn-trackProgress">Track Progress</button>
+								)}
 							</div>
 						</div>
 					))}
