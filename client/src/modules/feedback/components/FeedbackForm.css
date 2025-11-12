@@ -11,14 +11,15 @@
     z-index: 1000;
   }
   
-  .modal-content {
+.modal-content {
     background: #fff;
     padding: 16px;
     border-radius: 8px;
-    width: auto;
-    max-width: 420px; 
+    width: 600px;
+    height: 720px;
+    max-width: 1000px;
     box-sizing: border-box;
-    max-height: 100vh;
+    max-height: 600vh;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     position: relative;
   }
@@ -27,10 +28,10 @@
     position: absolute;
     top: 16px;
     right: 16px;
-    background: none;
+    background: transparent;
     border: none;
-    font-size: 24px;
-    color: #888;
+    font-size: 30px;
+    color: #2f2f2f;
     cursor: pointer;
     line-height: 1;
   }
@@ -50,9 +51,8 @@
   .feedback-form label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 500;
     color: #333;
-    font-size: 13px;
+    font-size: 14px;
   }
   
   .feedback-form textarea {
@@ -60,21 +60,22 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 14px;
     resize: vertical;
     /* Ensure textarea dimensions include padding/border and never overflow the modal */
     box-sizing: border-box;
     max-width: 100%;
-    min-height: 60px; /* slightly smaller default height to help fit content */
+    min-height: 100px; /* slightly smaller default height to help fit content */
     /* Prevent the textarea from forcing the modal taller than the viewport */
     max-height: calc(60vh - 120px);
     overflow: auto;
+    padding: 5px;
   }
   
   /* Star Rating styles */
   .star-rating {
     display: flex;
-    gap: 4px;
+    gap: 10px;
   }
   
   .star-button {
@@ -82,21 +83,19 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    font-size: 24px;
-    color: #ccc; /* Empty star color */
+    font-size: 40px;
+    color: #ccc;
     transition: color 0.2s;
   }
   
   .star-button.filled {
-    color: #fadb14; /* Filled star color */
+    color: #fadb14;
   }
   
   .star-button:hover {
     transform: scale(1.1);
   }
   
-  
-  /* Modal action buttons */
   .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -124,27 +123,49 @@
       max-width: 800px;
     }
   }
-  
-  /* Assuming you have global .btn styles */
-  .modal-actions .btn-secondary {
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ddd;
-  }
-  
-  .modal-actions .btn-primary {
-    background-color: #000; /* Matching your 'Submit' button */
-    color: #fff;
-    border: none;
+
+  /* Feedback button */
+  .feedback-form-actions{ display:flex; gap:8px; margin-top:30px; width:100%; }
+
+  /* Make both action buttons split the available width equally (50/50) */
+  .feedback-form-actions .btn{
+    flex: 1 1 0; 
+    min-width: 0; 
   }
 
-  .form-error-message {
-    color: #d93025; /* Red color for errors */
-    background-color: #fbeae9;
-    border: 1px solid #f6c8c6;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 16px;
+  .feedback-form-actions .btn-cancel,
+  .feedback-form-actions .btn-submit{
+    flex: 1 1 0;
+  }
+
+  .feedback-form-actions .btn{
+    padding: 10px 16px;
+    border-radius: 999px;
     font-size: 14px;
     text-align: center;
+  }
+
+  .feedback-form-actions .btn-cancel{
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid #e5e7eb;
+  }
+  .feedback-form-actions .btn-cancel:hover{ background:#fbfcfd; transform:translateY(-1px); }
+  
+  .feedback-form-actions .btn-submit{
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid #000000;
+  }
+  .feedback-form-actions .btn-submit:hover{ background:#0a0a0a; box-shadow: 0 8px 20px rgba(0,0,0,0.18); transform:translateY(-1px); }
+
+  .form-error-message {
+    color: #9b111e;
+    background-color: #fbeae9;
+    /* border: 1px solid #f6c8c6; */
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    text-align: left;
   }
