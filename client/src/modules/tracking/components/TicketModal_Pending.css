@@ -1,0 +1,158 @@
+/* client/modules/tracking/components/TicketModal_Pending.css */
+
+/* --- Modal Backdrop and Content --- */
+.modal-backdrop-staff {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content-staff {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px; /* Increased max width for the detail view */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* --- Header --- */
+.modal-header-staff {
+    display: flex;
+    justify-content: flex-end; /* Align title and close button */
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-title-staff {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.close-btn-staff {
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    cursor: pointer;
+    color: #6b7280;
+    transition: color 0.2s;
+    position: absolute; /* Position relative to the modal */
+    top: 15px;
+    right: 15px;
+}
+
+.close-btn-staff:hover {
+    color: #374151;
+}
+
+/* --- Ticket Header Pill (Table lamp is not working) --- */
+.ticket-header-pill {
+    background-color: #ffe599; /* Light yellow/orange from status-pending in original CSS */
+    color: #1f2937;
+    font-size: 1.25em;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+/* --- Detail Grid Layout --- */
+.detail-grid-staff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px 30px;
+}
+
+.detail-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-group label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 6px;
+}
+
+.detail-group input[type="text"],
+.detail-group textarea,
+.detail-group select,
+.attachment-container input[type="text"],
+.detail-group input[type="date"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #f9fafb; /* Light background for fields */
+    color: #374151;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+
+.detail-group textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.detail-group .required label::after {
+    content: ' *';
+    color: red;
+}
+
+/* --- Attachment Row Styling --- */
+.attachment-container {
+    display: flex;
+    gap: 10px;
+}
+
+.attachment-container input[type="text"] {
+    flex-grow: 1;
+    /* Ensure read-only background matches the design */
+    background-color: #f3f4f6; 
+}
+
+/* --- Footer --- */
+.modal-footer-staff {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 30px;
+}
+
+.start-work-btn {
+    /* Uses existing button-primary style */
+    font-weight: 600;
+    background-color: #7c3aed; /* Your primary button color */
+    color: #fff;
+    padding: 10px 25px;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .detail-grid-staff {
+        grid-template-columns: 1fr; /* Stack all fields vertically on mobile */
+        gap: 20px;
+    }
+    .detail-group.span-2 {
+        grid-column: span 1;
+    }
+    .modal-content-staff {
+        padding: 20px;
+    }
+}

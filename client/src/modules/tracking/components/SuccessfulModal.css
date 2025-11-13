@@ -1,0 +1,77 @@
+/* client/modules/tracking/components/SuccessMessageModal.css */
+
+/* --- Backdrop --- */
+.modal-backdrop-success {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4000; /* Highest z-index */
+}
+
+/* --- Content --- */
+.modal-content-success {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 380px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* --- Icon --- */
+.success-icon-container {
+    background-color: #ecfdf5; /* Light green background */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-icon {
+    width: 40px;
+    height: 40px;
+    color: #16a34a; /* Dark green checkmark */
+}
+
+/* --- Text --- */
+.success-title {
+    font-size: 1.15em;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 5px;
+}
+
+.success-message {
+    font-size: 0.95em;
+    font-weight: 500;
+    color: #4b5563;
+    margin: 0 0 30px 0;
+}
+
+/* --- Footer (OK Button) --- */
+.modal-footer-success {
+    padding-top: 15px;
+}
+
+.action-button.button-primary {
+    /* Uses the primary purple theme */
+    background-color: #7c3aed;
+    color: #fff;
+    padding: 10px 30px;
+    font-weight: 600;
+    width: 100%;
+}
+
+.action-button.button-primary:hover {
+    background-color: #6d28d9;
+}

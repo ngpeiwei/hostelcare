@@ -1,0 +1,95 @@
+/* client/modules/tracking/components/ConfirmationModal.css */
+
+/* --- Backdrop --- */
+.modal-backdrop-confirmation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop for focus */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; /* Must be higher than the detail modal */
+}
+
+/* --- Content --- */
+.modal-content-confirmation {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* --- Header --- */
+.modal-header-confirmation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.modal-title-confirmation {
+    font-size: 1.25em;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+.close-btn-confirmation {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #9ca3af;
+}
+
+/* --- Body --- */
+.modal-body-confirmation p {
+    font-size: 1em;
+    color: #374151;
+    line-height: 1.5;
+    margin: 10px 0 25px 0;
+}
+
+/* --- Footer (Buttons) --- */
+.modal-footer-confirmation {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid #f3f4f6;
+}
+
+/* Use existing action button classes */
+.action-button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.button-confirm {
+    background-color: #16a34a; /* Green for confirm/accept */
+    color: #ffffff;
+}
+
+.button-confirm:hover {
+    background-color: #15803d;
+}
+
+.action-button.button-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.action-button.button-secondary:hover {
+    background-color: #d1d5db;
+}

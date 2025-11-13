@@ -7,6 +7,7 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import StaffDashboard from './pages/Maintenance Staff/StaffDashboard';
 // import ViewTicket from './pages/Admin/2 ViewTicket';
 import TicketDetails from './pages/Admin/3 TicketDetails';
+import StaffUpdatePage from './pages/Maintenance Staff/StaffUpdatePage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/staff/dashboard" element={<StaffDashboard />} />
         <Route path="/admin/ticket/:id" element={<TicketDetails />} />
+        <Route path="/staff/ticket/:id/update" element={<StaffUpdatePage />} />
       </Routes>
     </Router>
   );
