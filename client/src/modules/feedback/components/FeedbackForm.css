@@ -16,12 +16,12 @@
     padding: 16px;
     border-radius: 8px;
     width: 600px;
-    height: 720px;
     max-width: 1000px;
     box-sizing: border-box;
-    max-height: 600vh;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
   }
   
   .modal-close-btn {
@@ -42,8 +42,7 @@
     font-size: 18px;
     font-weight: 600;
   }
-  
-  /* Feedback form styles */
+
   .feedback-form .form-group {
     margin-bottom: 20px;
   }
@@ -70,6 +69,12 @@
     max-height: calc(60vh - 120px);
     overflow: auto;
     padding: 5px;
+  }
+
+  .feedback-form-content {
+    flex-grow: 1; /* Makes this content area fill the form */
+    overflow-y: auto; /* Adds a scrollbar ONLY here if needed */
+    padding-right: 12px; /* Space for the scrollbar */
   }
   
   /* Star Rating styles */

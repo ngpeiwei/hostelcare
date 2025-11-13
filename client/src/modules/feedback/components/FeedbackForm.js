@@ -88,38 +88,38 @@ export default function FeedbackModal({ open, onClose, complaintId, onSubmitSucc
         <h2 className="modal-title">Feedback & Rating</h2>
         
         <form onSubmit={handleSubmit} className="feedback-form">
-          {/* ... (Your form-group divs for stars go here) ... */}
-          {/* --- ADDED ---: Display the error message */}
-          {error && <div className="form-error-message">{error}</div>}
+            {/* ... (Your form-group divs for stars go here) ... */}
+            {/* --- ADDED ---: Display the error message */}
+            {error && <div className="form-error-message">{error}</div>}
 
-          <div className="form-group">
-            <label>How satisfied are you with the maintenance service provided? <span className="required-asterisk">*</span></label>
-            <StarRating rating={satisfaction} setRating={setSatisfaction} />
-          </div>
-          <div className="form-group">
-            <label>How would you rate the staff&#39;s professionalism and communication? <span className="required-asterisk">*</span></label>
-            <StarRating rating={professionalism} setRating={setProfessionalism} />
-          </div>
-          <div className="form-group">
-            <label>How effective was the resolution of your complaint? <span className="required-asterisk">*</span></label>
-            <StarRating rating={effectiveness} setRating={setEffectiveness} />
-          </div>
-          <div className="form-group">
-            <label>How easy was it to use the HostelCare system to submit your complaint? <span className="required-asterisk">*</span></label>
-            <StarRating rating={easeOfUse} setRating={setEaseOfUse} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="feedback-comments">
-              Tell us more about your experience or any suggestions for improvement
-            </label>
-            <textarea
-              id="feedback-comments"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
-              placeholder="e.g., The staff fixed the issue quickly and was very polite."
-              rows="4"
-            />
-          </div>
+            <div className="form-group">
+              <label>How satisfied are you with the maintenance service provided? <span className="required-asterisk">*</span></label>
+              <StarRating rating={satisfaction} setRating={setSatisfaction} />
+            </div>
+            <div className="form-group">
+              <label>How would you rate the staff&#39;s professionalism and communication? <span className="required-asterisk">*</span></label>
+              <StarRating rating={professionalism} setRating={setProfessionalism} />
+            </div>
+            <div className="form-group">
+              <label>How effective was the resolution of your complaint? <span className="required-asterisk">*</span></label>
+              <StarRating rating={effectiveness} setRating={setEffectiveness} />
+            </div>
+            <div className="form-group">
+              <label>How easy was it to use the HostelCare system to submit your complaint? <span className="required-asterisk">*</span></label>
+              <StarRating rating={easeOfUse} setRating={setEaseOfUse} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="feedback-comments">
+                Tell us more about your experience or any suggestions for improvement
+              </label>
+              <textarea
+                id="feedback-comments"
+                value={comments}
+                onChange={(e) => setComments(e.target.value)}
+                placeholder="e.g., The staff fixed the issue quickly and was very polite."
+                rows="4"
+              />
+            </div>
 
           <div className="feedback-form-actions">
             {/* Disable buttons while loading */}

@@ -246,17 +246,11 @@
 .btn-submitTicket { background: #fff; color: black; font-weight: 600; }
 .btn-submitTicket:hover { background-color: #f0f0f0; } 
 
-/* .btn-trackProgress { background: #7c3aed; color: #fff; }
-.btn-trackProgress:hover { background-color: #6d28d9; }  */
-
 .btn-trackProgress { background: #7c3aed; color: #fff; }
 .btn-trackProgress:hover { background-color: #9333ea; } 
 
 .btn-viewDetails{ background: #fff; color: #374151; border: 1px solid #e5e7eb; }
-.btn-viewDetails:hover { background-color: #f9fafb; }
-
-.btn-feedback { background: black; color: #fff; }
-.btn-feedback:hover { background-color: #333; }
+.btn-viewDetails:hover { background-color: #e7e7e7; } 
 
 /* Complaint List */
 .complaint-list { display: flex; flex-direction: column; gap: 12px; }
@@ -296,34 +290,26 @@
   .content-section { padding: 0 20px; }
 }
 
-/* Add this for the new 'View Feedback' button */
-.btn-view-feedback {
-  /* You can style it like the feedback button or give it a new color */
-  background-color: #007bff; /* Example: blue color */
-  color: white;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
+.btn-feedback { background: rgb(63, 98, 253); color: #fff; }
+.btn-feedback:hover { background-color: #4f79eb; }
 
-/* Make read-only stars un-clickable */
+.btn-view-feedback { background: black; color: #fff; }
+.btn-view-feedback:hover { background-color: #393939; }
+
 .star-rating.read-only .star-button {
   cursor: default;
 }
 .star-rating.read-only .star-button:hover {
-  transform: none; /* Disable hover zoom */
+  transform: none;
 }
 
-/* Style for displaying the text comments */
 .feedback-comments-display {
   background-color: #f9f9f9;
   border: 1px solid #eee;
   border-radius: 4px;
   padding: 10px;
   font-size: 14px;
-  white-space: pre-wrap; /* Preserves line breaks */
+  white-space: pre-wrap;
   margin-top: 0;
 }
 

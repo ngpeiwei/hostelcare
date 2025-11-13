@@ -162,7 +162,9 @@ const StudentDashboard = () => {
                             </div>
                             <div className="complaint-actions">
                                 <div className={`pill status-${c.status.toLowerCase()}`}>{c.status}</div>
-                                <button className="btn btn-viewDetails">View Details</button>
+                                {c.status.toLowerCase() === 'resolved' && (
+                                    <button className="btn btn-viewDetails">View Details</button>
+                                )}
                                 
                                 {c.status.toLowerCase() === 'resolved' ? (
                                     c.feedback ? (
@@ -223,7 +225,7 @@ const ViewFeedbackModal = ({ open, feedback, onClose }) => {
                     &times;
                 </button>
                 
-                <h2 className="modal-title">Your Submitted Feedback</h2>
+                <h2 className="modal-title">Your Feedback</h2>
                 
                 <div className="feedback-form">
                     <div className="form-group">
@@ -245,7 +247,7 @@ const ViewFeedbackModal = ({ open, feedback, onClose }) => {
                     
                     {feedback.comments && (
                         <div className="form-group">
-                            <label>Your comments:</label>
+                            <label>Additional comments:</label>
                             <p className="feedback-comments-display">
                                 {feedback.comments}
                             </p>
