@@ -57,7 +57,7 @@ export default function FeedbackModal({ open, onClose, complaintId, onSubmitSucc
     await new Promise(resolve => setTimeout(resolve, 1500));
     console.log('Feedback submitted successfully!');
     // handleClose();
-    onSubmitSuccess();
+    onSubmitSuccess(feedbackData);
   } catch (apiError) {
     console.error('Failed to submit feedback:', apiError);
       setError(apiError.message || 'An error occurred. Please try again.');

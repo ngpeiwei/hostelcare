@@ -47,7 +47,7 @@
       font-weight: bold;
     }
 
-    .success-message {
+    .fb-success-message {
       font-size: 18px;
       font-weight: 0;
       color: #166534; /* Changed to green */

@@ -322,13 +322,18 @@
   background-color: #7c3aed;
 }
 
-.button-secondary {
+/* .button-secondary {
   background-color: #f3e8ff;
   color: #9333ea;
 }
 
 .button-secondary:hover {
   background-color: #e9d5ff;
+} */
+
+.button-secondary {
+  background-color: #d4e1ff;
+  color: #163dff;
 }
 
 .empty-state {

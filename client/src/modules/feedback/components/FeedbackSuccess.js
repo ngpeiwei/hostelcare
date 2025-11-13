@@ -12,7 +12,7 @@ export default function ({ open, onClose }) {
           <div className="success-icon">&#10004;</div>
         </div>
         
-        <div className="success-message">
+        <div className="fb-success-message">
           Your feedback has submitted successfully!
         </div>
         

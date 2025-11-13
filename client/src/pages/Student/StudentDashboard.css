@@ -246,8 +246,11 @@
 .btn-submitTicket { background: #fff; color: black; font-weight: 600; }
 .btn-submitTicket:hover { background-color: #f0f0f0; } 
 
+/* .btn-trackProgress { background: #7c3aed; color: #fff; }
+.btn-trackProgress:hover { background-color: #6d28d9; }  */
+
 .btn-trackProgress { background: #7c3aed; color: #fff; }
-.btn-trackProgress:hover { background-color: #6d28d9; } 
+.btn-trackProgress:hover { background-color: #9333ea; } 
 
 .btn-viewDetails{ background: #fff; color: #374151; border: 1px solid #e5e7eb; }
 .btn-viewDetails:hover { background-color: #f9fafb; }
@@ -291,6 +294,42 @@
   .cta-banner { flex-direction: column; gap: 12px; align-items: flex-start; }
   .login-name { display: none; }
   .content-section { padding: 0 20px; }
+}
+
+/* Add this for the new 'View Feedback' button */
+.btn-view-feedback {
+  /* You can style it like the feedback button or give it a new color */
+  background-color: #007bff; /* Example: blue color */
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Make read-only stars un-clickable */
+.star-rating.read-only .star-button {
+  cursor: default;
+}
+.star-rating.read-only .star-button:hover {
+  transform: none; /* Disable hover zoom */
+}
+
+/* Style for displaying the text comments */
+.feedback-comments-display {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  white-space: pre-wrap; /* Preserves line breaks */
+  margin-top: 0;
+}
+
+/* Make the "Close" button full-width in the view modal */
+.view-feedback .feedback-form-actions .btn-submit {
+  flex: 1 1 100%;
 }
 
 
