@@ -296,7 +296,7 @@ const AdminDashboard = () => {
       {/* Content Section */}
       <div className="content-section">
       <h3 className="section-title">
-      {activeTab === 'All Tickets' ? 'All Tickets' : `${activeTab} Tickets`}
+      {activeTab === 'All Tickets' ? 'All Tickets' : `${activeTab === 'Open' ? 'New' : activeTab} Tickets`}
       </h3>
         {loading ? (
           <div className="empty-state">
