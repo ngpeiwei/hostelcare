@@ -157,7 +157,7 @@
 /* Dashboard */
 .section-title {
   margin: 12px 0 10px 0;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .stats-row {
@@ -176,7 +176,7 @@
   flex-direction: column;
   gap: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease, transform 0.3s ease; 
+  transition: box-shadow 0.2s ease, transform 0.3s ease; 
 }
 
 .stat-card:hover {
@@ -190,13 +190,13 @@
 }
 
 .stat-value {
-  font-size: 40px;
+  font-size: 28px;
   font-weight: 600;
   color: #111827;
 }
 
 .stat-value.blue { color: #163dff; }
-.stat-value.yellow { color: #d1a700; }
+.stat-value.yellow { color: #a38c40; }
 .stat-value.orange { color: #9a3412; }
 .stat-value.green { color: #065f46; }
 
@@ -237,7 +237,7 @@
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all;
 }
 
 .btn:hover {
@@ -266,12 +266,11 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease, transform 0.3s ease; 
+  transition: box-shadow 0.2;
 }
 
 .complaint-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .complaint-main { display: flex; flex-direction: column; }

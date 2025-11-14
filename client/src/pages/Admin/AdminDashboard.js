@@ -3,13 +3,50 @@ import { useNavigate } from 'react-router-dom';
 import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/admin.png';
 import complaintService from '../../modules/complaints/services/complaintService';
+import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 import './AdminDashboard.css';
+
+const NoFeedbackModal = ({ open, onClose }) => {
+  if (!open) return null;
+
+  return (
+    <div className="fb-modal-overlay">
+      <div className="fb-modal-content feedback-modal view-feedback">
+        <button className="fb-modal-close-btn" onClick={onClose} aria-label="Close modal">
+          &times;
+        </button>
+        
+        <h2 className="fb-modal-title">Feedback Details</h2>
+        
+        <div className="feedback-form">
+          <div className="form-group">
+            <textarea
+                id="feedback-comments-empty"
+                className="no-comments-display"
+                value="No Reviews Yet"
+                readOnly
+                rows="4"
+            />
+          </div>
+
+          <div className="feedback-form-actions">
+            <button type="button" className="btn btn-submit" onClick={onClose}>
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('New');
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [viewFeedback, setViewFeedback] = useState(null);
+  const [noFeedback, setNoFeedback] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -64,15 +101,13 @@ const AdminDashboard = () => {
     navigate(`/admin/ticket/${ticketId}`);
   };
 
-  const handleViewFeedback = (ticketId) => {
-    navigate(`/admin/ticket/${ticketId}`);
-  };
-
   const getStatusBadge = (status) => {
-    if (status === 'Open') {
-      return <span className="status-badge status-open">Open</span>;
+    if (status === 'New') {
+      return <span className="status-badge status-new">New</span>;
     } else if (status === 'Pending') {
       return <span className="status-badge status-pending">Pending</span>;
+    } else if (status === 'In Progress') {
+      return <span className="status-badge status-inprogress">In Progress</span>;
     } else if (status === 'Resolved') {
       return <span className="status-badge status-resolved">Resolved</span>;
     }
@@ -80,14 +115,15 @@ const AdminDashboard = () => {
   };
 
   const renderActionButton = (ticket) => {
-    if (ticket.status === 'Open') {
+    if (ticket.status === 'New') {
       return (
         <>
+          {getStatusBadge(ticket.status)}
           <button
             className="action-button button-secondary"
             onClick={() => handleOpenTicket(ticket.id)}
           >
-            Open
+            New
           </button>
           <button
             className="action-button button-primary"
@@ -109,13 +145,37 @@ const AdminDashboard = () => {
           </button>
         </>
       );
+    } else if (ticket.status === 'In Progress') {
+      return (
+        <>
+          {getStatusBadge(ticket.status)}
+          <button
+            className="action-button button-primary"
+            onClick={() => handleViewProgress(ticket.id)}
+          >
+            View Progress
+        </button>
+      </>
+      );
     } else if (ticket.status === 'Resolved') {
       return (
         <>
           {getStatusBadge(ticket.status)}
           <button
             className="action-button button-primary"
-            onClick={() => handleViewFeedback(ticket.id)}
+            onClick={() => {
+              const sampleFeedback = {
+                satisfaction: 4, professionalism: 5, effectiveness: 3, easeOfUse: 5,
+                comments: 'The staff was very polite and fixed the issue quickly.'
+              };
+              setViewFeedback(sampleFeedback);
+            }}
+          >
+            View Feedback
+          </button>
+          <button
+            className="action-button button-primary"
+            onClick={() => setNoFeedback(true)}
           >
             View Feedback
           </button>
@@ -147,8 +207,11 @@ const AdminDashboard = () => {
 
   // Summary stats for admin dashboard
   const total = tickets.length;
-  const resolved = tickets.filter((t) => t.status === 'Resolved').length;
-  const pending = tickets.filter((t) => t.status === 'Pending').length;
+  const newticket = tickets.filter((c) => c.status === 'New').length;
+  const pending = tickets.filter((c) => c.status === 'Pending').length;
+  const inProgress = tickets.filter((c) => c.status === 'In Progress').length;
+  const resolved = tickets.filter((c) => c.status === 'Resolved').length;
+  
 
   return (
     <div className="admin-dashboard">
@@ -185,24 +248,27 @@ const AdminDashboard = () => {
         <div className="content-section">
             <h3 className="section-title">Dashboard</h3>
             <div className="stats-row">
-                <div className="stat-card">
-                    <div className="stat-label">Complaints Filed</div>
-                    <div className="stat-value">{total}</div>
-                    <div className="stat-badge">Total</div>
-                </div>
-
-                <div className="stat-card">
-                    <div className="stat-label">Resolved</div>
-                    <div className="stat-value green">{resolved}</div>
-                    <div className="stat-badge done">✓ Done</div>
-                </div>
-
-                <div className="stat-card">
-                    <div className="stat-label">Pending</div>
-                    <div className="stat-value orange">{pending}</div>
-                    <div className="stat-badge active">Active</div>
-                </div>
-            </div>
+                  <div className="stat-card">
+                      <div className="stat-label">Total Complaints Received</div>
+                      <div className="stat-value">{total}</div>
+                  </div>
+                  <div className="stat-card">
+                      <div className="stat-label">New</div>
+                      <div className="stat-value blue">{newticket}</div>
+                  </div>
+                  <div className="stat-card">
+                      <div className="stat-label">Pending</div>
+                      <div className="stat-value yellow">{pending}</div>
+                  </div>
+                  <div className="stat-card">
+                      <div className="stat-label">In Progress</div>
+                      <div className="stat-value orange">{inProgress}</div>
+                  </div>
+                  <div className="stat-card">
+                      <div className="stat-label">Resolved</div>
+                      <div className="stat-value green">{resolved}</div>
+                  </div>
+              </div>
         </div>
 
       {/* Navigation Tabs */}
@@ -220,24 +286,24 @@ const AdminDashboard = () => {
           Pending Tickets
         </button>
         <button
+          className={`tab-button ${activeTab === 'In Progress' ? 'active' : ''}`}
+          onClick={() => handleTabClick('In Progress')}
+        >
+          In Progress Tickets
+        </button>
+        <button
           className={`tab-button ${activeTab === 'Resolved' ? 'active' : ''}`}
           onClick={() => handleTabClick('Resolved')}
         >
           Resolved Tickets
         </button>
-        <button
-          className={`tab-button ${activeTab === 'All Tickets' ? 'active' : ''}`}
-          onClick={() => handleTabClick('All Tickets')}
-        >
-          All Tickets
-        </button>
       </div>
 
       {/* Content Section */}
       <div className="content-section">
-        <h3 className="section-title">
-          {activeTab === 'New' ? 'New Tickets' : activeTab === 'All Tickets' ? 'All Tickets' : `${activeTab} Tickets`}
-        </h3>
+      <h3 className="section-title">
+      {activeTab === 'All Tickets' ? 'All Tickets' : `${activeTab} Tickets`}
+      </h3>
         {loading ? (
           <div className="empty-state">
             <p className="empty-state-text">Loading...</p>
@@ -277,6 +343,13 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
+      <ViewFeedbackModal 
+          open={!!viewFeedback} 
+          feedback={viewFeedback}
+          onClose={() => setViewFeedback(null)} />
+      <NoFeedbackModal
+          open={noFeedback}
+          onClose={() => setNoFeedback(false)}/>
     </div>
   );
 };

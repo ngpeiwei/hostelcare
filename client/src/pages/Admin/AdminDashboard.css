@@ -138,7 +138,7 @@
 /* Dashboard */
 .section-title {
   margin: 12px 0 10px 0;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .stats-row {
@@ -157,7 +157,12 @@
   flex-direction: column;
   gap: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s ease, transform 0.3s ease; 
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .stat-label {
@@ -171,8 +176,10 @@
   color: #111827;
 }
 
-.stat-value.green { color: #16a34a; }
-.stat-value.orange { color: #ea580c; }
+.stat-value.blue { color: #163dff; }
+.stat-value.yellow { color: #a38c40; }
+.stat-value.orange { color: #9a3412; }
+.stat-value.green { color: #065f46; }
 
 .stat-badge {
   align-self: flex-end;
@@ -256,17 +263,16 @@
 }
 
 .ticket-description {
-  font-size: 16px;
   font-weight: 600;
   color: #1f2937;
-  margin-bottom: 8px;
 }
 
 .ticket-id {
   display: flex;
   align-items: center;
+  margin-top: 6px;
   gap: 6px;
-  font-size: 14px;
+  font-size: 13px;
   color: #6b7280;
 }
 
@@ -277,7 +283,7 @@
 
 .ticket-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
 }
 
@@ -288,48 +294,28 @@
   font-weight: 500;
 }
 
-.status-open {
-  background-color: #fce7f3;
-  color: #be185d;
-}
-
-.status-pending {
-  background-color: #fed7aa;
-  color: #9a3412;
-}
-
-.status-resolved {
-  background-color: #d1fae5;
-  color: #065f46;
-}
+.status-new { background-color: #d4e1ff; color: #163dff; }
+.status-pending { background-color: #fff5d6; color: #d1a700; }
+.status-inprogress { background-color: #fed7aa; color: #9a3412; }
+.status-resolved { background-color: #d1fae5; color: #065f46; }
 
 .action-button {
-  padding: 8px 20px;
+  padding: 8px 14px;
   border: none;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .button-primary {
-  background-color: #9333ea;
-  color: #ffffff;
+  background-color: #7c3aed;
+  color: #fff;
 }
 
 .button-primary:hover {
-  background-color: #7c3aed;
+  background-color: #9333ea;
 }
-
-/* .button-secondary {
-  background-color: #f3e8ff;
-  color: #9333ea;
-}
-
-.button-secondary:hover {
-  background-color: #e9d5ff;
-} */
 
 .button-secondary {
   background-color: #d4e1ff;
@@ -347,4 +333,13 @@
   margin-top: 10px;
 }
 
+.no-feedback-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #666;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  margin-right: 10px;
+}
 

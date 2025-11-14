@@ -6,6 +6,7 @@ import './StudentDashboard.css';
 import ComplaintModal from '../../modules/complaints/components/ComplaintForm';
 import FeedbackModal from '../../modules/feedback/components/FeedbackForm'; 
 import SuccessModal from '../../modules/feedback/components/FeedbackSuccess';
+import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 
 const sampleComplaints = [
     {
@@ -210,72 +211,3 @@ const StudentDashboard = () => {
 }
 
 export default StudentDashboard;
-
-const DisplayStarRating = ({ rating }) => {
-    return (
-        <div className="star-rating read-only">
-            {[...Array(5)].map((_, index) => {
-                const ratingValue = index + 1;
-                return (
-                    <span
-                        key={ratingValue}
-                        className={`star-button ${ratingValue <= rating ? 'filled' : ''}`}
-                    >
-                        &#9733;
-                    </span>
-                );
-            })}
-        </div>
-    );
-};
-
-const ViewFeedbackModal = ({ open, feedback, onClose }) => {
-    if (!open || !feedback) return null;
-
-    return (
-        <div className="fb-modal-overlay">
-            <div className="fb-modal-content feedback-modal view-feedback">
-                <button className="fb-modal-close-btn" onClick={onClose} aria-label="Close modal">
-                    &times;
-                </button>
-                
-                <h2 className="fb-modal-title">Your Feedback</h2>
-                
-                <div className="feedback-form">
-                    <div className="form-group">
-                        <label>Your satisfaction with the service:</label>
-                        <DisplayStarRating rating={feedback.satisfaction} />
-                    </div>
-                    <div className="form-group">
-                        <label>Staff professionalism and communication:</label>
-                        <DisplayStarRating rating={feedback.professionalism} />
-                    </div>
-                    <div className="form-group">
-                        <label>Effectiveness of the resolution:</label>
-                        <DisplayStarRating rating={feedback.effectiveness} />
-                    </div>
-                    <div className="form-group">
-                        <label>Ease of using the HostelCare system:</label>
-                        <DisplayStarRating rating={feedback.easeOfUse} />
-                    </div>
-                    
-                    {feedback.comments && (
-                        <div className="form-group">
-                            <label>Additional comments:</label>
-                            <p className="feedback-comments-display">
-                                {feedback.comments}
-                            </p>
-                            
-                        </div>
-                    )}
-
-                    <div className="feedback-form-actions">
-                        <button type="button" className="btn btn-submit" onClick={onClose}>
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};

@@ -156,6 +156,11 @@
     border: 1px solid #e5e7eb;
   }
   .feedback-form-actions .btn-cancel:hover{ background:#fbfcfd; transform:translateY(-1px); }
+  .feedback-form textarea.no-comments-display {
+    font-style: italic;
+    color: #6c757d;
+    background-color: #f8f9fa;
+  }
   
   .feedback-form-actions .btn-submit{
     background: #000000;

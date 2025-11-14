@@ -239,6 +239,7 @@ const StaffDashboard = () => {
     };
 
     // Calculate counts based on current tickets state
+    const total = tickets.length;
     const pendingCount = tickets.filter((t) => t.status === 'Pending').length;
     const inProgressCount = tickets.filter((t) => t.status === 'In Progress').length;
     const resolvedCount = tickets.filter((t) => t.status === 'Resolved').length;
@@ -273,22 +274,23 @@ const StaffDashboard = () => {
             <div className="content-section">
                 <h3 className="section-title">Dashboard</h3>
                 <div className="stats-row">
+                <div className="stat-card">
+                        <div className="stat-label">Total Assigned Tickets</div>
+                        <div className="stat-value orange">{total}</div> {/* 🔑 Use calculated counts */}
+                    </div>
                     <div className="stat-card">
                         <div className="stat-label">Pending Tickets</div>
                         <div className="stat-value orange">{pendingCount}</div> {/* 🔑 Use calculated counts */}
-                        <div className="stat-badge active">Pending</div>
                     </div>
 
                     <div className="stat-card">
                         <div className="stat-label">In Progress</div>
                         <div className="stat-value">{inProgressCount}</div> {/* 🔑 Use calculated counts */}
-                        <div className="stat-badge">In Progress</div>
                     </div>
 
                     <div className="stat-card">
                         <div className="stat-label">Resolved</div>
                         <div className="stat-value green">{resolvedCount}</div> {/* 🔑 Use calculated counts */}
-                        <div className="stat-badge done">✓ Done</div>
                     </div>
                 </div>
             </div>
@@ -326,12 +328,27 @@ const StaffDashboard = () => {
                     </div>
                 ) : (
                     <div className="tickets-list">
-                        {tickets.map((ticket) => (
-                            <div key={ticket.id} className="ticket-card">
-                                <div className="ticket-info">
-                                    <div className="ticket-description">{ticket.description}</div>
-                                    <div className="ticket-id">#{ticket.id}</div>
-                                </div>
+                    {tickets.map((ticket) => (
+                    <div key={ticket.id} className="ticket-card">
+                        <div className="ticket-info">
+                        <div className="ticket-description">{ticket.description}</div>
+                        <div className="ticket-id">
+                            <svg
+                            className="ticket-id-icon"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                            </svg>
+                            #{ticket.id}
+                        </div>
+                        </div>
                                 <div className="ticket-actions">
                                     {renderActionButton(ticket)}
                                 </div>

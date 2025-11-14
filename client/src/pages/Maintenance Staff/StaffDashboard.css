@@ -128,7 +128,7 @@
 /* Dashboard Summary */
 .section-title {
   margin: 12px 0 10px 0;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .stats-row {
@@ -147,7 +147,12 @@
   flex-direction: column;
   gap: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s ease, transform 0.3s ease; 
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .stat-label {
@@ -156,13 +161,15 @@
 }
 
 .stat-value {
-  font-size: 40px;
+  font-size: 28px;
   font-weight: 600;
   color: #111827;
 }
 
-.stat-value.green { color: #16a34a; }
-.stat-value.orange { color: #ea580c; }
+.stat-value.blue { color: #163dff; }
+.stat-value.yellow { color: #a38c40; }
+.stat-value.orange { color: #9a3412; }
+.stat-value.green { color: #065f46; }
 
 .stat-badge {
   align-self: flex-end;
@@ -174,6 +181,7 @@
 }
 .stat-badge.done { background: #ecfdf5; color: #16a34a; }
 .stat-badge.active { background: #fff7ed; color: #f97316; }
+
 
 /* Navigation Tabs */
 .navigation-tabs {
@@ -236,24 +244,27 @@
 }
 
 .ticket-info {
-  /* Aligns with the ticket main info */
   display: flex; 
   flex-direction: column;
 }
 
 .ticket-description {
-  font-size: 16px;
   font-weight: 600;
   color: #1f2937;
-  margin-bottom: 8px;
 }
 
 .ticket-id {
   display: flex;
   align-items: center;
+  margin-top: 6px;
   gap: 6px;
-  font-size: 14px;
+  font-size: 13px;
   color: #6b7280;
+}
+
+.ticket-id-icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* Ticket Action Section */
@@ -265,61 +276,37 @@
 
 /* Status Badge Colors */
 .status-badge {
-  padding: 6px 10px;
-  border-radius: 12px; 
+  padding: 6px 16px;
+  border-radius: 20px;
   font-size: 13px;
   font-weight: 500;
-  min-width: 80px;
-  text-align: center;
-  align-self: center;
 }
 
-/* ✅ Updated “Pending” Style */
-.status-pending {
-  color: #d1a700;
-  background-color: #fff5d6;
-}
+.status-new { background-color: #d4e1ff; color: #163dff; }
+.status-pending { background-color: #fff5d6; color: #d1a700; }
+.status-inprogress { background-color: #fed7aa; color: #9a3412; }
+.status-resolved { background-color: #d1fae5; color: #065f46; }
 
-/* ✅ Keep Resolved + In Progress distinct */
-.status-resolved {
-  background-color: #d1fae5;
-  color: #065f46; 
-}
-
-.status-inprogress {
-  background-color: #fed7aa;
-  color: #9a3412;
-}
-
-/* ✅ Updated “View Details” Button */
 .action-button {
-  /* Adopting standard btn padding from StudentDashboard.css */
-  padding: 8px 14px; 
+  padding: 8px 14px;
   border: none;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 600; /* Increased weight for button text */
   cursor: pointer;
-  transition: all 0.2s ease, box-shadow 0.2s ease;
-  
-  /* 🔑 UNIFIED BUTTON COLOR */
-  background-color: #7c3aed; /* Dark purple */
-  color: #ffffff;
-}
-
-.action-button:hover {
-  background-color: #9333ea; /* Light purple on hover */
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Removing old redundant or conflicting styles */
-.button-secondary { /* Removed specific secondary style */
+  transition: all 0.2s;
   background-color: #7c3aed;
   color: #ffffff;
 }
 
-/* Optional secondary buttons */
+.action-button:hover {
+  background-color: #9333ea;
+}
+
+.button-secondary { 
+  background-color: #7c3aed;
+  color: #ffffff;
+}
+
 .button-secondary {
   background-color: #f3e8ff;
   color: #9333ea;
