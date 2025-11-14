@@ -41,7 +41,7 @@ const NoFeedbackModal = ({ open, onClose }) => {
 };
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('New');
+  const [activeTab, setActiveTab] = useState('Open');
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -73,7 +73,7 @@ const AdminDashboard = () => {
   const loadTickets = async () => {
     try {
       setLoading(true);
-      const status = activeTab === 'New' ? 'New' : activeTab === 'All Tickets' ? 'All' : activeTab;
+      const status = activeTab === 'Open' ? 'Open' : activeTab === 'All Tickets' ? 'All' : activeTab;
       const response = await complaintService.getAllComplaints(status);
       if (response.data) {
         setTickets(response.data);
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
   };
 
   const getStatusBadge = (status) => {
-    if (status === 'New') {
+    if (status === 'Open') {
       return <span className="status-badge status-new">New</span>;
     } else if (status === 'Pending') {
       return <span className="status-badge status-pending">Pending</span>;
@@ -115,16 +115,10 @@ const AdminDashboard = () => {
   };
 
   const renderActionButton = (ticket) => {
-    if (ticket.status === 'New') {
+    if (ticket.status === 'Open') {
       return (
         <>
           {getStatusBadge(ticket.status)}
-          <button
-            className="action-button button-secondary"
-            onClick={() => handleOpenTicket(ticket.id)}
-          >
-            New
-          </button>
           <button
             className="action-button button-primary"
             onClick={() => handleAssignStaff(ticket.id)}
@@ -207,7 +201,7 @@ const AdminDashboard = () => {
 
   // Summary stats for admin dashboard
   const total = tickets.length;
-  const newticket = tickets.filter((c) => c.status === 'New').length;
+  const newticket = tickets.filter((c) => c.status === 'Open').length;
   const pending = tickets.filter((c) => c.status === 'Pending').length;
   const inProgress = tickets.filter((c) => c.status === 'In Progress').length;
   const resolved = tickets.filter((c) => c.status === 'Resolved').length;
@@ -274,8 +268,8 @@ const AdminDashboard = () => {
       {/* Navigation Tabs */}
       <div className="navigation-tabs">
         <button
-          className={`tab-button ${activeTab === 'New' ? 'active' : ''}`}
-          onClick={() => handleTabClick('New')}
+          className={`tab-button ${activeTab === 'Open' ? 'active' : ''}`}
+          onClick={() => handleTabClick('Open')}
         >
           New Tickets
         </button>

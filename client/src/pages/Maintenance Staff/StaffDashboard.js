@@ -276,16 +276,16 @@ const StaffDashboard = () => {
                 <div className="stats-row">
                 <div className="stat-card">
                         <div className="stat-label">Total Assigned Tickets</div>
-                        <div className="stat-value orange">{total}</div> {/* 🔑 Use calculated counts */}
+                        <div className="stat-value">{total}</div> {/* 🔑 Use calculated counts */}
                     </div>
                     <div className="stat-card">
                         <div className="stat-label">Pending Tickets</div>
-                        <div className="stat-value orange">{pendingCount}</div> {/* 🔑 Use calculated counts */}
+                        <div className="stat-value yellow">{pendingCount}</div> {/* 🔑 Use calculated counts */}
                     </div>
 
                     <div className="stat-card">
                         <div className="stat-label">In Progress</div>
-                        <div className="stat-value">{inProgressCount}</div> {/* 🔑 Use calculated counts */}
+                        <div className="stat-value orange">{inProgressCount}</div> {/* 🔑 Use calculated counts */}
                     </div>
 
                     <div className="stat-card">
