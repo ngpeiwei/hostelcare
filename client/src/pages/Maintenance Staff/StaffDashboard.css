@@ -156,7 +156,7 @@
 }
 
 .stat-value {
-  font-size: 28px;
+  font-size: 40px;
   font-weight: 600;
   color: #111827;
 }
@@ -276,19 +276,19 @@
 
 /* ✅ Updated “Pending” Style */
 .status-pending {
-  color: #a38c40;
+  color: #d1a700;
   background-color: #fff5d6;
 }
 
 /* ✅ Keep Resolved + In Progress distinct */
 .status-resolved {
-  background-color: #065f46;
-  color: #d1fae5;
+  background-color: #d1fae5;
+  color: #065f46; 
 }
 
 .status-inprogress {
-  background-color: #9a3412;
-  color: #fed7aa;
+  background-color: #fed7aa;
+  color: #9a3412;
 }
 
 /* ✅ Updated “View Details” Button */

@@ -190,13 +190,15 @@
 }
 
 .stat-value {
-  font-size: 28px;
+  font-size: 40px;
   font-weight: 600;
   color: #111827;
 }
 
-.stat-value.green { color: #16a34a; }
-.stat-value.orange { color: #ea580c; }
+.stat-value.blue { color: #163dff; }
+.stat-value.yellow { color: #d1a700; }
+.stat-value.orange { color: #9a3412; }
+.stat-value.green { color: #065f46; }
 
 .stat-badge {
   align-self: flex-end;
@@ -279,8 +281,10 @@
 
 .complaint-actions { display: flex; gap: 10px; align-items: center; }
 .pill { padding: 6px 10px; border-radius: 12px; font-size: 13px; }
-.status-pending { background: #fff7ed; color: #c2410c; }
-.status-resolved { background: #ecfdf5; color: #166534; }
+.status-new { background-color: #d4e1ff; color: #163dff; }
+.status-pending { background-color: #fff5d6; color: #d1a700; }
+.status-inprogress { background-color: #fed7aa; color: #9a3412; }
+.status-resolved { background-color: #d1fae5; color: #065f46; }
 
 /* Responsive */
 @media (max-width: 800px) {

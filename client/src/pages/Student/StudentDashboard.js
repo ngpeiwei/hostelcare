@@ -9,27 +9,33 @@ import SuccessModal from '../../modules/feedback/components/FeedbackSuccess';
 
 const sampleComplaints = [
     {
+        id: 'C005',
+        title: 'Basin tap leaking',
+        status: 'New',
+        feedback: null,
+    },
+    {
         id: 'C004',
         title: 'Ceiling fan not functioning',
-        status: 'Resolved',
+        status: 'Pending',
         feedback: null,
     },
 	{
         id: 'C003',
         title: 'Mirror Broken',
-        status: 'Resolved',
+        status: 'InProgress',
         feedback: null,
     },
     {
         id: 'C002',
         title: 'Table lamp is not working',
-        status: 'Pending',
+        status: 'Resolved',
         feedback: null,
     },
     {
         id: 'C001',
         title: 'Toilet basin tap leaking',
-        status: 'Pending',
+        status: 'Resolved',
         feedback: null,
     },
 ];
@@ -62,8 +68,10 @@ const StudentDashboard = () => {
     useEffect(() => {setComplaints(sampleComplaints);}, []);
 
     const total = complaints.length;
-    const resolved = complaints.filter((c) => c.status === 'Resolved').length;
+    const newticket = complaints.filter((c) => c.status === 'New').length;
     const pending = complaints.filter((c) => c.status === 'Pending').length;
+    const inProgress = complaints.filter((c) => c.status === 'In Progress').length;
+    const resolved = complaints.filter((c) => c.status === 'Resolved').length;
 
     return (
         <div className={`student-dashboard`}>
@@ -98,19 +106,24 @@ const StudentDashboard = () => {
                 <h3 className="section-title">Dashboard</h3>
                 <div className="stats-row">
                     <div className="stat-card">
-                        <div className="stat-label">Complaints Filed</div>
+                        <div className="stat-label">Total Complaints Filed</div>
                         <div className="stat-value">{total}</div>
-                        <div className="stat-badge">Total</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-label">New</div>
+                        <div className="stat-value blue">{newticket}</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-label">Pending</div>
+                        <div className="stat-value yellow">{pending}</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-label">In Progress</div>
+                        <div className="stat-value orange">{inProgress}</div>
                     </div>
                     <div className="stat-card">
                         <div className="stat-label">Resolved</div>
                         <div className="stat-value green">{resolved}</div>
-                        <div className="stat-badge done">✓ Done</div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-label">Pending</div>
-                        <div className="stat-value orange">{pending}</div>
-                        <div className="stat-badge active">Active</div>
                     </div>
                 </div>
 
@@ -161,7 +174,8 @@ const StudentDashboard = () => {
                                 </div>
                             </div>
                             <div className="complaint-actions">
-                                <div className={`pill status-${c.status.toLowerCase()}`}>{c.status}</div>
+                                <div className={`pill status-${c.status.toLowerCase()}`}>
+                                {c.status === 'InProgress' ? 'In Progress' : c.status}</div>
                                 {c.status.toLowerCase() === 'resolved' && (
                                     <button className="btn btn-viewDetails">View Details</button>
                                 )}
@@ -219,13 +233,13 @@ const ViewFeedbackModal = ({ open, feedback, onClose }) => {
     if (!open || !feedback) return null;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content feedback-modal view-feedback">
-                <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">
+        <div className="fb-modal-overlay">
+            <div className="fb-modal-content feedback-modal view-feedback">
+                <button className="fb-modal-close-btn" onClick={onClose} aria-label="Close modal">
                     &times;
                 </button>
                 
-                <h2 className="modal-title">Your Feedback</h2>
+                <h2 className="fb-modal-title">Your Feedback</h2>
                 
                 <div className="feedback-form">
                     <div className="form-group">
@@ -251,6 +265,7 @@ const ViewFeedbackModal = ({ open, feedback, onClose }) => {
                             <p className="feedback-comments-display">
                                 {feedback.comments}
                             </p>
+                            
                         </div>
                     )}
 

@@ -1,4 +1,4 @@
-.modal-overlay {
+.fb-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     z-index: 1000;
   }
   
-.modal-content {
+.fb-modal-content {
     background: #fff;
     padding: 16px;
     border-radius: 8px;
@@ -24,7 +24,7 @@
     overflow-y: auto;
   }
   
-  .modal-close-btn {
+  .fb-modal-close-btn {
     position: absolute;
     top: 16px;
     right: 16px;
@@ -36,7 +36,7 @@
     line-height: 1;
   }
   
-  .modal-title {
+  .fb-modal-title {
     margin-top: 0;
     margin-bottom: 24px;
     font-size: 18px;
@@ -101,7 +101,7 @@
     transform: scale(1.1);
   }
   
-  .modal-actions {
+  .fb-modal-actions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
@@ -110,21 +110,21 @@
 
   /* Responsive tweaks */
   @media (max-width: 480px) {
-    .modal-content {
+    .fb-modal-content {
       padding: 16px;
       border-radius: 6px;
       max-width: 100%;
       /* Allow mobile modal to grow; avoid inner scrolling */
       max-height: none;
     }
-    .modal-title {
+    .fb-modal-title {
       font-size: 16px;
     }
   }
 
   /* Optional large-screen narrower content */
   @media (min-width: 1200px) {
-    .modal-content {
+    .fb-modal-content {
       max-width: 800px;
     }
   }
@@ -164,7 +164,7 @@
   }
   .feedback-form-actions .btn-submit:hover{ background:#0a0a0a; box-shadow: 0 8px 20px rgba(0,0,0,0.18); transform:translateY(-1px); }
 
-  .form-error-message {
+  .fb-form-error-message {
     color: #9b111e;
     background-color: #fbeae9;
     /* border: 1px solid #f6c8c6; */
@@ -175,6 +175,6 @@
     text-align: left;
   }
 
-  .required-asterisk {
+  .fb-required-asterisk {
     color: red;
   }
