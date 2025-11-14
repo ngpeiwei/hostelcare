@@ -291,7 +291,7 @@
   padding: 6px 16px;
   border-radius: 20px;
   font-size: 13px;
-  font-weight: 500;
+  /* font-weight: 500; */
 }
 
 .status-new { background-color: #d4e1ff; color: #163dff; }

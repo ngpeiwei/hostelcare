@@ -1,5 +1,4 @@
-/* Modal overlay and dialog */
-.complaint-overlay {
+.cp-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.45);
@@ -10,7 +9,7 @@
   padding: 20px;
 }
 
-.complaint-modal {
+.cp-modal {
   width: 720px;
   max-width: 100%;
   max-height: 90vh;
@@ -21,26 +20,27 @@
   padding: 18px;
 }
 
-.complaint-modal-header{
+.cp-modal-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
   margin-bottom:3px;
 }
 
-.complaint-modal-close{
+.cp-modal-close-btn{
   background:transparent;
   border:0;
-  font-size:18px;
+  font-size: 18px;
+  color: #2f2f2f;
+  font-weight: 600;
   cursor:pointer;
 }
 
-.complaint-modal-body{ padding-top:6px; }
+.cp-modal-body{ padding-top:6px; }
 
-.complaint-form label{
+.cp-form label{
   display: flex;
   align-items: center;
-
   font-size: 14px;
   color: #333;
   margin-bottom: 10px;
@@ -48,26 +48,21 @@
   flex-wrap: wrap;
 }
 
-
-.complaint-form label.attachments-label {
-  display: block;
-}
-
-/* Ensure inputs/selects/textarea inside a flex label wrap to full width beneath the label row */
-.complaint-form label > input,
-.complaint-form label > select,
-.complaint-form label > textarea{
-  flex-basis: 100%;
-  width: 100%;
-  margin-top: 8px;
-}
-
 .form-icon {
  vertical-align: middle;
  margin-right: 8px; 
 }
 
-.complaint-form input, .complaint-form select, .complaint-form textarea{
+/* form field appears underneath the label text, not next to it */
+.cp-form label > input,
+.cp-form label > select,
+.cp-form label > textarea{
+  flex-basis: 100%;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.cp-form input, .cp-form select, .cp-form textarea{
   margin-top:8px;
   width:100%;
   padding:10px 12px;
@@ -80,70 +75,34 @@
 
 }
 
-.complaint-form label span.required {
+.cp-form label span.required {
   color: red;
+  margin-left: 4px;
 }
 
-.complaint-form textarea{ min-height:100px; resize:vertical }
-
-.complaint-form input::placeholder,
-.complaint-form textarea::placeholder{
+.cp-form textarea{ min-height:100px; resize:vertical }
+.cp-form input::placeholder,
+.cp-form textarea::placeholder{
   color: #9ca3af; 
   font-style: normal; 
   font-weight: 0;
   margin-bottom:4px;
 }
 
-.complaint-form input:hover,
-.complaint-form textarea:hover,
-.complaint-form select:hover{
+.cp-form input:hover,
+.cp-form textarea:hover,
+.cp-form select:hover{
   background:#F3F3F5;
   border-color: #d1d5db;
   transition: border-color 120ms ease, background-color 120ms ease;
 }
 
-/* Complaint button */
-.complaint-form-actions{ display:flex; gap:8px; margin-top:50px; width:100%; }
-
-/* Make both action buttons split the available width equally (50/50) */
-.complaint-form-actions .btn{
-  flex: 1 1 0; 
-  min-width: 0; 
-}
-
-.complaint-form-actions .btn-cancel,
-.complaint-form-actions .btn-submit{
-  flex: 1 1 0;
-}
-
-/* Visual styling for action buttons */
-.complaint-form-actions .btn{
-  padding: 10px 16px;
-  border-radius: 999px;
-  font-size: 14px;
-  text-align: center;
-}
-
-
-.complaint-form-actions .btn-cancel{
-  background: #ffffff;
-  color: #111827;
-  border: 1px solid #e5e7eb;
-}
-.complaint-form-actions .btn-cancel:hover{ background:#fbfcfd; transform:translateY(-1px); }
-
-.complaint-form-actions .btn-submit{
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-}
-.complaint-form-actions .btn-submit:hover{ background:#0a0a0a; box-shadow: 0 8px 20px rgba(0,0,0,0.18); transform:translateY(-1px); }
-
 .form-error{ color:#9b111e; background:#fff0f0; padding:8px; border-radius:6px; margin-bottom:8px }
 
-
-
-/*  New Attachment Uploader */
+/*  Attachment */
+.cp-form label.attachments-label {
+  display: block;
+}
 .file-upload-area {
   margin-top: 8px;
   border: 2px dashed #d1d5db; 
@@ -197,18 +156,13 @@
   gap: 10px;              
 }
 
-/* Each item is now a flex row */
 .attachment-item {
   display: flex;
   flex-direction: row; 
   align-items: center;  
-  /* border: 1px solid #e5e7eb; 
-  border-radius: 8px; 
-  background-color: #f9fafb;  */
   width: 100%;
 }
 
-/* Thumbnail: Smaller and on the left */
 .attachment-thumbnail {
   width: 50px;          
   height: 50px;       
@@ -219,7 +173,6 @@
   background-color: #e5e7eb;
 }
 
-/* Placeholder for non-image files */
 .attachment-placeholder {
   display: flex;
   align-items: center;
@@ -228,9 +181,7 @@
 .attachment-placeholder svg {
   width: 28px;
   height: 28px;
-  /* color: #6b7280; */
 }
-
 
 .attachment-info {
   display: flex;
@@ -240,7 +191,6 @@
   min-width: 0;
 }
 
-/* Attachment name button */
 .attachment-name-btn {
   font-size: 14px;
   font-style: italic;     
@@ -282,3 +232,34 @@
 .attachment-remove-btn:hover {
   color: #ef4444; 
 }
+
+/* Complaint button */
+.cp-form-actions{ display:flex; gap:8px; margin-top:50px; width:100%; }
+
+.cp-form-actions .btn{
+  flex: 1 1 0; 
+  min-width: 0; 
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.cp-form-actions .btn-cancel,
+.cp-form-actions .btn-submit{
+  flex: 1 1 0;
+}
+
+.cp-form-actions .btn-cancel{
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+}
+.cp-form-actions .btn-cancel:hover{ background:#fbfcfd; transform:translateY(-1px); }
+
+.cp-form-actions .btn-submit{
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+}
+.cp-form-actions .btn-submit:hover{ background:#0a0a0a; box-shadow: 0 8px 20px rgba(0,0,0,0.18); transform:translateY(-1px); }

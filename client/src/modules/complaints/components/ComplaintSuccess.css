@@ -1,0 +1,94 @@
+.cp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  z-index: 1000;
+  }
+    
+.cp-modal-content.success-card {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 12px;
+  width: 500px;
+  height: 400px;
+  max-width: 1000px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  
+  /* Add flex to center content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  }
+    
+.cp-success-icon-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #5cbf5f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+/* .cp-success-icon {
+  font-size: 80px;
+  color: white;
+  line-height: 1;
+  font-weight: bold;
+} */
+
+.cp-success-icon {
+  width: 100px;
+  height: 100px;
+  margin-right: 8px;
+}
+
+.cp-check-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawCheck 0.5s ease forwards;
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.cp-success-message {
+  font-size: 18px;
+  font-weight: 0;
+  color: #166534; /* Changed to green */
+  margin-top: 0px;
+  margin-bottom: 50px;
+  background-color: white;
+  }
+
+.cp-btn-ok {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cp-success-ok-btn {
+  width: 30%;
+  background: #7c3aed; 
+  border: 1px solid #7c3aed;
+  color: white;
+}
+.cp-success-ok-btn:hover {
+  background: #6d28d9;
+  border-color: #6d28d9;
+}

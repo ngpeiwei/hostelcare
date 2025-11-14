@@ -4,6 +4,7 @@ import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/user.jpg';
 import './StudentDashboard.css';
 import ComplaintModal from '../../modules/complaints/components/ComplaintForm';
+import ComplaintSuccessModal from '../../modules/complaints/components/ComplaintSuccess';
 import FeedbackModal from '../../modules/feedback/components/FeedbackForm'; 
 import SuccessModal from '../../modules/feedback/components/FeedbackSuccess';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
@@ -56,9 +57,15 @@ const StudentDashboard = () => {
     };
 
     const [isComplaintOpen, setIsComplaintOpen] = useState(false);
+    const [isComplaintSuccessOpen, setIsComplaintSuccessOpen] = useState(false);
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(null);
     const [isSuccessOpen, setIsSuccessOpen] = useState(false);
     const [viewingFeedback, setViewingFeedback] = useState(null);
+
+    const handleComplaintSuccess = () => {
+        setIsComplaintOpen(false); 
+        setIsComplaintSuccessOpen(true); 
+    };
 
     const handleFeedbackSuccess = (feedbackData) => {setComplaints(currentComplaints => currentComplaints.map(c =>
             c.id === feedbackData.complaintId ? { ...c, feedback: feedbackData }  : c));
@@ -76,7 +83,7 @@ const StudentDashboard = () => {
 
     return (
         <div className={`student-dashboard`}>
-            {/* Header (No changes here) */}
+            {/* Header */}
             <div className="dashboard-header">
                 <div className="header-left">
                     <img src={logoImage} alt="HostelCare Logo" className="logo-icon" />
@@ -136,7 +143,14 @@ const StudentDashboard = () => {
                     <button className="btn btn-submitTicket" onClick={() => setIsComplaintOpen(true)}> + Submit A Ticket</button>
                 </div>
                     
-                <ComplaintModal open={isComplaintOpen} onClose={() => setIsComplaintOpen(false)} />
+                <ComplaintModal 
+                    open={isComplaintOpen} 
+                    onClose={() => setIsComplaintOpen(false)} 
+                    onSubmitSuccess={handleComplaintSuccess} 
+                />
+
+                <ComplaintSuccessModal open={isComplaintSuccessOpen} onClose={() => setIsComplaintSuccessOpen(false)} />
+                    
                 <FeedbackModal 
                     open={!!isFeedbackOpen} 
                     onClose={() => setIsFeedbackOpen(null)} 

@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'; // Import useRef
+import React, { useState, useEffect, useRef } from 'react'; 
 import ReactDOM from 'react-dom';
-import complaintService from '../services/complaintService';
 import '../ComplaintForm.css';
 
-
-function ComplaintForm({ open, onClose }) { 
+function ComplaintForm({ open, onClose, onSubmitSuccess }) { 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [subCategory, setSubCategory] = useState('');
@@ -16,43 +14,19 @@ function ComplaintForm({ open, onClose }) {
   const [loading,setLoading] = useState(false);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null); 
+  const modalBodyRef = useRef(null);
 
-
+  // Close the main modal on 'Escape' key press
   useEffect(() => {
     if (!open) return;
-    function onKey(e) {
-      if (e.key === 'Escape') onClose && onClose();
-    }
+    const onKey = (e) => {
+      if (e.key === 'Escape') handleClose(); 
+    };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+      return () => document.removeEventListener('keydown', onKey);
+    }, [open]);
 
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    const withPreview = files.map((f) => ({ file: f, preview: URL.createObjectURL(f) }));
-    setAttachments((prev) => [...prev, ...withPreview]);
-    e.target.value = null;
-  };
-
-  const removeAttachment = (index) => {
-    setAttachments((prev) => {
-      const item = prev[index];
-      if (item && item.preview) URL.revokeObjectURL(item.preview);
-      return prev.filter((_, i) => i !== index);
-    });
-  };
-
-  // Open preview for an attachment (object with {file, preview})
-  const openPreview = (att) => {
-    setPreview(att);
-  };
-
-  const closePreview = () => {
-    setPreview(null);
-  };
-
-  // Close preview on Escape key when preview is open
+  // Close the attachment preview modal on 'Escape' key press
   useEffect(() => {
     if (!preview) return;
     const onKey = (e) => {
@@ -62,48 +36,7 @@ function ComplaintForm({ open, onClose }) {
     return () => document.removeEventListener('keydown', onKey);
   }, [preview]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    if (!title || !category || !hostel || !room) {
-      setError('Please fill required fields.');
-      return;
-    }
-    setLoading(true);
-    let res;
-    try {
-      if (attachments && attachments.length > 0) {
-        const form = new FormData();
-        form.append('title', title);
-        form.append('category', category);
-        form.append('subCategory', subCategory);
-        form.append('description', description);
-        form.append('hostel', hostel);
-        form.append('room', room);
-        attachments.forEach((a) => {
-          form.append('attachments', a.file, a.file.name);
-        });
-        res = await complaintService.createComplaint(form);
-      } else {
-        const payload = { title, category, subCategory, description, hostel, room };
-        res = await complaintService.createComplaint(payload);
-      }
-
-      if (res && (res.ok || res.status === 201 || res.status === 200)) {
-        onClose && onClose();
-        resetForm();
-      } else {
-        console.warn('Complaint create returned:', res);
-        onClose && onClose();
-      }
-    } catch (err) {
-      console.error('create complaint failed', err);
-      setError('Failed to submit complaint. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Clears all form fields and revokes attachment URLs
   const resetForm = () => {
     setTitle('');
     setCategory('');
@@ -116,38 +49,121 @@ function ComplaintForm({ open, onClose }) {
     setError(null);
   };
 
+  // Handles adding new files and creating local preview URLs
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    const withPreview = files.map((f) => ({ file: f, preview: URL.createObjectURL(f) }));
+    setAttachments((prev) => [...prev, ...withPreview]);
+    e.target.value = null; // Clear input to allow re-uploading same file
+  };
+
+  // Removes a file and revokes its local preview URL
+  const removeAttachment = (index) => {
+    setAttachments((prev) => {
+      const item = prev[index];
+      if (item && item.preview) URL.revokeObjectURL(item.preview);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const openPreview = (att) => {
+    setPreview(att);
+  };
+
+  const closePreview = () => {
+    setPreview(null);
+  };
+
+  const handleClose = () => {
+    resetForm();   // clear error + inputs
+    onClose && onClose();
+  };
+
+  // Handles form submission (Simulated API call)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    // Basic Validation
+    if (!title || !category || !subCategory|| !hostel || !room) {
+      setError('Please fill all * required fields.');
+
+    if (modalBodyRef.current) {
+      modalBodyRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+      return;
+    }
+    setLoading(true);
+
+    const complaintData = {
+      title,
+      category,
+      subCategory,
+      description,
+      hostel,
+      room,
+      attachments: attachments.map(a => ({
+        name: a.file.name,
+        type: a.file.type,
+        size: a.file.size
+      }))
+    };
+
+    try {
+      console.log('--- Submitting Complaint (Simulated) ---');
+      console.log('Form Data:', { title, category, subCategory, description, hostel, room });
+      console.log('Attachments Count:', attachments.length);
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Complaint submitted successfully (Simulated)');
+      onSubmitSuccess(complaintData);
+      handleClose();
+    } catch (err) {
+      // Catch and handle simulated errors
+      console.error('Simulated complaint submission failed', err);
+      setError('Failed to submit complaint. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!open) return null;
 
 
+  // Modal Form Content
   const modalContent = (
     <div
-      className="complaint-overlay"
+      className="cp-overlay"
       role="presentation"
-      onMouseDown={(e) => {
-        if (e.target.classList.contains('complaint-overlay')) onClose && onClose();
+     // Close modal on outside click (only if clicking the overlay)
+     onMouseDown={(e) => {
+         if (e.target.classList.contains('cp-overlay')) handleClose();
       }}
     >
-      <div className="complaint-modal" role="dialog" aria-modal="true">
-        <div className="complaint-modal-header">
+      <div className="cp-modal" role="dialog" aria-modal="true" ref={modalBodyRef}>
+        <div className="cp-modal-header">
           <h3>Complaint Ticket</h3>
           <button
-            className="complaint-modal-close"
+            className="cp-modal-close-btn"
             aria-label="Close complaint form"
-            onClick={() => onClose && onClose()} 
+            onClick={handleClose} 
           >
             ✕
           </button>
         </div>
 
-        <div className="complaint-modal-body">
-          <form className="complaint-form" onSubmit={handleSubmit}>
+        <div className="cp-modal-body">
+          <form className="cp-form" onSubmit={handleSubmit}>
             {error && <div className="form-error">{error}</div>}
+
+            {/* Issue Title */}
             <label>
               <svg className="form-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               Issue Title <span className="required">*</span><input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., Broken Door" autoFocus/>
             </label>
+            {/* Category */}
             <label>
               <svg className="form-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -157,18 +173,21 @@ function ComplaintForm({ open, onClose }) {
               <option value="individual">Individual</option>
               <option value="public">Public</option></select>
             </label>
+            {/* Sub-Category */}
             <label>
               <svg className="form-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
               </svg>
               Sub-Category <span className="required">*</span><input value={subCategory} onChange={(e) => setSubCategory(e.target.value)} placeholder="e.g., Light fixture" />
             </label>
+            {/* Description */}
             <label>
               <svg className="form-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
               Description<textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Please describe the issue in detail..." />
             </label>
+            {/* Hostel */}
             <label>
               <svg className="form-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -184,6 +203,7 @@ function ComplaintForm({ open, onClose }) {
               <option value="Cahaya Gemilang">Cahaya Gemilang</option>
               <option value="Indah Kembara">Indah Kembara</option></select>
             </label>
+            {/* Room Number */}
             <label>
               <svg className="form-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -277,9 +297,8 @@ function ComplaintForm({ open, onClose }) {
                         <button
                           type="button"
                             onClick={(e) => {
-                            // 1. Stop the browser's default label action (this is the key fix)
+                            // Prevents the button click from triggering the parent label/file-upload-area
                             e.preventDefault();
-                            // 2. Stop the event from bubbling to other React handlers (good practice)
                             e.stopPropagation();
                             removeAttachment(idx);
                           }}
@@ -294,8 +313,8 @@ function ComplaintForm({ open, onClose }) {
               )}
             </label>
 
-            <div className="complaint-form-actions">
-              <button type="button" className="btn btn-cancel" onClick={() => onClose && onClose()} disabled={loading}>Cancel</button>
+            <div className="cp-form-actions">
+              <button type="button" className="btn btn-cancel"  onClick={handleClose} disabled={loading}>Cancel</button>
               <button type="submit" className="btn btn-submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit Complaint'}</button>
             </div>
           </form>
@@ -304,21 +323,21 @@ function ComplaintForm({ open, onClose }) {
     </div>
   );
 
-  // Preview portal for viewing attachment full-size (image/video or link) - thumbnail
+  // --- Preview Modal Portal ---
   const previewPortal = preview ? (
     <div
-      className="complaint-overlay"
+      className="cp-overlay"
       role="presentation"
       onMouseDown={(e) => {
-        if (e.target.classList.contains('complaint-overlay')) closePreview();
+        if (e.target.classList.contains('cp-overlay')) closePreview();
       }}
     >
-      <div className="complaint-modal" role="dialog" aria-modal="true" style={{ maxWidth: '90%', padding: '12px' }}>
-        <div className="complaint-modal-header">
+      <div className="cp-modal" role="dialog" aria-modal="true" style={{ maxWidth: '90%', padding: '12px' }}>
+        <div className="cp-modal-header">
           <h3 style={{ fontSize: '16px', margin: 0 }}>{preview.file.name}</h3>
-          <button className="complaint-modal-close" aria-label="Close preview" onClick={closePreview}>✕</button>
+          <button className="cp-modal-close" aria-label="Close preview" onClick={closePreview}>✕</button>
         </div>
-        <div className="complaint-modal-body" style={{ paddingTop: 8, textAlign: 'center' }}>
+        <div className="cp-modal-body" style={{ paddingTop: 8, textAlign: 'center' }}>
           {preview.file.type.startsWith('image/') ? (
             <img src={preview.preview} alt={preview.file.name} style={{ maxWidth: '100%', maxHeight: '80vh', borderRadius: 6 }} />
           ) : preview.file.type.startsWith('video/') ? (
@@ -338,3 +357,6 @@ function ComplaintForm({ open, onClose }) {
 }
 
 export default ComplaintForm;
+
+
+
