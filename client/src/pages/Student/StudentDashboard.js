@@ -99,6 +99,13 @@ const StudentDashboard = () => {
                     </div>
                     {showDropdown && (
                         <div className="dropdown-menu">
+                            <button className="dropdown-item" onClick={() => navigate('/student/StudentProfile')}>
+                                <svg className="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                        d="M5.121 17.804A6 6 0 0112 15a6 6 0 016.879 2.804M15 9a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                Profile
+                            </button>
                             <button className="dropdown-item" onClick={handleLogout}>
                                 <svg className="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

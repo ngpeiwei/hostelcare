@@ -56,7 +56,7 @@ export default function LoginStaff() {
             <input
               className="hc-input"
               type="email"
-              placeholder="Email address"
+              placeholder="@usm.my or any *.usm.my subdomains"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -80,8 +80,8 @@ export default function LoginStaff() {
           </form>
 
           <div className="hc-links">
-            <p>Don't have an account? <a href="/auth/register">Sign Up</a></p>
-            <p><a href="/auth/login">Login As Student</a></p>
+            <p>Don't have an account? <a href="/auth/SignUp">Sign Up</a></p>
+            <p><a href="/auth/Login">Login As Student</a></p>
             <p><a href="/auth/LoginAdmin">Login As Admin</a></p>
           </div>
         </div>

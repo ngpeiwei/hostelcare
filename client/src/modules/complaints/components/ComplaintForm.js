@@ -86,7 +86,7 @@ function ComplaintForm({ open, onClose, onSubmitSuccess }) {
 
     // Basic Validation
     if (!title || !category || !subCategory|| !hostel || !room) {
-      setError('Please fill all * required fields.');
+      setError('Please fill all required fields.');
 
     if (modalBodyRef.current) {
       modalBodyRef.current.scrollTo({ top: 0, behavior: "smooth" });
@@ -194,14 +194,14 @@ function ComplaintForm({ open, onClose, onSubmitSuccess }) {
               </svg>
               Hostel <span className="required">*</span><select value={hostel} onChange={(e) => setHostel(e.target.value)}>
               <option value="" disabled hidden>Pls Select</option>
-              <option value="Restu">Restu</option>
-              <option value="Saujana">Saujana</option>
-              <option value="Tekun">Tekun</option>
-              <option value="Fajar Harapan">Fajar Harapan</option>
-              <option value="Aman Damai">Aman Damai</option>
-              <option value="Bakti Permai">Bakti Permai</option>
-              <option value="Cahaya Gemilang">Cahaya Gemilang</option>
-              <option value="Indah Kembara">Indah Kembara</option></select>
+              <option value="Desasiswa Restu">Restu</option>
+              <option value="Desasiswa Saujana">Saujana</option>
+              <option value="Desasiswa Tekun">Tekun</option>
+              <option value="Desasiswa Fajar Harapan">Fajar Harapan</option>
+              <option value="Desasiswa Aman Damai">Aman Damai</option>
+              <option value="Desasiswa Bakti Permai">Bakti Permai</option>
+              <option value="Desasiswa Cahaya Gemilang">Cahaya Gemilang</option>
+              <option value="Desasiswa Indah Kembara">Indah Kembara</option></select>
             </label>
             {/* Room Number */}
             <label>
@@ -209,7 +209,7 @@ function ComplaintForm({ open, onClose, onSubmitSuccess }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              Room Number <span className="required">*</span><input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="e.g., M04-09-12A" />
+              Building and Room Number <span className="required">*</span><input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="e.g., M04-09-12A" />
             </label>
             
             {/* Attachement */}
@@ -335,7 +335,7 @@ function ComplaintForm({ open, onClose, onSubmitSuccess }) {
       <div className="cp-modal" role="dialog" aria-modal="true" style={{ maxWidth: '90%', padding: '12px' }}>
         <div className="cp-modal-header">
           <h3 style={{ fontSize: '16px', margin: 0 }}>{preview.file.name}</h3>
-          <button className="cp-modal-close" aria-label="Close preview" onClick={closePreview}>✕</button>
+          <button className="cp-modal-close-btn" aria-label="Close preview" onClick={closePreview}>✕</button>
         </div>
         <div className="cp-modal-body" style={{ paddingTop: 8, textAlign: 'center' }}>
           {preview.file.type.startsWith('image/') ? (
