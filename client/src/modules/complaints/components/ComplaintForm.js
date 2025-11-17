@@ -194,14 +194,14 @@ function ComplaintForm({ open, onClose, onSubmitSuccess }) {
               </svg>
               Hostel <span className="required">*</span><select value={hostel} onChange={(e) => setHostel(e.target.value)}>
               <option value="" disabled hidden>Pls Select</option>
-              <option value="Desasiswa Restu">Restu</option>
-              <option value="Desasiswa Saujana">Saujana</option>
-              <option value="Desasiswa Tekun">Tekun</option>
-              <option value="Desasiswa Fajar Harapan">Fajar Harapan</option>
-              <option value="Desasiswa Aman Damai">Aman Damai</option>
-              <option value="Desasiswa Bakti Permai">Bakti Permai</option>
-              <option value="Desasiswa Cahaya Gemilang">Cahaya Gemilang</option>
-              <option value="Desasiswa Indah Kembara">Indah Kembara</option></select>
+              <option value="Desasiswa Restu">Desasiswa Restu</option>
+              <option value="Desasiswa Saujana">Desasiswa Saujana</option>
+              <option value="Desasiswa Tekun">Desasiswa Tekun</option>
+              <option value="Desasiswa Fajar Harapan">Desasiswa Fajar Harapan</option>
+              <option value="Desasiswa Aman Damai">Desasiswa Aman Damai</option>
+              <option value="Desasiswa Bakti Permai">Desasiswa Bakti Permai</option>
+              <option value="Desasiswa Cahaya Gemilang">Desasiswa Cahaya Gemilang</option>
+              <option value="Desasiswa Indah Kembara">Desasiswa Indah Kembara</option></select>
             </label>
             {/* Room Number */}
             <label>
