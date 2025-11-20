@@ -271,25 +271,25 @@ const AdminDashboard = () => {
           className={`tab-button ${activeTab === 'Open' ? 'active' : ''}`}
           onClick={() => handleTabClick('Open')}
         >
-          New Tickets
+          New Tickets (5)
         </button>
         <button
           className={`tab-button ${activeTab === 'Pending' ? 'active' : ''}`}
           onClick={() => handleTabClick('Pending')}
         >
-          Pending Tickets
+          Pending Tickets (4)
         </button>
         <button
           className={`tab-button ${activeTab === 'In Progress' ? 'active' : ''}`}
           onClick={() => handleTabClick('In Progress')}
         >
-          In Progress Tickets
+          In Progress Tickets (0)
         </button>
         <button
           className={`tab-button ${activeTab === 'Resolved' ? 'active' : ''}`}
           onClick={() => handleTabClick('Resolved')}
         >
-          Resolved Tickets
+          Resolved Tickets (6)
         </button>
       </div>
 

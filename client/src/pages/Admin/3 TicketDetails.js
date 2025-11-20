@@ -132,7 +132,7 @@ const TicketDetails = () => {
   }
 
   const staffOptions = ['Nazrul Hakim', 'Muqtadir Syabil', 'Siti Aminah', 'Mohd Razif'];
-  const statusOptions = ['Open', 'Pending', 'Resolved'];
+  const statusOptions = ['New','In Progress', 'Pending', 'Resolved'];
 
   return (
     <div className="ticket-details-page">
@@ -298,7 +298,7 @@ const TicketDetails = () => {
               <input
                 type="text"
                 className="form-input"
-                value={ticket.building}
+                value={'+60102355511'}
                 disabled
               />
             </div>
@@ -314,7 +314,7 @@ const TicketDetails = () => {
               <input
                 type="text"
                 className="form-input"
-                value={ticket.floorAndRoom}
+                value={'M04-09-12A'}
                 disabled
               />
             </div>
