@@ -7,11 +7,21 @@ import './StaffDashboard.css';
 
 // Import the modal components
 import TicketModal_Pending from '../../modules/tracking/components/TicketModal_Pending';
-import SuccessMessageModal from '../../modules/tracking/components/SuccessfulModal';
+import SuccessMessageModal from '../../modules/tracking/components/SuccessfulModal'; 
+
+const initialMockData = [
+    { id: '00005', title: "Mattress old and spoiled", description: "Mattress old and spoiled", dateReported: "2025-11-12", status: "Pending", reporter: "Syakila", hostel: "Desasiswa Tekun", phone: "+60102355511" },
+    { id: '00008', title: "Bed frame is loosed", description: "Bed frame is loosed", dateReported: "2025-11-12", status: "Pending", reporter: "Student Y", hostel: "Desasasiswa Saujana", phone: "+60104566778" },
+    { id: '00001', title: "Toilet tap has been leaking for 2 days", description: "Toilet tap has been leaking for 2 days", dateReported: "2025-11-10", status: "In Progress", reporter: "Student A", hostel: "Desasiswa Tekun", phone: "+60102362610" },
+    { id: '00002', title: "Ceiling fan speed slow", description: "The ceiling fan in my room is very slow", dateReported: "2025-11-09", status: "In Progress", reporter: "Student B", hostel: "Desasasiswa Bakti Permai", phone: "+60103456789" },
+    { id: '00003', title: "Window broken", description: "Window glass shattered", dateReported: "2025-11-08", status: "Resolved", reporter: "Student C", hostel: "Desasiswa Aman Damai", phone: "+60107654321" }
+];
+
 
 const StaffDashboard = () => {
     const [activeTab, setActiveTab] = useState('Pending Tickets');
-    const [tickets, setTickets] = useState([]);
+    // State to hold the tickets visible on the current tab
+    const [tickets, setTickets] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [showDropdown, setShowDropdown] = useState(false);
     const navigate = useNavigate();
@@ -19,9 +29,12 @@ const StaffDashboard = () => {
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [isSuccessOpen, setIsSuccessOpen] = useState(false);
 
+    // 🔑 FIX 1: New state to manage ALL mock data persistently across the session
+    const [allMockTickets, setAllMockTickets] = useState(initialMockData); 
+
     useEffect(() => {
         loadTickets();
-    }, [activeTab]);
+    }, [activeTab, allMockTickets]); // Re-run loadTickets when tab or persistent data changes
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -37,102 +50,37 @@ const StaffDashboard = () => {
         };
     }, [showDropdown]);
 
+    // 🔑 FIX 2: loadTickets now filters the persistent state (allMockTickets)
     const loadTickets = async () => {
         setLoading(true);
-
         let statusFilter;
         
+        if (activeTab === 'Pending Tickets') statusFilter = 'Pending';
+        else if (activeTab === 'In Progress Tickets') statusFilter = 'In Progress';
+        else if (activeTab === 'Resolved Tickets') statusFilter = 'Resolved';
+        else statusFilter = 'All';
+
         try {
-          //let statusFilter; // Renamed to avoid confusion with ticket.status
-            if (activeTab === 'Pending Tickets') statusFilter = 'Pending';
-            else if (activeTab === 'In Progress Tickets') statusFilter = 'In Progress';
-            else if (activeTab === 'Resolved Tickets') statusFilter = 'Resolved';
-            else statusFilter = 'All';
+            // Attempt real API call (assuming it fails for now)
+            // let response = await complaintService.getAllComplaints(statusFilter);
 
-            let response = null;
-            try {
-                response = await complaintService.getAllComplaints(statusFilter);
-            } catch (err) {
-                console.warn("complaintService.getAllComplaints() failed, using mock data instead.");
-            }
-
-            if (!response || !response.data || response.data.length === 0) {
-                console.log("Using mock ticket data for testing");
-
-                const mockTickets = [
-                    {
-                        id: '00009',
-                        title: "Mattress old and spoiled",
-                        description: "Mattress old and spoiled",
-                        dateReported: "2025-11-12",
-                        status: "Pending", // Ensure initial mock status is Pending for testing
-                        reporter: "Student X",
-                        location: "Block C - Room 301"
-                    },
-                    {
-                        id: '00008',
-                        title: "Bed frame is loosed",
-                        description: "Bed frame is loosed",
-                        dateReported: "2025-11-12",
-                        status: "Pending", // Ensure initial mock status is Pending for testing
-                        reporter: "Student Y",
-                        location: "Block C - Room 302"
-                    },
-                    // Add an 'In Progress' mock ticket for testing the new button behavior
-                    {
-                        id: '00001',
-                        title: "Toilet basin tap leaking",
-                        description: "Toilet tap has been leaking for 2 days",
-                        dateReported: "2025-11-10",
-                        status: "In Progress", 
-                        reporter: "Student A",
-                        location: "Block B - Room 101"
-                    },
-                     {
-                        id: '00002',
-                        title: "Ceiling fan speed slow",
-                        description: "The ceiling fan in my room is very slow",
-                        dateReported: "2025-11-09",
-                        status: "In Progress", 
-                        reporter: "Student B",
-                        location: "Block B - Room 102"
-                    },
-                    // Add a 'Resolved' mock ticket for testing
-                    {
-                        id: '00003',
-                        title: "Window broken",
-                        description: "Window glass shattered",
-                        dateReported: "2025-11-08",
-                        status: "Resolved",
-                        reporter: "Student C",
-                        location: "Block A - Room 201"
-                    }
-                ];
-
-                const filtered = mockTickets.filter(t => {
-                    // Filter based on the selected tab
-                    if (statusFilter === 'All') return true;
-                    return t.status === statusFilter;
-                });
-                setTickets(filtered);
-            } else {
-                setTickets(response.data);
-            }
-        } catch (error) {
-            console.error('Error loading tickets:', error);
-            // Fallback to mock data on error if backend fails completely
-            const mockTicketsOnError = [
-                { id: '00009', title: "Mattress old and spoiled", description: "Mattress old and spoiled", dateReported: "2025-11-12", status: "Pending", reporter: "Student X", location: "Block C - Room 301" },
-                { id: '00008', title: "Bed frame is loosed", description: "Bed frame is loosed", dateReported: "2025-11-12", status: "Pending", reporter: "Student Y", location: "Block C - Room 302" },
-                { id: '00001', title: "Toilet basin tap leaking", description: "Toilet tap has been leaking for 2 days", dateReported: "2025-11-10", status: "In Progress", reporter: "Student A", location: "Block B - Room 101" },
-                { id: '00002', title: "Ceiling fan speed slow", description: "The ceiling fan in my room is very slow", dateReported: "2025-11-09", status: "In Progress", reporter: "Student B", location: "Block B - Room 102" },
-                { id: '00003', title: "Window broken", description: "Window glass shattered", dateReported: "2025-11-08", status: "Resolved", reporter: "Student C", location: "Block A - Room 201" }
-            ];
-            const filteredOnError = mockTicketsOnError.filter(t => {
+            // 💡 Use persistent mock state instead of API or hardcoded mock array
+            const filteredTickets = allMockTickets.filter(t => {
                 if (statusFilter === 'All') return true;
                 return t.status === statusFilter;
             });
-            setTickets(filteredOnError);
+            
+            setTickets(filteredTickets);
+            
+        } catch (error) {
+            console.error('Error loading tickets:', error);
+            // On API error, still filter the mock tickets (already handled above)
+            const filteredTickets = allMockTickets.filter(t => {
+                if (statusFilter === 'All') return true;
+                return t.status === statusFilter;
+            });
+            setTickets(filteredTickets);
+            
         } finally {
             setLoading(false);
         }
@@ -146,9 +94,8 @@ const StaffDashboard = () => {
         navigate(`/staff/ticket/${ticketId}/update`);
     };
 
-   const handleViewDetails = (ticketId) => {
-        // Find the full ticket data and set it to state to open the modal
-        const ticket = tickets.find(t => t.id === ticketId);
+    const handleViewDetails = (ticketId) => {
+        const ticket = allMockTickets.find(t => t.id === ticketId); // Use persistent state here
         if (ticket) {
             setSelectedTicket(ticket);
         }
@@ -158,36 +105,28 @@ const StaffDashboard = () => {
         setSelectedTicket(null);
     };
 
-    // 🔑 UPDATED LOGIC: This function is called after "Confirm Start"
+    // 🔑 FIX 3: Updates the persistent state, triggering the useEffect hook and loadTickets
     const handleUpdateStatus = (ticketId, newStatus) => {
-        // 1. Update the local state immediately
-        setTickets(prevTickets =>
+        // 1. Update the persistent mock state (Fixes bug 1 & 3)
+        setAllMockTickets(prevTickets =>
             prevTickets.map(t =>
                 t.id === ticketId ? { ...t, status: newStatus } : t
             )
         );
 
-        // 2. Show success message (e.g., "You have successfully started your work!")
+        // 2. Show success popup
         setIsSuccessOpen(true);
 
-        // 3. IMPORTANT: Update the activeTab if the current tab no longer makes sense
-        // For example, if we were on 'Pending Tickets' and a ticket became 'In Progress',
-        // we might want to switch to 'In Progress Tickets' tab or refresh the current one.
-        // For now, let's just ensure loadTickets() is called after a delay.
+        // 3. Automatically move user to the correct tab (Fixes bug 1, part 2)
+        if (newStatus === 'In Progress') {
+            setActiveTab('In Progress Tickets');
+        } else if (newStatus === 'Resolved') {
+            setActiveTab('Resolved Tickets');
+        }
 
-        // 4. TODO: In a real app, call the API here to update the backend:
-        // trackingService.updateStatus(ticketId, newStatus);
-
-        // 5. Reload tickets after a brief delay to ensure dashboard totals and other tickets update
-        // (This will also re-filter based on the current activeTab)
-        setTimeout(() => {
-            loadTickets(); 
-            // If the tab was 'Pending Tickets', switching it will naturally hide the updated ticket.
-            // If we want to automatically switch to 'In Progress Tickets' after starting work,
-            // we could do: setActiveTab('In Progress Tickets');
-            // For now, let's just refresh the current tab's data.
-        }, 300); // Small delay for UX
+        // Note: loadTickets will be called automatically via useEffect due to the change in allMockTickets/activeTab
     };
+
 
     const getStatusBadge = (status) => {
         if (status === 'Pending') {
@@ -200,20 +139,25 @@ const StaffDashboard = () => {
         return null;
     };
 
+    // 🔑 FIX 4: Single button logic confirmed
     const renderActionButton = (ticket) => {
         let buttonText;
         let buttonAction;
 
-        if (ticket.status === 'Pending' || ticket.status === 'Resolved') {
-            // Pending -> View Details | Resolved -> View Details
+        if (ticket.status === 'Pending') {
+            // Pending -> View Details (Opens Modal)
             buttonText = 'View Details';
-            buttonAction = () => handleViewDetails(ticket.id); // View Details opens the modal
+            buttonAction = () => handleViewDetails(ticket.id);
         } else if (ticket.status === 'In Progress') {
-            // In Progress -> Update Progress (Renaming 'Track Progress' back to 'Update Progress' for staff action)
+            // In Progress -> Update Progress (Navigates to the update form)
             buttonText = 'Update Progress';
-            buttonAction = () => handleUpdateProgress(ticket.id); // Update Progress navigates to the update form
+            buttonAction = () => handleUpdateProgress(ticket.id);
+        } else if (ticket.status === 'Resolved') {
+            // Resolved -> View Details
+            buttonText = 'View Details';
+            buttonAction = () => handleViewDetails(ticket.id);
         } else {
-            return null; // Don't render anything if status is unknown
+            return null;
         }
 
         return (
@@ -238,11 +182,11 @@ const StaffDashboard = () => {
         navigate('/auth/LoginStaff');
     };
 
-    // Calculate counts based on current tickets state
-    const total = tickets.length;
-    const pendingCount = tickets.filter((t) => t.status === 'Pending').length;
-    const inProgressCount = tickets.filter((t) => t.status === 'In Progress').length;
-    const resolvedCount = tickets.filter((t) => t.status === 'Resolved').length;
+    // Calculate counts based on the PERSISTENT state (allMockTickets)
+    const total = allMockTickets.length;
+    const pendingCount = allMockTickets.filter((t) => t.status === 'Pending').length;
+    const inProgressCount = allMockTickets.filter((t) => t.status === 'In Progress').length;
+    const resolvedCount = allMockTickets.filter((t) => t.status === 'Resolved').length;
 
     return (
         <div className="mainstaff-dashboard">
@@ -274,23 +218,23 @@ const StaffDashboard = () => {
             <div className="content-section">
                 <h3 className="section-title">Dashboard</h3>
                 <div className="stats-row">
-                <div className="stat-card">
+                    <div className="stat-card">
                         <div className="stat-label">Total Assigned Tickets</div>
-                        <div className="stat-value">{total}</div> {/* 🔑 Use calculated counts */}
+                        <div className="stat-value">{total}</div>
                     </div>
                     <div className="stat-card">
                         <div className="stat-label">Pending Tickets</div>
-                        <div className="stat-value yellow">{pendingCount}</div> {/* 🔑 Use calculated counts */}
+                        <div className="stat-value pending-value">{pendingCount}</div>
                     </div>
 
                     <div className="stat-card">
                         <div className="stat-label">In Progress</div>
-                        <div className="stat-value orange">{inProgressCount}</div> {/* 🔑 Use calculated counts */}
+                        <div className="stat-value inprogress-value">{inProgressCount}</div>
                     </div>
 
                     <div className="stat-card">
                         <div className="stat-label">Resolved</div>
-                        <div className="stat-value green">{resolvedCount}</div> {/* 🔑 Use calculated counts */}
+                        <div className="stat-value resolved-value">{resolvedCount}</div>
                     </div>
                 </div>
             </div>
@@ -328,41 +272,25 @@ const StaffDashboard = () => {
                     </div>
                 ) : (
                     <div className="tickets-list">
-                    {tickets.map((ticket) => (
-                    <div key={ticket.id} className="ticket-card">
-                        <div className="ticket-info">
-                        <div className="ticket-description">{ticket.description}</div>
-                        <div className="ticket-id">
-                            <svg
-                            className="ticket-id-icon"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                            />
-                            </svg>
-                            #{ticket.id}
-                        </div>
-                        </div>
-                                <div className="ticket-actions">
-                                    {renderActionButton(ticket)}
+                        {tickets.map((ticket) => (
+                            <div key={ticket.id} className="ticket-card">
+                                <div className="ticket-info">
+                                    <div className="ticket-description">{ticket.title}</div>
+                                    <div className="ticket-id">#{ticket.id}</div>
                                 </div>
+                                {renderActionButton(ticket)}
                             </div>
                         ))}
                     </div>
                 )}
             </div>
 
+            {/* Modals */}
             <TicketModal_Pending
                 open={!!selectedTicket}
                 onClose={handleCloseDetailModal}
                 ticketData={selectedTicket}
-                onUpdateStatus={handleUpdateStatus}
+                onUpdateStatus={handleUpdateStatus} // This handles the status change
             />
 
             <SuccessMessageModal

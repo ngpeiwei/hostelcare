@@ -23,12 +23,13 @@
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
     max-height: 85vh;
     overflow-y: auto;
+    position: relative;
 }
 
 /* --- Header --- */
 .modal-header-staff {
     display: flex;
-    justify-content: flex-end; /* Align title and close button */
+    justify-content: space-between; /* Align title and close button */
     align-items: center;
     border-bottom: 1px solid #e5e7eb;
     padding-bottom: 15px;
@@ -36,21 +37,21 @@
 }
 
 .modal-title-staff {
-    font-size: 1.5em;
+    font-size: 20px;
     font-weight: 700;
+    margin: 0;
+    text-align: left;
     color: #1f2937;
 }
 
 .close-btn-staff {
     background: none;
     border: none;
-    font-size: 1.8em;
+    font-size: 24px;
     cursor: pointer;
     color: #6b7280;
-    transition: color 0.2s;
-    position: absolute; /* Position relative to the modal */
-    top: 15px;
-    right: 15px;
+    transition: color 0.2s ease;
+    padding: 5px;
 }
 
 .close-btn-staff:hover {

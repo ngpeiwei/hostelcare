@@ -1,0 +1,259 @@
+/* client/pages/Maintenance Staff/StaffUpdatePage.css */
+
+.staff-update-page {
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* --- 1. Header Styles (Copied from StaffDashboard.css style) --- */
+.update-page-header {
+    background-color: #ffffff;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-title {
+    margin-left: 15px;
+}
+
+.main-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 5px 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.header-right .user-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+}
+
+/* Back Button Styling */
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: #374151;
+    transition: color 0.2s;
+}
+.back-button:hover {
+    color: #9333ea;
+}
+.back-icon {
+    width: 20px;
+    height: 20px;
+    /* You may need to adjust filter/color property if using a monotone SVG */
+}
+
+/* --- Content Wrapper & Card --- */
+.page-content-wrapper {
+    padding: 30px;
+}
+
+.ticket-update-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.section-title-update {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 25px;
+}
+
+/* --- Ticket Summary Styles --- */
+.title-pill {
+    background-color: #ffe599; 
+    color: #1f2937;
+    font-size: 1.2em;
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 30px;
+    margin-bottom: 30px;
+    font-size: 0.9em;
+    color: #4b5563;
+}
+.info-grid p { margin: 0; }
+
+
+/* --- 5. Progress Bar Styles (Centered Dots) --- */
+.progress-container {
+    padding: 20px 0 35px 0; /* Increased bottom padding for spacing */
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 30px;
+}
+
+.progress-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding-bottom: 5px;
+    /* Ensuring inner spacing */
+    padding-left: 20px; 
+    padding-right: 20px;
+}
+
+/* Horizontal line connecting dots */
+.progress-line::before {
+    content: '';
+    position: absolute;
+    top: 10px; /* Aligns with dot center */
+    left: 10%; /* Starts slightly after the first dot edge */
+    right: 10%; /* Ends slightly before the last dot edge */
+    width: 80%;
+    height: 2px;
+    background-color: #e5e7eb;
+    z-index: 1;
+}
+
+.progress-step {
+    position: relative;
+    text-align: center;
+    flex-grow: 1;
+    z-index: 2;
+    transform: translateX(-50%); /* Moves the text/dot group left by half its size */
+}
+
+/* Moving the labels back into position */
+.progress-step:first-child {
+    transform: translateX(0); /* Anchor first step to the left edge */
+    text-align: left;
+}
+.progress-step:last-child {
+    transform: translateX(0); /* Anchor last step to the right edge */
+    text-align: right;
+}
+
+.progress-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    color: white;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0 auto 5px auto;
+}
+
+.progress-step:first-child .progress-dot {
+    margin-left: 0;
+}
+.progress-step:last-child .progress-dot {
+    margin-right: 0;
+}
+
+.progress-step.completed .progress-dot {
+    background-color: #7c3aed; 
+}
+
+.progress-label {
+    font-size: 0.85em;
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+/* --- 6. Update Text Spacing Adjustment --- */
+.update-info {
+    /* Adjusted top margin for balanced spacing below the progress bar */
+    margin-top: 25px; 
+    font-style: italic;
+    color: #4b5563;
+    font-size: 0.9em;
+    padding-left: 10px;
+}
+
+/* --- Comments & Action --- */
+.comments-section label {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.comments-section textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    min-height: 100px;
+    resize: vertical;
+    font-size: 0.9em;
+    margin-bottom: 30px;
+}
+
+.action-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px; /* Spacing between the two buttons */
+}
+
+/* 3. Button Styles */
+.btn-resolve-ticket, .btn-save-progress {
+    padding: 10px 25px;
+    border: 1px solid #7c3aed;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-resolve-ticket {
+    background-color: #16a34a; /* Green for resolution */
+    color: white;
+    border-color: #16a34a;
+}
+
+.btn-resolve-ticket:hover {
+    background-color: #15803d;
+}
+
+.btn-save-progress {
+    /* 4. Save Button Styling */
+    background-color: #ffffff; 
+    color: #1f2937; /* Black text */
+    border-color: #d1d5db; /* Light border */
+}
+
+.btn-save-progress:hover {
+    background-color: #f9fafb;
+    border-color: #9333ea;
+    color: #9333ea;
+}
