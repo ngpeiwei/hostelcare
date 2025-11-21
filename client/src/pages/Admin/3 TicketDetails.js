@@ -283,7 +283,7 @@ const TicketDetails = () => {
               <input
                 type="text"
                 className="form-input"
-                value={ticket.location}
+                value={"Desasiswa Tekun"}
                 disabled
               />
             </div>

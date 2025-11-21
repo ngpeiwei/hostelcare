@@ -3,7 +3,7 @@ let tickets = [
   {
     id: '00015',
     description: 'Aircond not functioning',
-    status: 'Resolved',
+    status: 'In Progress',
     dateCreated: '2025-07-10',
     name: 'Ahmad bin Ali',
     email: 'ahmad@student.usm.my',
