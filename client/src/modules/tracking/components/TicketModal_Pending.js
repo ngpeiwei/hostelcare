@@ -34,11 +34,6 @@ const TicketModal_Pending = ({ open, onClose, ticketData, onUpdateStatus }) => {
         // We pass the new status 'In Progress' and the ticket ID
         onUpdateStatus(ticketData.id, 'In Progress'); 
     };
-    
-    // --- Data Mapping (Based on the Figma Detail View) ---
-    // Note: If you don't have fields like staff/estimated date in your initial data, 
-    // you'll need to fetch them or assume they are managed by the Admin. 
-    // We display them here as required in the image.
 
     return (
         <div className="modal-backdrop-staff">
@@ -58,10 +53,10 @@ const TicketModal_Pending = ({ open, onClose, ticketData, onUpdateStatus }) => {
                         {/* Row 1 */}
                         <div className="detail-group">
                             <label>Date created</label>
-                            <input type="text" value={ticketData.dateReported || 'N/A'} readOnly />
+                            <input type="text" value={ticketData.dateReported || ''} readOnly />
                         </div>
                         <div className="detail-group">
-                            <label>Location</label>
+                            <label>Hostel</label>
                             <input type="text" value={ticketData.location?.split(' - ')[0] || 'Desasiswa Tekun'} readOnly />
                         </div>
                         
@@ -71,8 +66,8 @@ const TicketModal_Pending = ({ open, onClose, ticketData, onUpdateStatus }) => {
                             <input type="text" value={`#${ticketData.id}`} readOnly />
                         </div>
                         <div className="detail-group">
-                            <label>Building</label>
-                            <input type="text" value={ticketData.location?.split(' - ')[1] || 'M06'} readOnly />
+                            <label>Phone Number</label>
+                            <input type="text" value={ticketData.location?.split(' - ')[1] || '+60102355511'} readOnly />
                         </div>
 
                         {/* Row 3 */}
@@ -81,8 +76,8 @@ const TicketModal_Pending = ({ open, onClose, ticketData, onUpdateStatus }) => {
                             <input type="text" value={ticketData.reporter || 'N/A'} readOnly />
                         </div>
                         <div className="detail-group">
-                            <label>Floor and Room Number</label>
-                            <input type="text" value={'L5-03-01'} readOnly /> {/* Mocked value */}
+                            <label>Building and Room Number</label>
+                            <input type="text" value={'M04-09-12A'} readOnly />
                         </div>
 
                         {/* Row 4 */}
