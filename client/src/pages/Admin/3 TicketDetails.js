@@ -448,4 +448,3 @@ const TicketDetails = () => {
 };
 
 export default TicketDetails;
-
