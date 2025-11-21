@@ -137,13 +137,16 @@ const TicketModal_Pending = ({ open, onClose, ticketData, onUpdateStatus }) => {
                 </div>
 
                 <div className="modal-footer-staff">
-                    <button 
-                        className="action-button button-primary start-work-btn"
-                        onClick={handleStartWorkClick}
-                    >
-                        Start Work
-                    </button>
+                    {ticketData.status === 'Pending' && (
+                        <button 
+                            className="action-button button-primary start-work-btn"
+                            onClick={handleStartWorkClick}
+                        >
+                            Start Work
+                        </button>
+                    )}
                 </div>
+
             </div>
             
             {/* Confirmation Modal Component */}

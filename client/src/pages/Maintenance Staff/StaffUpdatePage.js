@@ -10,17 +10,49 @@ import userImage from '../../assets/admin.png';
 // --- Mock Data / Service Call Simulation ---
 const fetchTicketDetails = (id) => {
     // Simulating fetching a ticket that is 'In Progress'
-    return {
-        id: id,
-        title: "Ceiling fan speed slow",
-        dateFiled: '2025-11-03',
-        status: 'In Progress', // Current status
-        location: 'Desasiswa Saujana, M04',
-        progressHistory: [
-            { status: 'Pending', date: '2025-11-03 10:00 AM' },
-            { status: 'In Progress', date: '2025-11-03 1:40 PM', comment: 'You have updated the ticket at 1:40 PM' },
-        ],
-    };
+    if (id === "00001") {
+        return {
+            id: id,
+            title: "Toilet tap has been leaking for 2 days",
+            name: "Alyssa Hamdan",
+            dateCreated: "2025-11-10",
+            category: "Shared",
+            subCategory: "Sink",
+            hostel: "Desasiswa Tekun",
+            buildingRoom: "M06-06-20",
+            phone: "+60102362610",
+            attachments: "N/A",
+            staff: "Nazrul Hakim",
+            status: "In Progress",
+            progressHistory: [
+                { status: "Pending", date: "2025-11-10 08:30 AM" },
+                { status: "In Progress", date: "2025-11-10 11:15 AM", comment: "Work started by staff." }
+            ]
+        };
+    }
+
+    if (id === "00002") {
+        return {
+            id: id,
+            title: "Ceiling fan speed slow",
+            name: "Amir bin Ahmad",
+            dateCreated: "2025-07-11",
+            category: "Individual",
+            subCategory: "Ceiling Fan",
+            hostel: "Desasiswa Tekun",
+            buildingRoom: "L5-03-13",
+            phone: "+60102355511",
+            attachments: "N/A",
+            staff: "N/A",
+            status: "In Progress",
+            progressHistory: [
+                { status: "Pending", date: "2025-11-03 10:00 AM" },
+                { status: "In Progress", date: "2025-11-03 1:40 PM", comment: "You have updated the ticket at 1:40 PM" },
+            ],
+        };
+    }
+
+    return null;
 };
 // ------------------------------------------
 
@@ -124,33 +156,32 @@ const StaffUpdatePage = () => {
 
             <div className="page-content-wrapper">
                 
-                {/* 1. & 2. Back Button using the size container of Resolve Ticket */}
-                <button 
-                    className="btn-back-dashboard"
-                    onClick={() => navigate('/staff/dashboard')}
-                >
-                    {/* 🔑 Arrow Icon: Assumes Font Awesome is linked globally */}
-                    <i className="fa-sharp fa-solid fa-angle-left"></i>
-                    <span>Back to Dashboard</span>
+                {/* Back Button - Navigate to Staff Dashboard */}
+                <button className="btn-back-dashboard" onClick={() => navigate('/staff/dashboard')}>
+                    ← Back to Dashboard
                 </button>
                 
                 <h3 className="section-title-update">Ticket Status: In Progress</h3>
                 
                 <ProgressBar history={ticket.progressHistory} currentStatus={ticket.status} />
-                
-                {/* 3. Update Text is moved HERE, BELOW the ticket info summary */}
-                
+                                            
                 <div className="ticket-details-block">
                     <div className="ticket-info-summary">
                         <div className="title-pill">{ticket.title}</div>
                         
                         <div className="info-grid">
-                            <p>Filed: {ticket.dateFiled}</p>
-                            <p>Hostel: {ticket.location}</p>
-                            <p>Category: Individual</p>
-                            <p>Attachment: N/A</p>
-                            <p>Sub-category: Ceiling Fan</p>
-                            <p>Staff: N/A</p>
+                            {/* FIRST COLUMN (Name, Created, Category, Sub-category, Phone Number) */}
+                            <p>Name: {ticket.name || 'N/A'}</p>
+                            <p>Created: {ticket.dateCreated || 'N/A'}</p>
+                            <p>Category: {ticket.category || 'N/A'}</p>
+                            <p>Sub-category: {ticket.subCategory || 'N/A'}</p>
+                            <p>Phone Number: {ticket.phone || 'N/A'}</p>
+
+                            {/* SECOND COLUMN (Hostel, Building/Room, Attachments, Staff) */}
+                            <p>Hostel: {ticket.hostel || 'N/A'}</p>
+                            <p>Building and Room Number: {ticket.buildingRoom || 'N/A'}</p>
+                            <p>Attachments: {ticket.attachments || 'N/A'}</p>
+                            <p>Staff: {ticket.staff || 'N/A'}</p>
                         </div>
                     </div>
                     

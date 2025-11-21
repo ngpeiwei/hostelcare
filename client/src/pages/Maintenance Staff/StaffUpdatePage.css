@@ -1,11 +1,12 @@
 /* client/pages/Maintenance Staff/StaffUpdatePage.css */
 
 .staff-update-page {
-    background-color: #f5f5f5;
     min-height: 100vh;
+    background-color: #f5f5f5;
+    padding-bottom: 40px; /* Added from sample CSS for better spacing */
 }
 
-/* --- Header Styles */
+/* --- 1. Header Styles (Standard Dashboard Look) --- */
 .update-page-header {
     background-color: #ffffff;
     padding: 20px 40px;
@@ -14,88 +15,64 @@
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+.header-left { display: flex; align-items: center; gap: 15px; }
+.header-title { margin-left: 15px; }
+.main-title { font-size: 28px; font-weight: 700; color: #1f2937; margin: 0 0 5px 0; }
+.subtitle { font-size: 14px; color: #6b7280; margin: 0; }
+.header-right .user-profile { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb; }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
 
-.header-title {
-    margin-left: 15px;
-}
-
-.main-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #1f2937;
-    margin: 0 0 5px 0;
-}
-
-.subtitle {
-    font-size: 14px;
-    color: #6b7280;
-    margin: 0;
-}
-
-.header-right .user-profile {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #e5e7eb;
-}
-
-/* --- Back Button Styling --- */
-.btn-back-dashboard {
-    padding: 10px 25px; 
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    
-    background-color: #f3f4f6; /* Light gray background */
-    color: #374151; /* Dark text */
-    border: 1px solid #d1d5db;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.btn-back-dashboard:hover {
-    background-color: #e5e7eb;
-    color: #1f2937;
-    border-color: #9ca3af;
-}
-
-.btn-back-dashboard .fa-angle-left {
-    font-size: 1.2em;
-    color: currentColor; /* Ensures the icon color matches the text color */
-}
-
-/* --- Content Wrapper & Card --- */
+/* --- Content Wrapper & Main Blocks --- */
 .page-content-wrapper {
     padding: 30px 40px; 
     max-width: 900px; 
     margin: 0 auto;
 }
 
-.ticket-update-card {
+/* 1. Back Button Styling (FROM SAMPLE CSS) */
+.btn-back-dashboard {
+    padding: 8px 16px; /* Smaller padding */
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    max-width: 900px;
-    margin: 0 auto;
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: all 0.2s;
+    
+    /* Ensure icon and text are aligned */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
 }
+
+.btn-back-dashboard:hover {
+    background-color: #f9fafb;
+    border-color: #9333ea;
+}
+
+/* 1. Icon Arrow Fix (Targets the Font Awesome icon) */
+.btn-back-dashboard .fa-angle-left {
+    font-size: 1.2em; /* Ensures icon is visible and sized correctly */
+    color: currentColor; /* Inherits the text color (#374151) */
+}
+
 
 .section-title-update {
     font-size: 1.25em;
     font-weight: 700;
     color: #1f2937;
     margin-bottom: 25px;
+}
+
+/* --- Ticket Details Block (Background Container) --- */
+.ticket-details-block {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    padding: 30px;
 }
 
 /* --- Ticket Summary Styles --- */
@@ -110,20 +87,21 @@
     margin-bottom: 20px;
 }
 
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px 30px;
-    margin-bottom: 30px;
-    font-size: 0.9em;
-    color: #4b5563;
+/* 2. Updated Info Grid for New Data Fields */
+.info-grid { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px 30px; 
+    margin-bottom: 30px; 
+    font-size: 0.9em; 
+    color: #4b5563; 
 }
 .info-grid p { margin: 0; }
 
 
-/* --- Progress Bar Styles --- */
+/* --- 3. Progress Bar Styles (Alignment Fixes) --- */
 .progress-container {
-    padding: 20px 0 10px 0; /* Reduced bottom padding */
+    padding: 20px 0 10px 0; 
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 30px;
 }
@@ -131,22 +109,19 @@
 .progress-line {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Ensure labels start from the top */
+    align-items: center;
     position: relative;
     padding-bottom: 5px;
-    padding-left: 0; 
-    padding-right: 0;
-    width: 100%; /* Ensure it spans the full container */
+    width: 100%;
 }
 
 /* Horizontal line connecting dots */
 .progress-line::before {
     content: '';
     position: absolute;
-    top: 10px; 
-    /* 🔑 FIX 1: Line spans exactly between the center of the first and last dot */
-    left: 10px; 
-    right: 10px; 
+    top: 14px;
+    left: 0;
+    right: 0;
     height: 2px;
     background-color: #e5e7eb;
     z-index: 1;
@@ -155,128 +130,85 @@
 .progress-step {
     position: relative;
     text-align: center;
-    /* 🔑 FIX 2: Explicitly set width to distribute stages evenly */
-    width: 33.333%;
+    width: 33.33%;
     z-index: 2;
-    padding-top: 5px;
-    /* Center the stage content relative to its 33.33% block */
+
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;  /* CENTER everything */
 }
-
-/* 🔑 FIX 2: Anchor the first and last dots to their respective sides */
-.progress-step:first-child {
-    align-items: flex-start; /* Anchor dot/label to the left */
-    text-align: left;
-}
-.progress-step:last-child {
-    align-items: flex-end; /* Anchor dot/label to the right */
-    text-align: right;
-}
-/* Middle step takes the remaining space and centers its content */
-.progress-step:nth-child(2) {
-    text-align: center;
-    flex-grow: 1;
-}
-
 
 .progress-dot {
-    width: 20px;
-    height: 20px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background-color: #e5e7eb;
     color: white;
     font-size: 14px;
-    line-height: 20px;
-    margin: 0; 
-    display: inline-block; 
-}
-
-/* 🔑 FIX 4: Adjust margins on the labels of end stages to position them directly under the dot */
-.progress-step:first-child .progress-dot {
-    margin-left: 0; 
-}
-.progress-step:last-child .progress-dot {
-    margin-right: 0; 
+    display: flex;
+    align-items: center;      /* CENTER VERTICALLY */
+    justify-content: center;  /* CENTER HORIZONTALLY */
 }
 
 .progress-step.completed .progress-dot {
-    background-color: #7c3aed; 
+    background-color: #7c3aed;
 }
 
 .progress-label {
     font-size: 0.85em;
     color: #6b7280;
-    margin-top: 5px;
-    /* 🔑 FIX 5: Remove max-content from previous step to allow slight wrapping if needed, but anchor to center */
-    width: auto; 
+    margin-top: 6px;
 }
 
+
+/* --- Update Info Text (Moved Below Details Block) --- */
 .update-info-text {
-    /* 🔑 FIX: Remove margins from the original location and define spacing relative to its new location */
     margin-top: 20px; 
     margin-bottom: 10px; 
     font-style: italic;
     color: #4b5563;
     font-size: 0.9em;
-    padding-left: 0;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb; /* Separator line above the update text */
 }
+
 
 /* --- Comments & Action --- */
-.comments-section label {
-    font-size: 0.95em;
-    font-weight: 600;
-    color: #374151;
-    margin-top: 25px;
-    margin-bottom: 8px;
-    display: block;
-}
-
-.comments-section textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    min-height: 100px;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 14px;
-    margin-bottom: 30px;
-}
+.comments-section label { font-size: 0.95em; font-weight: 600; color: #374151; margin-bottom: 8px; display: block; }
+.comments-section textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; min-height: 100px; resize: vertical; font-size: 14px; font-family: inherit;; margin-bottom: 30px; }
 
 .action-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 15px; 
+    gap: 15px;
     padding-top: 20px;
 }
 
-/* 3. Button Styles */
-.btn-resolve-ticket, .btn-save-progress {
-    padding: 10px 25px;
-    border: 1px solid #7c3aed;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
+/* Resolve Button */
 .btn-resolve-ticket {
-    background-color: #16a34a; /* Green for resolution */
+    background-color: #16a34a; 
     color: white;
-    border-color: #16a34a;
+    padding: 10px 25px;
+    border: 1px solid #16a34a;
+    border-radius: 8px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .btn-resolve-ticket:hover {
     background-color: #15803d;
 }
 
+/* Save Button */
 .btn-save-progress {
-    /* 4. Save Button Styling */
     background-color: #ffffff; 
-    color: #1f2937; /* Black text */
-    border-color: #d1d5db; /* Light border */
+    color: #1f2937; 
+    border: 1px solid #d1d5db;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 400;
+    cursor: pointer;
 }
 
 .btn-save-progress:hover {
