@@ -126,7 +126,7 @@ const StaffUpdatePage = () => {
                 
                 {/* 1. & 2. Back Button using the size container of Resolve Ticket */}
                 <button 
-                    className="btn-back-dashboard" // 🔑 NEW CLASS for styling
+                    className="btn-back-dashboard"
                     onClick={() => navigate('/staff/dashboard')}
                 >
                     {/* 🔑 Arrow Icon: Assumes Font Awesome is linked globally */}

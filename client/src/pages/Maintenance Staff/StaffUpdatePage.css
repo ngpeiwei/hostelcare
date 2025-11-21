@@ -5,7 +5,7 @@
     min-height: 100vh;
 }
 
-/* --- 1. Header Styles (Copied from StaffDashboard.css style) --- */
+/* --- Header Styles */
 .update-page-header {
     background-color: #ffffff;
     padding: 20px 40px;
@@ -46,31 +46,40 @@
     border: 2px solid #e5e7eb;
 }
 
-/* Back Button Styling */
-.back-button {
+/* --- Back Button Styling --- */
+.btn-back-dashboard {
+    padding: 10px 25px; 
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    background-color: #f3f4f6; /* Light gray background */
+    color: #374151; /* Dark text */
+    border: 1px solid #d1d5db;
+
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    color: #374151;
-    transition: color 0.2s;
+    margin-bottom: 20px;
 }
-.back-button:hover {
-    color: #9333ea;
+
+.btn-back-dashboard:hover {
+    background-color: #e5e7eb;
+    color: #1f2937;
+    border-color: #9ca3af;
 }
-.back-icon {
-    width: 20px;
-    height: 20px;
-    /* You may need to adjust filter/color property if using a monotone SVG */
+
+.btn-back-dashboard .fa-angle-left {
+    font-size: 1.2em;
+    color: currentColor; /* Ensures the icon color matches the text color */
 }
 
 /* --- Content Wrapper & Card --- */
 .page-content-wrapper {
-    padding: 30px;
+    padding: 30px 40px; 
+    max-width: 900px; 
+    margin: 0 auto;
 }
 
 .ticket-update-card {
@@ -112,9 +121,9 @@
 .info-grid p { margin: 0; }
 
 
-/* --- 5. Progress Bar Styles (Centered Dots) --- */
+/* --- Progress Bar Styles --- */
 .progress-container {
-    padding: 20px 0 35px 0; /* Increased bottom padding for spacing */
+    padding: 20px 0 10px 0; /* Reduced bottom padding */
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 30px;
 }
@@ -122,22 +131,22 @@
 .progress-line {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Ensure labels start from the top */
     position: relative;
     padding-bottom: 5px;
-    /* Ensuring inner spacing */
-    padding-left: 20px; 
-    padding-right: 20px;
+    padding-left: 0; 
+    padding-right: 0;
+    width: 100%; /* Ensure it spans the full container */
 }
 
 /* Horizontal line connecting dots */
 .progress-line::before {
     content: '';
     position: absolute;
-    top: 10px; /* Aligns with dot center */
-    left: 10%; /* Starts slightly after the first dot edge */
-    right: 10%; /* Ends slightly before the last dot edge */
-    width: 80%;
+    top: 10px; 
+    /* 🔑 FIX 1: Line spans exactly between the center of the first and last dot */
+    left: 10px; 
+    right: 10px; 
     height: 2px;
     background-color: #e5e7eb;
     z-index: 1;
@@ -146,20 +155,31 @@
 .progress-step {
     position: relative;
     text-align: center;
-    flex-grow: 1;
+    /* 🔑 FIX 2: Explicitly set width to distribute stages evenly */
+    width: 33.333%;
     z-index: 2;
-    transform: translateX(-50%); /* Moves the text/dot group left by half its size */
+    padding-top: 5px;
+    /* Center the stage content relative to its 33.33% block */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
 }
 
-/* Moving the labels back into position */
+/* 🔑 FIX 2: Anchor the first and last dots to their respective sides */
 .progress-step:first-child {
-    transform: translateX(0); /* Anchor first step to the left edge */
+    align-items: flex-start; /* Anchor dot/label to the left */
     text-align: left;
 }
 .progress-step:last-child {
-    transform: translateX(0); /* Anchor last step to the right edge */
+    align-items: flex-end; /* Anchor dot/label to the right */
     text-align: right;
 }
+/* Middle step takes the remaining space and centers its content */
+.progress-step:nth-child(2) {
+    text-align: center;
+    flex-grow: 1;
+}
+
 
 .progress-dot {
     width: 20px;
@@ -169,14 +189,16 @@
     color: white;
     font-size: 14px;
     line-height: 20px;
-    margin: 0 auto 5px auto;
+    margin: 0; 
+    display: inline-block; 
 }
 
+/* 🔑 FIX 4: Adjust margins on the labels of end stages to position them directly under the dot */
 .progress-step:first-child .progress-dot {
-    margin-left: 0;
+    margin-left: 0; 
 }
 .progress-step:last-child .progress-dot {
-    margin-right: 0;
+    margin-right: 0; 
 }
 
 .progress-step.completed .progress-dot {
@@ -187,16 +209,18 @@
     font-size: 0.85em;
     color: #6b7280;
     margin-top: 5px;
+    /* 🔑 FIX 5: Remove max-content from previous step to allow slight wrapping if needed, but anchor to center */
+    width: auto; 
 }
 
-/* --- 6. Update Text Spacing Adjustment --- */
-.update-info {
-    /* Adjusted top margin for balanced spacing below the progress bar */
-    margin-top: 25px; 
+.update-info-text {
+    /* 🔑 FIX: Remove margins from the original location and define spacing relative to its new location */
+    margin-top: 20px; 
+    margin-bottom: 10px; 
     font-style: italic;
     color: #4b5563;
     font-size: 0.9em;
-    padding-left: 10px;
+    padding-left: 0;
 }
 
 /* --- Comments & Action --- */
@@ -204,6 +228,7 @@
     font-size: 0.95em;
     font-weight: 600;
     color: #374151;
+    margin-top: 25px;
     margin-bottom: 8px;
     display: block;
 }
@@ -215,14 +240,16 @@
     border-radius: 6px;
     min-height: 100px;
     resize: vertical;
-    font-size: 0.9em;
+    font-family: inherit;
+    font-size: 14px;
     margin-bottom: 30px;
 }
 
 .action-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 15px; /* Spacing between the two buttons */
+    gap: 15px; 
+    padding-top: 20px;
 }
 
 /* 3. Button Styles */

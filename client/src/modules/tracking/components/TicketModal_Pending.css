@@ -95,12 +95,13 @@
 .attachment-container input[type="text"],
 .detail-group input[type="date"] {
     width: 100%;
-    padding: 10px 12px;
+    padding: 5px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
     background-color: #f9fafb; /* Light background for fields */
     color: #374151;
-    font-size: 0.9em;
+    font-family: inherit;
+    font-size: 14px;
     box-sizing: border-box;
 }
 
@@ -137,9 +138,8 @@
 }
 
 .start-work-btn {
-    /* Uses existing button-primary style */
     font-weight: 600;
-    background-color: #7c3aed; /* Your primary button color */
+    background-color: #7c3aed;
     color: #fff;
     padding: 10px 25px;
 }
