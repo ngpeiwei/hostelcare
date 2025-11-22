@@ -210,7 +210,7 @@ const StaffUpdatePage = () => {
                         ></textarea>
                     </div>
 
-                    <div className="action-footer">
+                   <div className="action-footer">
                         <button className="btn-save-progress" onClick={handleSaveClick}>
                             Save
                         </button>
@@ -220,7 +220,7 @@ const StaffUpdatePage = () => {
                     </div>
                 </div>
             </div>
-
+ 
             {/* Confirmation Modal */}
             <ConfirmationModal
                 open={isConfirmOpen}

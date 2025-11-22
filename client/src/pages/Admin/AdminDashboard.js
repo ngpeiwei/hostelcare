@@ -76,7 +76,10 @@ const AdminDashboard = () => {
       const status = activeTab === 'Open' ? 'Open' : activeTab === 'All Tickets' ? 'All' : activeTab;
       const response = await complaintService.getAllComplaints(status);
       if (response.data) {
-        setTickets(response.data);
+        // Use response directly; remove any hardcoded exclusions so all matching
+        // tickets are shown for the selected status.
+        const results = response.data;
+        setTickets(results);
       }
     } catch (error) {
       console.error('Error loading tickets:', error);
@@ -95,6 +98,10 @@ const AdminDashboard = () => {
 
   const handleAssignStaff = (ticketId) => {
     navigate(`/admin/ticket/${ticketId}`);
+  };
+
+  const handleViewInProgress = (ticketId) => {
+    navigate(`/admin/inprogress/${ticketId}`);
   };
 
   const handleViewProgress = (ticketId) => {
@@ -145,11 +152,11 @@ const AdminDashboard = () => {
           {getStatusBadge(ticket.status)}
           <button
             className="action-button button-primary"
-            onClick={() => handleViewProgress(ticket.id)}
+            onClick={() => handleViewInProgress(ticket.id)}
           >
             View Progress
-        </button>
-      </>
+          </button>
+        </>
       );
     } else if (ticket.status === 'Resolved') {
       return (

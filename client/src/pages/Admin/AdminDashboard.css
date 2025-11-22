@@ -292,6 +292,13 @@
   border-radius: 20px;
   font-size: 13px;
   /* font-weight: 500; */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  flex-shrink: 0;
+
 }
 
 .status-new { background-color: #d4e1ff; color: #163dff; }

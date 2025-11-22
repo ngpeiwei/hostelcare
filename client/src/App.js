@@ -10,7 +10,11 @@ import StaffDashboard from './pages/Maintenance Staff/StaffDashboard';
 // import ViewTicket from './pages/Admin/2 ViewTicket';
 import TicketDetails from './pages/Admin/3 TicketDetails';
 import StaffUpdatePage from './pages/Maintenance Staff/StaffUpdatePage';
+<<<<<<< HEAD
 import StudentTrackerPage from './modules/tracking/components/StudentTracker';
+=======
+import InProgressDetails from './pages/Admin/InProgressDetails';
+>>>>>>> 85ee21f1aef2bd5cc627dfdab13b4ba7a90d38d5
 
 function App() {
   return (
@@ -26,6 +30,7 @@ function App() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/staff/dashboard" element={<StaffDashboard />} />
         <Route path="/admin/ticket/:id" element={<TicketDetails />} />
+        <Route path="/admin/inprogress/:id" element={<InProgressDetails />} />
         <Route path="/staff/ticket/:id/update" element={<StaffUpdatePage />} />
         <Route path="/student/tracker/:id" element={<StudentTrackerPage />} />
       </Routes>
