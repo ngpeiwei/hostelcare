@@ -276,7 +276,12 @@ const StudentDashboard = () => {
                                 <div className={`pill status-${c.status.toLowerCase()}`}>
                                 {c.status === 'InProgress' ? 'In Progress' : c.status}</div>
                                 {c.status.toLowerCase() === 'resolved' && (
-                                    <button className="btn btn-viewDetails">View Details</button>
+                                    <button 
+                                        className="btn btn-viewDetails"
+                                        onClick={() => handleViewDetails(c)}
+                                    >
+                                        View Details
+                                    </button>
                                 )}
                                 
                                 {c.status.toLowerCase() === 'resolved' ? (

@@ -7,10 +7,10 @@ import StudentDashboard from './pages/Student/StudentDashboard';
 import StudentProfile from './pages/Student/StudentProfile';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import StaffDashboard from './pages/Maintenance Staff/StaffDashboard';
-// import ViewTicket from './pages/Admin/2 ViewTicket';
 import TicketDetails from './pages/Admin/3 TicketDetails';
 import StaffUpdatePage from './pages/Maintenance Staff/StaffUpdatePage';
 import InProgressDetails from './pages/Admin/InProgressDetails';
+import StudentTrackerPage from './modules/tracking/components/StudentTracker';
 
 function App() {
   return (

@@ -9,7 +9,6 @@ import userImage from '../../assets/admin.png';
 // When true, actions (Resolve/Save/Reopen) only change local state for UI preview
 const LOCAL_PREVIEW = true;
 
-// --- Mock Data / Service Call Simulation (KEEP AS IS) ---
 const fetchTicketDetails = (id) => {
     if (id === "00015") {
         return {
@@ -40,7 +39,7 @@ const fetchTicketDetails = (id) => {
 };
 // ------------------------------------------
 
-// --- Reusable Header Component (Adjusted for Admin View) ---
+// --- Header Component ---
 const Header = () => {
     return (
         <div className="update-page-header">
@@ -50,7 +49,7 @@ const Header = () => {
                 </div>
                 <div className="header-title">
                     <h2 className="main-title">Hostel Facilities Management System</h2>
-                    <p className="subtitle">Track and manage assigned maintenance tickets</p>
+                    <p className="subtitle">Track and manage your complaints</p>
                 </div>
             </div>
             <div className="header-right">
@@ -60,40 +59,7 @@ const Header = () => {
     );
 };
 
-// --- Progress Bar Component (KEEP AS IS) ---
-const ProgressBar = ({ history, currentStatus }) => {
-    const stages = ['Pending', 'In Progress', 'Resolved'];
-    const currentStageIndex = stages.findIndex(s => s === currentStatus);
-    
-    return (
-        <div className="progress-container">
-            <div className="progress-line">
-                {stages.map((stage, index) => (
-                    <div key={stage} className={`progress-step ${index <= currentStageIndex ? 'completed' : ''}`}>
-                        <div className="progress-dot">{index < currentStageIndex ? '✓' : (index === currentStageIndex ? 'i' : stage.charAt(0))}</div>
-                        <div className="progress-label">{stage}</div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-// --- Update Info Component (KEEP AS IS) ---
-const UpdateInfo = ({ history }) => {
-    const safeHistory = history || [];
-    const lastUpdate = safeHistory.length > 0 ? safeHistory[safeHistory.length - 1] : null;
-    if (!lastUpdate) return null;
-    
-    return (
-        <div className="update-info-text">
-            Update: {lastUpdate.comment || `Ticket status updated at ${new Date(lastUpdate.date).toLocaleTimeString()}`}
-        </div>
-    );
-};
-
-
-const InProgressDetails = () => { // <--- Component Name Confirmed
+const InProgressDetails = () => { 
     const { id } = useParams();
     const navigate = useNavigate();
     const [ticket, setTicket] = useState(null);
@@ -108,7 +74,6 @@ const InProgressDetails = () => { // <--- Component Name Confirmed
         setTicket(data);
     }, [id]);
 
-    // Initialize comment from latest progressHistory when ticket loads
     useEffect(() => {
         if (!ticket) return;
         const latest = ticket.progressHistory && ticket.progressHistory.length ? ticket.progressHistory[ticket.progressHistory.length - 1].comment : '';
@@ -144,9 +109,6 @@ const InProgressDetails = () => { // <--- Component Name Confirmed
 
         const timestamp = new Date().toLocaleString();
 
-        // Determine the new status depending on the action.
-        // If LOCAL_PREVIEW is true, do not change the ticket.status on resolve
-        // so the ticket remains visible in the In Progress list (backend is not updated).
         let finalStatus = ticket.status || 'In Progress';
         if (confirmAction === 'resolve') {
             if (LOCAL_PREVIEW) {
@@ -182,10 +144,39 @@ const InProgressDetails = () => { // <--- Component Name Confirmed
 
     const handleSuccessClose = () => {
         setSuccessOpen(false);
-        // Keep the user on this details page for UI-only preview; do not
-        // navigate back to the dashboard or trigger any backend refresh.
-        // This makes Resolve/Save act as a local, static update for now.
         setConfirmAction(null);
+    };
+
+    // --- Progress Bar (3 Statuses) ---
+    const ProgressBar = ({ history, currentStatus }) => {
+        const stages = ['Pending', 'In Progress', 'Resolved'];
+        const currentStageIndex = stages.findIndex(s => s === currentStatus);
+        
+        return (
+            <div className="progress-container">
+                <div className="progress-line">
+                    {stages.map((stage, index) => (
+                        <div key={stage} className={`progress-step ${index <= currentStageIndex ? 'completed' : ''}`}>
+                            <div className="progress-dot">{index < currentStageIndex ? '✓' : (index === currentStageIndex ? 'i' : stage.charAt(0))}</div>
+                            <div className="progress-label">{stage}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    // --- Update Info ---
+    const UpdateInfo = ({ history }) => {
+        const safeHistory = history || [];
+        const lastUpdate = safeHistory.length > 0 ? safeHistory[safeHistory.length - 1] : null;
+        if (!lastUpdate) return null;
+        
+        return (
+            <div className="update-info-text">
+                Update: {lastUpdate.comment || `You have updated the ticket at ${new Date(lastUpdate.date).toLocaleTimeString()}`}
+            </div>
+        );
     };
 
     return (
@@ -193,8 +184,6 @@ const InProgressDetails = () => { // <--- Component Name Confirmed
             <Header />
 
             <div className="page-content-wrapper">
-                
-                {/* Back Button - Navigate to Admin Dashboard */}
                 <button 
                     className="btn-back-dashboard" 
                     onClick={() => navigate('/admin/dashboard')} // <--- Navigate to Admin Dashboard
@@ -211,14 +200,12 @@ const InProgressDetails = () => { // <--- Component Name Confirmed
                         <div className="title-pill">{ticket.title}</div>
                         
                         <div className="info-grid">
-                            {/* FIRST COLUMN */}
                             <p>Name: {ticket.name || 'N/A'}</p>
                             <p>Created: {ticket.dateCreated || 'N/A'}</p>
                             <p>Category: {ticket.category || 'N/A'}</p>
                             <p>Sub-category: {ticket.subCategory || 'N/A'}</p>
                             <p>Phone Number: {ticket.phoneNo || 'N/A'}</p>
 
-                            {/* SECOND COLUMN */}
                             <p>Hostel: {ticket.hostel || 'N/A'}</p>
                             <p>Building and Room Number: {ticket.floorAndRoom || ticket.buildingAndRoom || ticket.buildingRoom || 'N/A'}</p>
                             <p>Attachments: {Array.isArray(ticket.attachments) ? (ticket.attachments.length ? ticket.attachments.join(', ') : 'N/A') : (ticket.attachments || 'N/A')}</p>
@@ -260,7 +247,10 @@ const InProgressDetails = () => { // <--- Component Name Confirmed
                 open={isConfirmOpen}
                 onClose={() => setIsConfirmOpen(false)}
                 onConfirm={handleConfirmAction}
-                message={confirmAction === 'resolve' ? 'Are you sure you want to mark this ticket as Resolved?' : ' Save current progress for this ticket?'}
+                message={confirmAction === 'resolve' 
+                    ? 'Are you sure you want to mark this ticket as Resolved?' 
+                    : 'Save current progress for this ticket?'
+                }
                 confirmText={confirmAction === 'resolve' ? 'Resolve' : 'Save'}
             />
 

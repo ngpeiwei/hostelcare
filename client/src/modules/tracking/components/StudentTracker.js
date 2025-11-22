@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import logoImage from '../../assets/logo.png';
-import userImage from '../../assets/admin.png';
-import StudentTrackerPage from './StudentTracker.css';
+import logoImage from '../../../assets/logo.png';
+import userImage from '../../../assets/admin.png';
+import './StudentTracker.css';
 
 // --- MOCK DATA ---
 const fetchStudentTicketDetails = (id) => {
