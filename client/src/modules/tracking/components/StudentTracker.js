@@ -1,4 +1,4 @@
-// client/pages/Student/StudentTrackerPage.js
+// client/pages/Student/StudentTracker.js
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -13,19 +13,19 @@ const fetchStudentTicketDetails = (id) => {
         {
             id: 'C005', title: 'Corridor Lamp spoil', status: 'New', dateCreated: '2025-07-12', 
             category: 'Shared', subCategory: 'Lamp', hostel: 'Desasiswa Tekun', 
-            phone: '+60102355511', buildingRoom: 'L5-03-12', attachments: 'N/A',
+            phone: '+60102355511', buildingRoom: 'L5-03-12', attachments: 'N/A', description: 'The corridor lamp is not turning on',
             progressHistory: [{ status: 'New', date: '2025-07-12 10:00 AM' }]
         },
         {
             id: 'C004', title: 'Mattress old and spoiled', status: 'Pending', dateCreated: '2025-07-14', 
             category: 'Individual', subCategory: 'Mattress', hostel: 'Desasiswa Tekun', 
-            phone: '+60102355511', buildingRoom: 'L5-03-07', attachments: 'N/A',
+            phone: '+60102355511', buildingRoom: 'L5-03-07', attachments: 'N/A', description: 'The mattress is very dirty and old',
             progressHistory: [{ status: 'New', date: '2025-07-14 09:00 AM' }, { status: 'Pending', date: '2025-07-14 11:00 AM' }]
         },
         {
             id: 'C003', title: 'Aircond not functioning', status: 'In Progress', dateCreated: '2025-07-10', 
             category: 'Individual', subCategory: 'Air Conditioner', hostel: 'Desasiswa Tekun', 
-            phone: '+60102355511', buildingRoom: 'M04-09-12A', attachments: 'N/A',
+            phone: '+60102355511', buildingRoom: 'M04-09-12A', attachments: 'N/A', description: 'Aircon cannot turn on',
             progressHistory: [{ status: 'New', date: '2025-07-10 12:00 PM' }, { status: 'Pending', date: '2025-07-10 1:00 PM' }, { status: 'In Progress', date: '2025-07-11 09:00 AM' }]
         },
         // Resolved tickets don't typically use this page, but include them for full data consistency
@@ -85,7 +85,7 @@ const ProgressBar = ({ history, currentStatus }) => {
     );
 };
 
-const StudentTrackerPage = () => {
+const StudentTracker = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [ticket, setTicket] = useState(null);
@@ -106,27 +106,26 @@ const StudentTrackerPage = () => {
             <div className="page-content-wrapper">
                 {/* Back Button (Simplified, matching the Staff Update Page design logic) */}
                 <button 
-                    className="btn-back-dashboard" 
-                    onClick={() => navigate('/student/dashboard')}
-                >
-                    <i className="fa-sharp fa-solid fa-angle-left"></i>
-                    <span>Back to Dashboard</span>
+                    className="btn-back-dashboard" onClick={() => navigate('/student/dashboard')}>
+                    ← Back to Dashboard
                 </button>
                 
                 <h3 className="section-title-update">Tracking Complaint: #{ticket.id}</h3>
-                
-                {/* 1. Progress Bar (The main tracking element) */}
-                <div className="ticket-details-block progress-block">
-                    <ProgressBar history={ticket.progressHistory} currentStatus={ticket.status} />
-                </div>
 
-                {/* 2. Details Block (Read-only info) */}
-                <div className="ticket-details-block info-block">
+                {/* ONE unified block */}
+                <div className="ticket-details-block">
+
+                    {/* Progress Bar */}
+                    <ProgressBar 
+                        history={ticket.progressHistory} 
+                        currentStatus={ticket.status} 
+                    />
+
+                    {/* Ticket Info */}
                     <div className="ticket-info-summary">
                         <div className="title-pill">{ticket.title}</div>
-                        
+
                         <div className="info-grid">
-                            <p>Name: {ticket.name || 'N/A'}</p> 
                             <p>Created: {ticket.dateCreated || 'N/A'}</p> 
                             <p>Category: {ticket.category || 'N/A'}</p>
                             <p>Sub-category: {ticket.subCategory || 'N/A'}</p>
@@ -135,15 +134,24 @@ const StudentTrackerPage = () => {
                             <p>Hostel: {ticket.hostel || 'N/A'}</p>
                             <p>Building and Room Number: {ticket.buildingRoom || 'N/A'}</p>
                             <p>Attachments: {ticket.attachments || 'N/A'}</p>
-                            <p>Staff: {ticket.staff || 'N/A'}</p> 
+                        </div>
+
+                        {/* Description Box */}
+                        <div className="comments-section">
+                            <label htmlFor="description">Description</label>
+                            <textarea
+                                id="description"
+                                value={ticket.description || ''}
+                                readOnly
+                            ></textarea>
                         </div>
                     </div>
+
                 </div>
                 
-                {/* No comment box or action buttons for student */}
             </div>
         </div>
     );
 };
 
-export default StudentTrackerPage;
+export default StudentTracker;

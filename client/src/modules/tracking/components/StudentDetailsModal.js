@@ -25,9 +25,9 @@ const StudentDetailsModal = ({ open, onClose, complaintData }) => {
                 </div>
 
                 <div className="complaint-modal-body">
-                    <div className="status-header">
+                    {/* <div className="status-header">
                         <StatusPill status={complaintData.status} />
-                    </div>
+                    </div> */}
 
                     <div className="ticket-header-pill">
                         {complaintData.title}
@@ -36,7 +36,7 @@ const StudentDetailsModal = ({ open, onClose, complaintData }) => {
                     <div className="info-grid-student">
                         
                         {/* FIRST COLUMN */}
-                        <p>Name: {displayValue(complaintData.name)}</p>
+                        {/* <p>Name: {displayValue(complaintData.name)}</p> */}
                         <p>Created: {displayValue(complaintData.dateCreated)}</p>
                         <p>Category: {displayValue(complaintData.category)}</p>
                         <p>Sub-category: {displayValue(complaintData.subCategory)}</p>

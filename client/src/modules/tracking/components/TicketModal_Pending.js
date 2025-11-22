@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import './TicketModal_Pending.css';
-import ConfirmationModal from './ConfirmationModal'; // We'll create this next
+import ConfirmationModal from './ConfirmationModal'; 
 
 // Helper component for status badge (uses styles from StaffDashboard.css)
 const StatusBadge = ({ status }) => {
@@ -154,8 +154,8 @@ const TicketModal_Pending = ({ open, onClose, ticketData, onUpdateStatus }) => {
                 open={isConfirmOpen}
                 onClose={() => setIsConfirmOpen(false)}
                 onConfirm={handleConfirmUpdate}
-                message={`Are you sure you want to start work on ticket #${ticketData.id}?`}
-                confirmText="Confirm Start"
+                message={`Confirm start work for this ticket?`}
+                confirmText="Start"
             />
         </div>
     );

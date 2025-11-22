@@ -195,3 +195,24 @@
     color: #4b5563; 
 }
 .info-grid p { margin: 0; }
+
+.description-section label {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.description-section textarea {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
+    width: 100%;
+    padding: 15px;
+    border-radius: 6px;
+    min-height: 80px;
+    resize: vertical;
+    font-size: 0.9em;
+    font-family: inherit;
+}

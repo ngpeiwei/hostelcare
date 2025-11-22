@@ -9,6 +9,7 @@ import FeedbackModal from '../../modules/feedback/components/FeedbackForm';
 import SuccessModal from '../../modules/feedback/components/FeedbackSuccess';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 import StudentDetailsModal from '../../modules/tracking/components/StudentDetailsModal';
+import StudentTracker from '../../modules/tracking/components/StudentTracker';
 
 const sampleComplaints = [
     {
@@ -139,6 +140,7 @@ const StudentDashboard = () => {
                 >
                     Track Progress
                 </button>
+
             );
         }
         return null;
@@ -149,7 +151,7 @@ const StudentDashboard = () => {
     const total = complaints.length;
     const newticket = complaints.filter((c) => c.status === 'New').length;
     const pending = complaints.filter((c) => c.status === 'Pending').length;
-    const inProgress = complaints.filter((c) => c.status === 'In Progress').length;
+    const inProgress = complaints.filter((c) => c.status === 'InProgress').length;
     const resolved = complaints.filter((c) => c.status === 'Resolved').length;
 
     return (
@@ -302,7 +304,12 @@ const StudentDashboard = () => {
                                         </button>
                                     )
                                 ) : (
-                                    <button className="btn btn-trackProgress">Track Progress</button>
+                                    <button 
+                                        className="btn btn-trackProgress"
+                                        onClick={() => handleTrackProgress(c.id)}
+                                    >
+                                        Track Progress
+                                    </button>
                                 )}
                             </div>
                         </div>

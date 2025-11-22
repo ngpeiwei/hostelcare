@@ -69,7 +69,7 @@
 
 /* Use existing action button classes */
 .action-button {
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
     border-radius: 8px;
     /* font-weight: 600; */
     cursor: pointer;
@@ -77,12 +77,14 @@
 }
 
 .button-confirm {
-    background-color: #16a34a; /* Green for confirm/accept */
+    background: #7c3aed; 
+    border: 1px solid #7c3aed;
     color: #ffffff;
+    padding: 10px 135px;
 }
 
 .button-confirm:hover {
-    background-color: #15803d;
+    background-color: #7c3aed;
 }
 
 .action-button.button-secondary {

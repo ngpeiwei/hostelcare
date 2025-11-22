@@ -1,5 +1,5 @@
 /* --- Centered Overlay --- */
-.cp-modal-overlay {
+.sm-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -9,11 +9,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 4000;
+  z-index: 1000;
 }
 
 /* --- Modal Card --- */
-.cp-modal-content.success-card {
+.sm-modal-content.success-card {
   background: #fff;
   padding: 32px 24px;
   border-radius: 12px;
@@ -31,7 +31,7 @@
 }
 
 /* --- Green Circle Icon --- */
-.cp-success-icon-wrapper {
+.sm-success-icon-wrapper {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -42,12 +42,13 @@
   margin-bottom: 30px;
 }
 
-.cp-success-icon {
+.sm-success-icon {
   width: 100px;
   height: 100px;
+  margin-right: 8px;
 }
 
-.cp-check-path {
+.sm-check-path {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
   animation: drawCheck 0.5s ease forwards;
@@ -60,28 +61,32 @@
 }
 
 /* --- Text --- */
-.cp-success-message {
+.sm-success-message {
   font-size: 18px;
-  color: #166534;
+  font-weight: 0;
+  color: #166534; /* Changed to green */
+  margin-top: 0px;
   margin-bottom: 50px;
+  background-color: white;
 }
 
 /* --- OK Button --- */
-.cp-btn-ok {
+.sm-btn-ok {
   padding: 10px 16px;
   border-radius: 999px;
   font-size: 14px;
+  text-align: center;
   cursor: pointer;
 }
 
-.cp-success-ok-btn {
+.sm-success-ok-btn {
   width: 30%;
-  background: #7c3aed;
+  background: #7c3aed; 
   border: 1px solid #7c3aed;
   color: white;
 }
 
-.cp-success-ok-btn:hover {
+.sm-success-ok-btn:hover {
   background: #6d28d9;
   border-color: #6d28d9;
 }

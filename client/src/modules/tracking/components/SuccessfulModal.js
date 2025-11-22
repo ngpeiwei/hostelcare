@@ -7,13 +7,13 @@ export default function SuccessMessageModal({ open, onClose, message }) {
     if (!open) return null;
 
     return (
-        <div className="cp-modal-overlay">
-            <div className="cp-modal-content success-card">
+        <div className="sm-modal-overlay">
+            <div className="sm-modal-content success-card">
 
-                <div className="cp-success-icon-wrapper">
-                    <svg className="cp-success-icon" viewBox="0 0 52 52">
+                <div className="sm-success-icon-wrapper">
+                    <svg className="sm-success-icon" viewBox="0 0 52 52">
                         <path
-                            className="cp-check-path"
+                            className="sm-check-path"
                             fill="none"
                             stroke="#fff"
                             strokeWidth="6"
@@ -22,13 +22,13 @@ export default function SuccessMessageModal({ open, onClose, message }) {
                     </svg>
                 </div>
 
-                <div className="cp-success-message">
+                <div className="sm-success-message">
                     {message}
                 </div>
 
                 <button 
                     type="button"
-                    className="cp-btn-ok cp-success-ok-btn"
+                    className="sm-btn-ok sm-success-ok-btn"
                     onClick={onClose}
                 >
                     OK

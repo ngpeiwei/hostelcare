@@ -296,7 +296,7 @@ const StaffDashboard = () => {
             <SuccessMessageModal
                 open={isSuccessOpen}
                 onClose={() => setIsSuccessOpen(false)}
-                title="You have successfully started your work !"
+                message={`You have started working on the ticket successfully !`}
             />
 
         </div>

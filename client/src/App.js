@@ -10,7 +10,7 @@ import StaffDashboard from './pages/Maintenance Staff/StaffDashboard';
 import TicketDetails from './pages/Admin/3 TicketDetails';
 import StaffUpdatePage from './pages/Maintenance Staff/StaffUpdatePage';
 import InProgressDetails from './pages/Admin/InProgressDetails';
-import StudentTrackerPage from './modules/tracking/components/StudentTracker';
+import StudentTracker from './modules/tracking/components/StudentTracker';
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
         <Route path="/admin/ticket/:id" element={<TicketDetails />} />
         <Route path="/admin/inprogress/:id" element={<InProgressDetails />} />
         <Route path="/staff/ticket/:id/update" element={<StaffUpdatePage />} />
-        <Route path="/student/tracker/:id" element={<StudentTrackerPage />} />
+        <Route path="/student/complaint/:id/track" element={<StudentTracker />} />
       </Routes>
     </Router>
   );

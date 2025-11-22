@@ -118,7 +118,7 @@ const StaffUpdatePage = () => {
             // TODO: API CALL → Mark as resolved
 
             // Show success modal
-            setSuccessMessage(`Ticket #${id} has been resolved successfully!`);
+            setSuccessMessage(`The ticket has been resolved successfully!`);
             setIsSuccessOpen(true);
         }
         else if (confirmAction === 'save') {
@@ -228,10 +228,11 @@ const StaffUpdatePage = () => {
                 onConfirm={handleConfirmAction}
                 message={
                     confirmAction === 'resolve'
-                        ? `Are you sure you want to update the ticket #${ticket.id} - Resolved?`
-                        : `Are you sure you want to save the current progress for ticket #${ticket.id}?`
+                        // ? `Are you sure you want to update the ticket #${ticket.id} - Resolved?`
+                        ? `Are you sure you want to mark this ticket as Resolved?`
+                        : `Save current progress for this ticket?`
                 }
-                confirmText={confirmAction === 'resolve' ? "Confirm Resolve" : "Confirm Save"}
+                confirmText={confirmAction === 'resolve' ? "Resolve" : "Confirm Save"}
             />
 
             {/* Success Modal */}
