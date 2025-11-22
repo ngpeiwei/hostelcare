@@ -1,0 +1,120 @@
+/* client/modules/tracking/components/StudentDetailsModal.css */
+
+/* --- Modal Backdrop and Content --- */
+.modal-backdrop-student {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content-student {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 700px; /* Standard modal width */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* --- Header --- */
+.modal-header-student {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-title-student {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.close-btn-student {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+/* --- Body Content --- */
+.status-header {
+    margin-bottom: 15px;
+}
+
+.ticket-header-pill {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 20px;
+}
+
+.info-grid-student {
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px 30px; 
+    margin-bottom: 30px; 
+    font-size: 0.9em; 
+    color: #4b5563; 
+    border-top: 1px solid #e5e7eb;
+    padding-top: 20px;
+}
+.info-grid-student p { 
+    margin: 0; 
+    line-height: 1.5;
+}
+
+.description-section h4 {
+    font-size: 1em;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 10px 0;
+}
+
+.description-box {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 15px;
+    min-height: 80px;
+    font-size: 0.9em;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+/* --- Footer --- */
+.modal-footer-student {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 20px;
+}
+
+.btn-close-modal {
+    /* Uses standard button styling from Student Dashboard */
+    background-color: #d1d5db;
+    color: #374151;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-close-modal:hover {
+    background-color: #b0b5bd;
+}

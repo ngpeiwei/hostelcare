@@ -1,0 +1,187 @@
+/* client/pages/Student/StudentTrackerPage.css */
+
+.student-tracker-page {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    padding-bottom: 40px;
+}
+
+/* --- Header Styles (Reusing StudentDashboard Look) --- */
+.tracker-page-header {
+    background-color: #ffffff;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.header-left { display: flex; align-items: center; gap: 15px; }
+.main-title { font-size: 28px; font-weight: 700; color: #1f2937; margin: 0 0 5px 0; }
+.subtitle { font-size: 14px; color: #6b7280; margin: 0; }
+.header-right .user-profile { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb; }
+
+
+/* --- Content Wrapper & Layout --- */
+.page-content-wrapper {
+    padding: 30px 40px; 
+    max-width: 900px; /* Constrain content width */
+    margin: 0 auto;
+}
+
+/* Back Button Styling (From StaffUpdatePage/Admin design) */
+.btn-back-dashboard {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: all 0.2s;
+    
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.btn-back-dashboard:hover {
+    background-color: #f9fafb;
+    border-color: #9333ea;
+}
+
+.btn-back-dashboard .fa-angle-left {
+    font-size: 1.2em;
+    color: currentColor;
+}
+
+
+.section-title-update {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 25px;
+}
+
+/* --- Ticket Details Block (Background Container) --- */
+.ticket-details-block {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    padding: 30px;
+    margin-bottom: 30px; /* Space between the progress block and info block */
+}
+
+/* --- Progress Bar Styles (4 Steps: New, Pending, In Progress, Resolved) --- */
+
+.progress-container {
+    padding: 20px 0 10px 0; 
+}
+
+.progress-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+/* Horizontal line connecting dots */
+.progress-line::before {
+    content: '';
+    position: absolute;
+    top: 14px; /* Centers line vertically relative to dot center */
+    left: 13px; /* Starts line after the first dot center */
+    right: 13px; /* Ends line before the last dot center */
+    height: 2px;
+    background-color: #e5e7eb;
+    z-index: 1;
+}
+
+.progress-line.progress-4-steps .progress-step {
+    /* Since we have 4 steps, set the width to 25% */
+    width: 25%;
+    flex-grow: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+/* Ensure the first and last dots are anchored precisely */
+.progress-line.progress-4-steps .progress-step:first-child {
+    align-items: flex-start; 
+    text-align: left;
+    margin-left: -13px; /* Half of dot width + offset */
+}
+.progress-line.progress-4-steps .progress-step:last-child {
+    align-items: flex-end; 
+    text-align: right;
+    margin-right: -13px; /* Half of dot width + offset */
+}
+
+.progress-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    color: white;
+    font-size: 14px;
+    line-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.progress-step.completed .progress-dot {
+    background-color: #7c3aed; /* Purple */
+}
+
+.progress-label {
+    font-size: 0.85em;
+    color: #6b7280;
+    margin-top: 6px;
+    width: auto;
+}
+
+/* --- Update Info Text (Read-Only Status Update) --- */
+.update-info-text {
+    margin-top: 20px; 
+    margin-bottom: 10px; 
+    font-style: italic;
+    color: #4b5563;
+    font-size: 0.9em;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb; /* Separator line */
+}
+
+/* --- Ticket Summary Styles --- */
+.ticket-info-summary {
+    /* Styling consistent with StaffUpdatePage */
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f5f5f5; 
+}
+
+.title-pill {
+    background-color: #f5f5f5; /* Make the pill blend into the background */
+    color: #1f2937;
+    font-size: 1.2em;
+    font-weight: 600;
+    padding: 0;
+    border-radius: 0;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.info-grid { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px 30px; 
+    margin-bottom: 0; 
+    font-size: 0.95em; 
+    color: #4b5563; 
+}
+.info-grid p { margin: 0; }

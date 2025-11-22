@@ -10,6 +10,7 @@ import StaffDashboard from './pages/Maintenance Staff/StaffDashboard';
 // import ViewTicket from './pages/Admin/2 ViewTicket';
 import TicketDetails from './pages/Admin/3 TicketDetails';
 import StaffUpdatePage from './pages/Maintenance Staff/StaffUpdatePage';
+import StudentTrackerPage from './modules/tracking/components/StudentTracker';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/staff/dashboard" element={<StaffDashboard />} />
         <Route path="/admin/ticket/:id" element={<TicketDetails />} />
         <Route path="/staff/ticket/:id/update" element={<StaffUpdatePage />} />
+        <Route path="/student/tracker/:id" element={<StudentTrackerPage />} />
       </Routes>
     </Router>
   );

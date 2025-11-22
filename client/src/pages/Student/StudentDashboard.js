@@ -8,37 +8,48 @@ import ComplaintSuccessModal from '../../modules/complaints/components/Complaint
 import FeedbackModal from '../../modules/feedback/components/FeedbackForm'; 
 import SuccessModal from '../../modules/feedback/components/FeedbackSuccess';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
+import StudentDetailsModal from '../../modules/tracking/components/StudentDetailsModal';
 
 const sampleComplaints = [
     {
         id: 'C005',
-        title: 'Basin tap leaking',
+        title: 'Corridor Lamp spoil',
         status: 'New',
         feedback: null,
+        dateCreated: '2025-07-12', category: 'Shared', subCategory: 'Lamp', hostel: 'Desasiswa Tekun',
+        phone: '+60102355511', buildingRoom: 'L5-03-12', attachments: 'N/A', name: 'Student A',
     },
     {
         id: 'C004',
-        title: 'Ceiling fan not functioning',
+        title: 'Mattress old and spoiled',
         status: 'Pending',
         feedback: null,
+        dateCreated: '2025-07-14', category: 'Individual', subCategory: 'Mattress', hostel: 'Desasiswa Tekun',
+        phone: '+60102355511', buildingRoom: 'L5-03-07', attachments: 'N/A', name: 'Student B',
     },
-	{
+    {
         id: 'C003',
-        title: 'Mirror Broken',
+        title: 'Aircond not functioning',
         status: 'InProgress',
         feedback: null,
+        dateCreated: '2025-07-10', category: 'Individual', subCategory: 'Air Conditioner', hostel: 'Desasiswa Tekun',
+        phone: '+60102355511', buildingRoom: 'M04-09-12A', attachments: 'N/A', name: 'Student C',
     },
     {
         id: 'C002',
-        title: 'Table lamp is not working',
+        title: 'Washing machine is broken',
         status: 'Resolved',
         feedback: null,
+        dateCreated: '2025-07-09', category: 'Shared', subCategory: 'Washing Machine', hostel: 'Desasiswa Tekun',
+        phone: '+60102355511', buildingRoom: 'M04-09-12A', attachments: 'N/A', name: 'Student D',
     },
     {
         id: 'C001',
-        title: 'Toilet basin tap leaking',
+        title: 'Drying rack wire is loose',
         status: 'Resolved',
         feedback: null,
+        dateCreated: '2025-07-08', category: 'Shared', subCategory: 'Drying Rack', hostel: 'Desasiswa Tekun',
+        phone: '+60102355511', buildingRoom: 'L5-03-03', attachments: 'N/A', name: 'Student E',
     },
 ];
 
@@ -61,6 +72,7 @@ const StudentDashboard = () => {
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(null);
     const [isSuccessOpen, setIsSuccessOpen] = useState(false);
     const [viewingFeedback, setViewingFeedback] = useState(null);
+    const [viewingDetails, setViewingDetails] = useState(null);
 
     const handleComplaintSuccess = () => {
         setIsComplaintOpen(false); 
@@ -71,6 +83,65 @@ const StudentDashboard = () => {
             c.id === feedbackData.complaintId ? { ...c, feedback: feedbackData }  : c));
         setIsFeedbackOpen(null); 
         setIsSuccessOpen(true);   
+    };
+
+    const handleTrackProgress = (complaintId) => {
+        navigate(`/student/complaint/${complaintId}/track`);
+    };
+
+    const handleViewDetails = (complaint) => {
+        setViewingDetails(complaint);
+    };
+
+    // HANDLER: Close the details modal
+    const handleCloseDetailsModal = () => {
+        setViewingDetails(null);
+    };
+
+    const renderActionButtons = (c) => {
+        const status = c.status.toLowerCase();
+        
+        if (status === 'resolved') {
+            return (
+                <>
+                    {/* 1. View Details Button (opens modal) */}
+                    <button 
+                        className="btn btn-viewDetails"
+                        onClick={() => handleViewDetails(c)} 
+                    >
+                        View Details
+                    </button>
+
+                    {/* 2. Feedback Button */}
+                    {c.feedback ? (
+                        <button 
+                            className="btn btn-view-feedback"
+                            onClick={() => setViewingFeedback(c.feedback)}
+                        >
+                            View Feedback
+                        </button>
+                    ) : (
+                        <button 
+                            className="btn btn-feedback" 
+                            onClick={() => setIsFeedbackOpen(c.id)}
+                        >
+                            Give Feedback
+                        </button>
+                    )}
+                </>
+            );
+        } else if (status === 'new' || status === 'pending' || status === 'inprogress') {
+            // Track Progress button for all non-resolved statuses (redirects to page)
+            return (
+                <button 
+                    className="btn btn-trackProgress"
+                    onClick={() => handleTrackProgress(c.id)}
+                >
+                    Track Progress
+                </button>
+            );
+        }
+        return null;
     };
 
     useEffect(() => {setComplaints(sampleComplaints);}, []);
@@ -170,6 +241,12 @@ const StudentDashboard = () => {
                     open={!!viewingFeedback} 
                     feedback={viewingFeedback}
                     onClose={() => setViewingFeedback(null)} 
+                />
+
+                <StudentDetailsModal
+                    open={!!viewingDetails}
+                    onClose={handleCloseDetailsModal}
+                    complaintData={viewingDetails}
                 />
 
                 <div className="complaint-list">
