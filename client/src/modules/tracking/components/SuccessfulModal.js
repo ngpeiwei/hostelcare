@@ -3,35 +3,37 @@
 import React from 'react';
 import './SuccessfulModal.css';
 
-const SuccessMessageModal = ({ open, onClose, title, message }) => {
+export default function SuccessMessageModal({ open, onClose, message }) {
     if (!open) return null;
 
     return (
-        <div className="modal-backdrop-success">
-            <div className="modal-content-success">
-                <div className="success-icon-container">
-                    {/* Checkmark Icon */}
-                    <svg className="success-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        <div className="cp-modal-overlay">
+            <div className="cp-modal-content success-card">
+
+                <div className="cp-success-icon-wrapper">
+                    <svg className="cp-success-icon" viewBox="0 0 52 52">
+                        <path
+                            className="cp-check-path"
+                            fill="none"
+                            stroke="#fff"
+                            strokeWidth="6"
+                            d="M14 27 l10 10 l20 -20"
+                        />
                     </svg>
                 </div>
-                
-                <div className="success-text-container">
-                    <h4 className="success-title">{title}</h4>
-                    <p className="success-message">{message}</p>
+
+                <div className="cp-success-message">
+                    {message}
                 </div>
 
-                <div className="modal-footer-success">
-                    <button 
-                        className="action-button button-primary" 
-                        onClick={onClose}
-                    >
-                        OK
-                    </button>
-                </div>
+                <button 
+                    type="button"
+                    className="cp-btn-ok cp-success-ok-btn"
+                    onClick={onClose}
+                >
+                    OK
+                </button>
             </div>
         </div>
     );
-};
-
-export default SuccessMessageModal;
+}

@@ -1,77 +1,87 @@
-/* client/modules/tracking/components/SuccessMessageModal.css */
-
-/* --- Backdrop --- */
-.modal-backdrop-success {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 4000; /* Highest z-index */
+/* --- Centered Overlay --- */
+.cp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
 }
 
-/* --- Content --- */
-.modal-content-success {
-    background-color: #ffffff;
-    padding: 40px 30px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 380px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-    text-align: center;
+/* --- Modal Card --- */
+.cp-modal-content.success-card {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 12px;
+  width: 500px;
+  height: 400px;
+  max-width: 1000px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  /* Centering content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-/* --- Icon --- */
-.success-icon-container {
-    background-color: #ecfdf5; /* Light green background */
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 20px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* --- Green Circle Icon --- */
+.cp-success-icon-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #5cbf5f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
 }
 
-.success-icon {
-    width: 40px;
-    height: 40px;
-    color: #16a34a; /* Dark green checkmark */
+.cp-success-icon {
+  width: 100px;
+  height: 100px;
+}
+
+.cp-check-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawCheck 0.5s ease forwards;
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* --- Text --- */
-.success-title {
-    font-size: 1.15em;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 5px;
+.cp-success-message {
+  font-size: 18px;
+  color: #166534;
+  margin-bottom: 50px;
 }
 
-.success-message {
-    font-size: 0.95em;
-    font-weight: 500;
-    color: #4b5563;
-    margin-top: 100px;
+/* --- OK Button --- */
+.cp-btn-ok {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-/* --- Footer (OK Button) --- */
-.modal-footer-success {
-    padding-top: 15px;
+.cp-success-ok-btn {
+  width: 30%;
+  background: #7c3aed;
+  border: 1px solid #7c3aed;
+  color: white;
 }
 
-.action-button.button-primary {
-    /* Uses the primary purple theme */
-    background-color: #7c3aed;
-    color: #fff;
-    padding: 10px 30px;
-    /* font-weight: 600; */
-    width: 100%;
-}
-
-.action-button.button-primary:hover {
-    background-color: #6d28d9;
+.cp-success-ok-btn:hover {
+  background: #6d28d9;
+  border-color: #6d28d9;
 }

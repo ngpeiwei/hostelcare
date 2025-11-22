@@ -297,8 +297,8 @@ const StaffDashboard = () => {
                 open={isSuccessOpen}
                 onClose={() => setIsSuccessOpen(false)}
                 title="You have successfully started your work !"
-                message="Status updated - In Progress !"
             />
+
         </div>
     );
 };

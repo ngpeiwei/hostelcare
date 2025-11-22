@@ -1,15 +1,16 @@
+// Updated StaffUpdatePage.js
 // client/pages/Maintenance Staff/StaffUpdatePage.js
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../../modules/tracking/components/ConfirmationModal';
+import SuccessMessageModal from '../../modules/tracking/components/SuccessfulModal';
 import './StaffUpdatePage.css';
 import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/admin.png';
 
 // --- Mock Data / Service Call Simulation ---
 const fetchTicketDetails = (id) => {
-    // Simulating fetching a ticket that is 'In Progress'
     if (id === "00001") {
         return {
             id: id,
@@ -47,8 +48,8 @@ const fetchTicketDetails = (id) => {
             status: "In Progress",
             progressHistory: [
                 { status: "Pending", date: "2025-11-03 10:00 AM" },
-                { status: "In Progress", date: "2025-11-03 1:40 PM", comment: "You have updated the ticket at 1:40 PM" },
-            ],
+                { status: "In Progress", date: "2025-11-03 1:40 PM", comment: "You have updated the ticket at 1:40 PM" }
+            ]
         };
     }
 
@@ -56,7 +57,7 @@ const fetchTicketDetails = (id) => {
 };
 // ------------------------------------------
 
-// --- Reusable Header Component (Matching StaffDashboard structure) ---
+// --- Header Component ---
 const Header = ({ navigate }) => {
     return (
         <div className="update-page-header">
@@ -84,6 +85,10 @@ const StaffUpdatePage = () => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
 
+    // Success Modal state
+    const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+
     useEffect(() => {
         const data = fetchTicketDetails(id);
         setTicket(data);
@@ -93,7 +98,7 @@ const StaffUpdatePage = () => {
         return <div className="loading-state">Loading Ticket #{id}...</div>;
     }
 
-    // Handlers for Save and Resolve
+    // --- Button Handlers ---
     const handleSaveClick = () => {
         setConfirmAction('save');
         setIsConfirmOpen(true);
@@ -109,17 +114,29 @@ const StaffUpdatePage = () => {
 
         if (confirmAction === 'resolve') {
             console.log(`Resolving Ticket ${id} with comment: ${comment}`);
-            // TODO: Send API request to update status to 'Resolved'
-            navigate('/staff/dashboard', { state: { successMessage: `Ticket #${id} resolved!` } });
-        } else if (confirmAction === 'save') {
+
+            // TODO: API CALL → Mark as resolved
+
+            // Show success modal
+            setSuccessMessage(`Ticket #${id} has been resolved successfully!`);
+            setIsSuccessOpen(true);
+        }
+        else if (confirmAction === 'save') {
             console.log(`Saving progress on Ticket ${id} with comment: ${comment}`);
-            // TODO: Send API request to save comment/progress history without changing status
-            // Show a temporary success message (optional)
-            alert(`Progress saved for Ticket #${id}.`); 
+            // TODO: API save progress
+            alert(`Progress saved for Ticket #${id}.`);
         }
     };
 
-    // --- Progress Bar Component ---
+    // After clicking OK on success modal
+    const handleSuccessClose = () => {
+        setIsSuccessOpen(false);
+
+        // Redirect to Resolved Tickets tab
+        navigate('/staff/dashboard?tab=resolved');
+    };
+
+    // --- Progress Bar ---
     const ProgressBar = ({ history, currentStatus }) => {
         const stages = ['Pending', 'In Progress', 'Resolved'];
         const currentStageIndex = stages.findIndex(s => s === currentStatus);
@@ -138,7 +155,7 @@ const StaffUpdatePage = () => {
         );
     };
 
-    // --- Update Info Component ---
+    // --- Update Info ---
     const UpdateInfo = ({ history }) => {
         const lastUpdate = history.length > 0 ? history[history.length - 1] : null;
         if (!lastUpdate) return null;
@@ -155,8 +172,6 @@ const StaffUpdatePage = () => {
             <Header navigate={navigate} />
 
             <div className="page-content-wrapper">
-                
-                {/* Back Button - Navigate to Staff Dashboard */}
                 <button className="btn-back-dashboard" onClick={() => navigate('/staff/dashboard')}>
                     ← Back to Dashboard
                 </button>
@@ -164,28 +179,25 @@ const StaffUpdatePage = () => {
                 <h3 className="section-title-update">Ticket Status: In Progress</h3>
                 
                 <ProgressBar history={ticket.progressHistory} currentStatus={ticket.status} />
-                                            
+                                             
                 <div className="ticket-details-block">
                     <div className="ticket-info-summary">
                         <div className="title-pill">{ticket.title}</div>
                         
                         <div className="info-grid">
-                            {/* FIRST COLUMN (Name, Created, Category, Sub-category, Phone Number) */}
                             <p>Name: {ticket.name || 'N/A'}</p>
                             <p>Created: {ticket.dateCreated || 'N/A'}</p>
                             <p>Category: {ticket.category || 'N/A'}</p>
                             <p>Sub-category: {ticket.subCategory || 'N/A'}</p>
                             <p>Phone Number: {ticket.phone || 'N/A'}</p>
 
-                            {/* SECOND COLUMN (Hostel, Building/Room, Attachments, Staff) */}
                             <p>Hostel: {ticket.hostel || 'N/A'}</p>
                             <p>Building and Room Number: {ticket.buildingRoom || 'N/A'}</p>
                             <p>Attachments: {ticket.attachments || 'N/A'}</p>
                             <p>Staff: {ticket.staff || 'N/A'}</p>
                         </div>
                     </div>
-                    
-                    {/* 3. Update text placed here */}
+
                     <UpdateInfo history={ticket.progressHistory} />
                     
                     <div className="comments-section">
@@ -207,7 +219,6 @@ const StaffUpdatePage = () => {
                         </button>
                     </div>
                 </div>
-
             </div>
 
             {/* Confirmation Modal */}
@@ -221,6 +232,13 @@ const StaffUpdatePage = () => {
                         : `Are you sure you want to save the current progress for ticket #${ticket.id}?`
                 }
                 confirmText={confirmAction === 'resolve' ? "Confirm Resolve" : "Confirm Save"}
+            />
+
+            {/* Success Modal */}
+            <SuccessMessageModal
+                open={isSuccessOpen}
+                onClose={handleSuccessClose}
+                message={successMessage}
             />
         </div>
     );
