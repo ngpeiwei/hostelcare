@@ -38,6 +38,10 @@ const fetchStudentTicketDetails = (id) => {
 
 // --- Reusable Header Component ---
 const Header = ({ navigate }) => {
+
+    const [showDropdown, setShowDropdown] = useState(false);
+    const handleDropdownToggle = () => setShowDropdown(!showDropdown);
+
     return (
         <div className="tracker-page-header">
             {/* Header structure matching StudentDashboard */}
@@ -50,7 +54,12 @@ const Header = ({ navigate }) => {
             </div>
             <div className="header-right">
                 <img src={userImage} alt="User" className="user-profile" />
-                {/* Simplified profile placeholder */}
+                <span 
+                    className={`dropdown-arrow ${showDropdown ? 'open' : ''}`} 
+                    onClick={handleDropdownToggle}
+                >
+                    ▼
+                </span>
             </div>
         </div>
     );

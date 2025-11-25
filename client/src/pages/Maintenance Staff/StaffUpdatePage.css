@@ -21,6 +21,18 @@
 .subtitle { font-size: 14px; color: #6b7280; margin: 0; }
 .header-right .user-profile { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb; }
 
+.dropdown-arrow {
+    margin-left: 6px;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+    width: 18px;
+    height: 18px;
+    color: currentColor;
+}
+
+.dropdown-arrow.open {
+    transform: rotate(180deg);
+}
 
 /* --- Content Wrapper & Main Blocks --- */
 .page-content-wrapper {

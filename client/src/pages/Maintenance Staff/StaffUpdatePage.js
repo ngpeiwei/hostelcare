@@ -59,6 +59,10 @@ const fetchTicketDetails = (id) => {
 
 // --- Header Component ---
 const Header = ({ navigate }) => {
+
+    const [showDropdown, setShowDropdown] = useState(false);
+    const handleDropdownToggle = () => setShowDropdown(!showDropdown);
+
     return (
         <div className="update-page-header">
             <div className="header-left">
@@ -72,6 +76,12 @@ const Header = ({ navigate }) => {
             </div>
             <div className="header-right">
                 <img src={userImage} alt="Staff" className="user-profile" />
+                <span 
+                    className={`dropdown-arrow ${showDropdown ? 'open' : ''}`} 
+                    onClick={handleDropdownToggle}
+                >
+                    ▼
+                </span>
             </div>
         </div>
     );
