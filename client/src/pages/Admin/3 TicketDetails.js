@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './TicketDetails.css';
-import complaintService from '../../modules/complaints/components/complaintService';
+import { submitComplaint } from '../../modules/complaints/components/complaintService';
 import userImage from '../../assets/admin.png';
 import logoImage from '../../assets/logo.png';
 
@@ -53,7 +53,7 @@ const TicketDetails = () => {
   const loadTicket = async () => {
     try {
       setLoading(true);
-      const response = await complaintService.getComplaintById(id);
+      const response = await submitComplaint.getComplaintById(id);
       if (response.data) {
         setTicket(response.data);
         setFormData({
@@ -84,7 +84,7 @@ const TicketDetails = () => {
         ...ticket,
         ...formData
       };
-      await complaintService.updateComplaint(id, updateData);
+      await submitComplaint.updateComplaint(id, updateData);
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);

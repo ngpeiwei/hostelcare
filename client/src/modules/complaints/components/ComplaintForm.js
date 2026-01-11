@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'; 
 import ReactDOM from 'react-dom';
+import { supabase } from '../../../supabaseClient';
+import { submitComplaint } from './complaintService';
 import './ComplaintForm.css';
 
 function ComplaintForm({ open, onClose, onSubmitSuccess }) { 
@@ -79,48 +81,49 @@ function ComplaintForm({ open, onClose, onSubmitSuccess }) {
     onClose && onClose();
   };
 
-  // Handles form submission (Simulated API call)
+  // Handles form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
     // Basic Validation
-    if (!title || !category || !subCategory|| !hostel || !room) {
+    if (!title || !category || !subCategory || !hostel || !room) {
       setError('Please fill all required fields.');
 
-    if (modalBodyRef.current) {
-      modalBodyRef.current.scrollTo({ top: 0, behavior: "smooth" });
-    }
+      if (modalBodyRef.current) {
+        modalBodyRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      }
 
       return;
     }
+
     setLoading(true);
 
-    const complaintData = {
-      title,
-      category,
-      subCategory,
-      description,
-      hostel,
-      room,
-      attachments: attachments.map(a => ({
-        name: a.file.name,
-        type: a.file.type,
-        size: a.file.size
-      }))
-    };
-
     try {
-      console.log('--- Submitting Complaint (Simulated) ---');
-      console.log('Form Data:', { title, category, subCategory, description, hostel, room });
-      console.log('Attachments Count:', attachments.length);
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Complaint submitted successfully (Simulated)');
-      onSubmitSuccess(complaintData);
-      handleClose();
+      // Get logged-in user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) throw new Error('User not logged in');
+
+      // Prepare complaint data
+      const complaintData = {
+        title,
+        category,
+        subCategory,
+        description,
+        hostel,
+        room,
+        userId: user.id,
+        attachments, // Array of File objects from input
+      };
+
+      // Submit complaint via service
+      const result = await submitComplaint(complaintData);
+
+      console.log('Complaint submitted successfully:', result);
+      onSubmitSuccess(result); // Pass result back to parent
+      handleClose(); // Close modal and reset form
     } catch (err) {
-      // Catch and handle simulated errors
-      console.error('Simulated complaint submission failed', err);
+      console.error('Failed to submit complaint:', err);
       setError('Failed to submit complaint. Please try again later.');
     } finally {
       setLoading(false);

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/admin.png';
-import complaintService from '../../modules/complaints/components/complaintService';
+import { submitComplaint } from '../../modules/complaints/components/complaintService';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 import './AdminDashboard.css';
 
@@ -74,7 +74,7 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
       const status = activeTab === 'Open' ? 'Open' : activeTab === 'All Tickets' ? 'All' : activeTab;
-      const response = await complaintService.getAllComplaints(status);
+      const response = await submitComplaint.getAllComplaints(status);
       if (response.data) {
         // Use response directly; remove any hardcoded exclusions so all matching
         // tickets are shown for the selected status.
@@ -202,8 +202,8 @@ const AdminDashboard = () => {
   const handleLogout = () => {
     // Clear any stored authentication tokens
     localStorage.removeItem('token');
-    // Navigate to LoginAdmin page
-    navigate('/auth/LoginAdmin');
+    // Navigate to Login page
+    navigate('/auth/login');
   };
 
   // Summary stats for admin dashboard
