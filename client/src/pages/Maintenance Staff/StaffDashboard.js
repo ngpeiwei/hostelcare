@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/admin.png';
-import complaintService from '../../modules/complaints/services/complaintService';
+import complaintService from '../../modules/complaints/components/complaintService';
 import './StaffDashboard.css';
 
 // Import the modal components

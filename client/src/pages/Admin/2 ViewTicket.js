@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ViewTicket.css';
-import complaintService from '../../modules/complaints/services/complaintService';
+import complaintService from '../../modules/complaints/components/complaintService';
 import userImage from '../../assets/admin.png';
 import logoImage from '../../assets/logo.png';
 

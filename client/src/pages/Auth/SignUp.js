@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../services/firebase';
+import { supabase } from '../../supabaseClient';
 import './SignUp.css';
 import logoImage from '../../assets/logo.png';
 import SignUpSuccess from './SignUpSuccess';
@@ -26,25 +25,43 @@ export default function SignUp() {
 	};
 
 	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setError('');
-		const v = validate();
-		if (v) return setError(v);
+	e.preventDefault();
+	setError('');
+	const v = validate();
+	if (v) return setError(v);
 
-			setLoading(true);
-			try {
-				const userCred = await createUserWithEmailAndPassword(auth, email, password);
-				// optionally get ID token and store
-				const idToken = await userCred.user.getIdToken();
-				localStorage.setItem('token', idToken);
-				// show success modal
-				setShowSuccess(true);
-			} catch (err) {
-				const msg = (err && err.message) ? err.message : 'Signup failed';
-				setError(msg);
-			} finally {
-				setLoading(false);
-			}
+	setLoading(true);
+
+	try {
+		// 1️. Sign up user with Supabase Auth
+		const { data: authData, error: authError } = await supabase.auth.signUp({
+		email,
+		password,
+		options: {
+			data: { name, phone } // optional metadata in Auth
+		}
+		});
+
+		if (authError) throw authError;
+
+		// 2️. Insert user info into your 'users' table
+		const { error: dbError } = await supabase
+		.from('users')
+		.insert([{ id: authData.user.id, name, phone, email, role: 'student' }]);
+
+		if (dbError) throw dbError;
+
+		// 3️. Store session token (optional)
+		localStorage.setItem('token', authData.session?.access_token || '');
+
+		// 4️. Show success modal
+		setShowSuccess(true);
+
+	} catch (err) {
+		setError(err.message || 'Signup failed');
+	} finally {
+		setLoading(false);
+	}
 	};
 
 	return (
