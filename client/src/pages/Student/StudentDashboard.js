@@ -41,11 +41,18 @@ const StudentDashboard = () => {
         fetchComplaints(); // refresh list
     };
 
-    const handleFeedbackSuccess = (feedbackData) => {setComplaints(currentComplaints => currentComplaints.map(c =>
-            c.id === feedbackData.complaintId ? { ...c, feedback: feedbackData }  : c));
-        setIsFeedbackOpen(null); 
-        setIsSuccessOpen(true);   
-    };
+    const handleFeedbackSuccess = (feedbackData) => {
+        console.log("Feedback data received:", feedbackData);
+        if (!feedbackData || !feedbackData.complaintId) {
+          console.error("Invalid feedbackData:", feedbackData);
+          return;
+        }
+        setComplaints(currentComplaints => currentComplaints.map(c =>
+            c.id === feedbackData.complaintId ? { ...c, feedback: feedbackData } : c));
+        setIsFeedbackOpen(null);
+        setIsSuccessOpen(true);
+      };
+      
 
     const handleTrackProgress = (complaintId) => {
         navigate(`/student/complaint/${complaintId}/track`);
