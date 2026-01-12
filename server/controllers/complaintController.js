@@ -1,367 +1,268 @@
-// In-memory storage (replace with database in production)
-let tickets = [
-  {
-    id: '00015',
-    description: 'Aircond not functioning',
-    status: 'In Progress',
-    dateCreated: '2025-07-10',
-    name: 'Ahmad bin Ali',
-    email: 'ahmad@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Air Conditioner',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'M04-09-12A',
-    attachments: [],
-    staffInCharge: 'Nazrul Hakim',
-    actionsToBeTaken: 'Replaced aircond unit',
-    estimatedServiceDate: '2025-07-12',
-    feedback: 'Fixed successfully'
-  },
-  {
-    id: '00014',
-    description: 'Washing machine is broken',
-    status: 'Resolved',
-    dateCreated: '2025-07-09',
-    name: 'Siti Nurhaliza',
-    email: 'siti@student.usm.my',
-    category: 'Shared',
-    subCategory: 'Washing Machine',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    buildingAndRoom: 'M04-09-12A',
-    attachments: [],
-    staffInCharge: 'Nazrul Hakim',
-    actionsToBeTaken: 'Repaired washing machine motor',
-    estimatedServiceDate: '2025-07-11',
-    feedback: 'Working well now'
-  },
-  {
-    id: '00013',
-    description: 'Drying rack wire is loose',
-    status: 'Resolved',
-    dateCreated: '2025-07-08',
-    name: 'Lee Wei Ming',
-    email: 'lee@student.usm.my',
-    category: 'Shared',
-    subCategory: 'Drying Rack',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-03',
-    attachments: [],
-    staffInCharge: 'Ahmad Fauzi',
-    actionsToBeTaken: 'Tightened wire connections',
-    estimatedServiceDate: '2025-07-10',
-    feedback: 'Good'
-  },
-  {
-    id: '00012',
-    description: 'Chair leg is wobbly',
-    status: 'Resolved',
-    dateCreated: '2025-07-07',
-    name: 'Sarah binti Hassan',
-    email: 'sarah@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Chair',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-04',
-    attachments: [],
-    staffInCharge: 'Nazrul Hakim',
-    actionsToBeTaken: 'Fixed chair leg',
-    estimatedServiceDate: '2025-07-09',
-    feedback: 'Stable now'
-  },
-  {
-    id: '00011',
-    description: 'Socket plug cannot use',
-    status: 'Resolved',
-    dateCreated: '2025-07-06',
-    name: 'Kamal bin Abdullah',
-    email: 'kamal@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Socket',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-05',
-    attachments: [],
-    staffInCharge: 'Ahmad Fauzi',
-    actionsToBeTaken: 'Replaced socket',
-    estimatedServiceDate: '2025-07-08',
-    feedback: 'Working'
-  },
-  {
-    id: '00010',
-    description: 'Mirror broken',
-    status: 'Resolved',
-    dateCreated: '2025-07-05',
-    name: 'Fatimah binti Zainal',
-    email: 'fatimah@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Mirror',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-06',
-    attachments: [],
-    staffInCharge: 'Nazrul Hakim',
-    actionsToBeTaken: 'Replaced mirror',
-    estimatedServiceDate: '2025-07-07',
-    feedback: 'New mirror installed'
-  },
-  {
-    id: '00009',
-    description: 'Mattress old and spoiled',
-    status: 'Pending',
-    dateCreated: '2025-07-14',
-    name: 'Rahman bin Ismail',
-    email: 'rahman@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Mattress',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-07',
-    attachments: [],
-    staffInCharge: 'Nazrul Hakim',
-    actionsToBeTaken: 'Order new mattress',
-    estimatedServiceDate: '2025-07-20',
-    feedback: ''
-  },
-  {
-    id: '00008',
-    description: 'Bedframe is loose',
-    status: 'Pending',
-    dateCreated: '2025-07-14',
-    name: 'Zara binti Mohd',
-    email: 'zara@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Bedframe',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-08',
-    attachments: [],
-    staffInCharge: 'Ahmad Fauzi',
-    actionsToBeTaken: 'Tighten bedframe bolts',
-    estimatedServiceDate: '2025-07-18',
-    feedback: ''
-  },
-  {
-    id: '00007',
-    description: 'Toilet pump leaking',
-    status: 'Pending',
-    dateCreated: '2025-07-13',
-    name: 'Hassan bin Yusof',
-    email: 'hassan@student.usm.my',
-    category: 'Shared',
-    subCategory: 'Toilet',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-09',
-    attachments: [],
-    staffInCharge: 'Nazrul Hakim',
-    actionsToBeTaken: 'Replace pump seal',
-    estimatedServiceDate: '2025-07-17',
-    feedback: ''
-  },
-  {
-    id: '00006',
-    description: 'Fridge is not cold anymore',
-    status: 'Pending',
-    dateCreated: '2025-07-13',
-    name: 'Aisyah binti Rahman',
-    email: 'aisyah@student.usm.my',
-    category: 'Shared',
-    subCategory: 'Refrigerator',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-10',
-    attachments: [],
-    staffInCharge: '',
-    actionsToBeTaken: '',
-    estimatedServiceDate: '',
-    feedback: ''
-  },
-  {
-    id: '00005',
-    description: 'Table lamp is not working',
-    detailedDescription: 'Last night suddenly I can\'t turn my lamp on. Please help to fix',
-    status: 'Open',
-    dateCreated: '2025-07-13',
-    name: 'Nur Syakila Athirah binti Azman',
-    email: 'syakilaat@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Table lamp',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-01',
-    attachments: ['IMG0002.png'],
-    staffInCharge: '',
-    actionsToBeTaken: '',
-    estimatedServiceDate: '',
-    feedback: ''
-  },
-  {
-    id: '00004',
-    description: 'Room socket spoil',
-    status: 'Open',
-    dateCreated: '2025-07-12',
-    name: 'Muhammad Firdaus',
-    email: 'firdaus@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Socket',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-11',
-    attachments: [],
-    staffInCharge: '',
-    actionsToBeTaken: '',
-    estimatedServiceDate: '',
-    feedback: ''
-  },
-  {
-    id: '00003',
-    description: 'Corridor Lamp spoil',
-    status: 'Open',
-    dateCreated: '2025-07-12',
-    name: 'Nurul Izzah',
-    email: 'nurul@student.usm.my',
-    category: 'Shared',
-    subCategory: 'Lamp',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-12',
-    attachments: [],
-    staffInCharge: '',
-    actionsToBeTaken: '',
-    estimatedServiceDate: '',
-    feedback: ''
-  },
-  {
-    id: '00002',
-    description: 'Ceiling fan speed slow',
-    status: 'Open',
-    dateCreated: '2025-07-11',
-    name: 'Amir bin Ahmad',
-    email: 'amir@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Ceiling Fan',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-13',
-    attachments: [],
-    staffInCharge: '',
-    actionsToBeTaken: '',
-    estimatedServiceDate: '',
-    feedback: ''
-  },
-  {
-    id: '00001',
-    description: 'Room door handle broken',
-    status: 'Open',
-    dateCreated: '2025-07-11',
-    name: 'Siti Aisyah',
-    email: 'sitiaisyah@student.usm.my',
-    category: 'Individual',
-    subCategory: 'Door',
-    hostel: 'Desasiswa Tekun',
-    phoneNo: '+60102355511',
-    floorAndRoom: 'L5-03-14',
-    attachments: [],
-    staffInCharge: '',
-    actionsToBeTaken: '',
-    estimatedServiceDate: '',
-    feedback: ''
-  }
-];
-
-// Generate next ticket ID
-const getNextTicketId = () => {
-  const maxId = Math.max(...tickets.map(t => parseInt(t.id)));
-  return String(maxId + 1).padStart(5, '0');
-};
+const supabase = require('../config/supabase');
 
 // Get all tickets with optional filtering
-exports.getAllComplaints = (req, res) => {
-  const { status } = req.query;
-  let filteredTickets = [...tickets];
-  
-  if (status && status !== 'All') {
-    if (status === 'New') {
-      filteredTickets = tickets.filter(t => t.status === 'Open');
-    } else {
-      filteredTickets = tickets.filter(t => t.status === status);
+exports.getAllComplaints = async (req, res) => {
+  try {
+    const { status } = req.query;
+    
+    let query = supabase
+      .from('complaints')
+      .select('*');
+    
+    // Apply status filter
+    if (status && status !== 'All') {
+      if (status === 'New') {
+        query = query.eq('status', 'Open');
+      } else {
+        query = query.eq('status', status);
+      }
     }
+    
+    // Sort by ID descending (newest first)
+    query = query.order('id', { ascending: false });
+    
+    const { data, error } = await query;
+    
+    if (error) {
+      console.error('Error fetching complaints:', error);
+      return res.status(500).json({ error: 'Failed to fetch complaints' });
+    }
+    
+    // Format data to match frontend expectations (convert snake_case to camelCase)
+    const formattedData = data.map(ticket => ({
+      id: String(ticket.id).padStart(5, '0'),
+      description: ticket.description,
+      detailedDescription: ticket.detailed_description || ticket.description || '',
+      status: ticket.status,
+      dateCreated: ticket.date_created,
+      name: ticket.name || '',
+      email: ticket.email || '',
+      category: ticket.category || '',
+      subCategory: ticket.sub_category || '',
+      hostel: ticket.hostel || '',
+      phoneNo: ticket.phone_no || '',
+      floorAndRoom: ticket.floor_and_room || ticket.buildingAndRoom || '',
+      buildingAndRoom: ticket.floor_and_room || ticket.buildingAndRoom || '',
+      attachments: ticket.attachments || [],
+      staffInCharge: ticket.staff_in_charge || '',
+      actionsToBeTaken: ticket.actions_to_be_taken || '',
+      estimatedServiceDate: ticket.estimated_service_date || '',
+      feedback: ticket.feedback || ''
+    }));
+    
+    res.json(formattedData);
+  } catch (error) {
+    console.error('Error in getAllComplaints:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  
-  // Sort by ID descending (newest first)
-  filteredTickets.sort((a, b) => parseInt(b.id) - parseInt(a.id));
-  
-  res.json(filteredTickets);
 };
 
 // Get single ticket by ID
-exports.getComplaintById = (req, res) => {
-  const { id } = req.params;
-  const ticket = tickets.find(t => t.id === id);
-  
-  if (!ticket) {
-    return res.status(404).json({ error: 'Ticket not found' });
+exports.getComplaintById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Remove leading zeros if present for database query
+    const numericId = parseInt(id);
+    
+    const { data, error } = await supabase
+      .from('complaints')
+      .select('*')
+      .eq('id', numericId)
+      .single();
+    
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'Ticket not found' });
+      }
+      console.error('Error fetching complaint:', error);
+      return res.status(500).json({ error: 'Failed to fetch complaint' });
+    }
+    
+    // Convert numeric ID to zero-padded string
+    const formattedData = {
+      ...data,
+      id: String(data.id).padStart(5, '0')
+    };
+    
+    res.json(formattedData);
+  } catch (error) {
+    console.error('Error in getComplaintById:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  
-  res.json(ticket);
 };
 
 // Create new ticket
-exports.submitComplaint = (req, res) => {
-  const newTicket = {
-    id: getNextTicketId(),
-    description: req.body.description,
-    status: 'Open',
-    dateCreated: new Date().toISOString().split('T')[0],
-    name: req.body.name || '',
-    email: req.body.email || '',
-    category: req.body.category || 'Individual',
-    subCategory: req.body.subCategory || '',
-    hostel: req.body.hostel || '',
-    phoneNo: req.body.phoneNo || '',
-    floorAndRoom: req.body.floorAndRoom || '',
-    attachments: req.body.attachments || [],
-    staffInCharge: '',
-    actionsToBeTaken: '',
-    estimatedServiceDate: '',
-    feedback: ''
-  };
-  
-  tickets.push(newTicket);
-  res.status(201).json(newTicket);
+exports.submitComplaint = async (req, res) => {
+  try {
+    // First, get the maximum ID to generate the next one
+    const { data: maxTicket, error: maxError } = await supabase
+      .from('complaints')
+      .select('id')
+      .order('id', { ascending: false })
+      .limit(1)
+      .single();
+    
+    let nextId = 1;
+    if (maxTicket && !maxError) {
+      nextId = parseInt(maxTicket.id) + 1;
+    }
+    
+    const newTicket = {
+      id: nextId,
+      description: req.body.description,
+      detailed_description: req.body.detailedDescription || req.body.description || '',
+      status: 'Open',
+      date_created: new Date().toISOString().split('T')[0],
+      name: req.body.name || '',
+      email: req.body.email || '',
+      category: req.body.category || 'Individual',
+      sub_category: req.body.subCategory || '',
+      hostel: req.body.hostel || '',
+      phone_no: req.body.phoneNo || '',
+      floor_and_room: req.body.floorAndRoom || req.body.buildingAndRoom || '',
+      attachments: req.body.attachments || [],
+      staff_in_charge: '',
+      actions_to_be_taken: '',
+      estimated_service_date: null,
+      feedback: ''
+    };
+    
+    const { data, error } = await supabase
+      .from('complaints')
+      .insert([newTicket])
+      .select()
+      .single();
+    
+    if (error) {
+      console.error('Error creating complaint:', error);
+      return res.status(500).json({ error: 'Failed to create complaint' });
+    }
+    
+    // Format response to match frontend expectations
+    const formattedData = {
+      id: String(data.id).padStart(5, '0'),
+      description: data.description,
+      detailedDescription: data.detailed_description,
+      status: data.status,
+      dateCreated: data.date_created,
+      name: data.name,
+      email: data.email,
+      category: data.category,
+      subCategory: data.sub_category,
+      hostel: data.hostel,
+      phoneNo: data.phone_no,
+      floorAndRoom: data.floor_and_room || data.buildingAndRoom,
+      buildingAndRoom: data.floor_and_room || data.buildingAndRoom,
+      attachments: data.attachments || [],
+      staffInCharge: data.staff_in_charge || '',
+      actionsToBeTaken: data.actions_to_be_taken || '',
+      estimatedServiceDate: data.estimated_service_date || '',
+      feedback: data.feedback || ''
+    };
+    
+    res.status(201).json(formattedData);
+  } catch (error) {
+    console.error('Error in submitComplaint:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
 // Update ticket
-exports.updateComplaint = (req, res) => {
-  const { id } = req.params;
-  const ticketIndex = tickets.findIndex(t => t.id === id);
-  
-  if (ticketIndex === -1) {
-    return res.status(404).json({ error: 'Ticket not found' });
+exports.updateComplaint = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const numericId = parseInt(id);
+    
+    // Convert frontend field names to database field names
+    const updateData = {
+      description: req.body.description,
+      detailed_description: req.body.detailedDescription || req.body.description || null,
+      status: req.body.status,
+      name: req.body.name,
+      email: req.body.email,
+      category: req.body.category,
+      sub_category: req.body.subCategory,
+      hostel: req.body.hostel,
+      phone_no: req.body.phoneNo,
+      floor_and_room: req.body.floorAndRoom || req.body.buildingAndRoom || null,
+      attachments: req.body.attachments || [],
+      staff_in_charge: req.body.staffInCharge || '',
+      actions_to_be_taken: req.body.actionsToBeTaken || '',
+      estimated_service_date: req.body.estimatedServiceDate || null,
+      feedback: req.body.feedback || ''
+    };
+    
+    // Remove undefined/null values to avoid overwriting with null
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key] === undefined) {
+        delete updateData[key];
+      }
+    });
+    
+    const { data, error } = await supabase
+      .from('complaints')
+      .update(updateData)
+      .eq('id', numericId)
+      .select()
+      .single();
+    
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'Ticket not found' });
+      }
+      console.error('Error updating complaint:', error);
+      return res.status(500).json({ error: 'Failed to update complaint' });
+    }
+    
+    // Format response to match frontend expectations
+    const formattedData = {
+      id: String(data.id).padStart(5, '0'),
+      description: data.description,
+      detailedDescription: data.detailed_description,
+      status: data.status,
+      dateCreated: data.date_created,
+      name: data.name,
+      email: data.email,
+      category: data.category,
+      subCategory: data.sub_category,
+      hostel: data.hostel,
+      phoneNo: data.phone_no,
+      floorAndRoom: data.floor_and_room || data.buildingAndRoom,
+      buildingAndRoom: data.floor_and_room || data.buildingAndRoom,
+      attachments: data.attachments || [],
+      staffInCharge: data.staff_in_charge || '',
+      actionsToBeTaken: data.actions_to_be_taken || '',
+      estimatedServiceDate: data.estimated_service_date || '',
+      feedback: data.feedback || ''
+    };
+    
+    res.json(formattedData);
+  } catch (error) {
+    console.error('Error in updateComplaint:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  
-  tickets[ticketIndex] = {
-    ...tickets[ticketIndex],
-    ...req.body,
-    id: tickets[ticketIndex].id // Preserve ID
-  };
-  
-  res.json(tickets[ticketIndex]);
 };
 
 // Delete ticket
-exports.deleteComplaint = (req, res) => {
-  const { id } = req.params;
-  const ticketIndex = tickets.findIndex(t => t.id === id);
-  
-  if (ticketIndex === -1) {
-    return res.status(404).json({ error: 'Ticket not found' });
+exports.deleteComplaint = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const numericId = parseInt(id);
+    
+    const { error } = await supabase
+      .from('complaints')
+      .delete()
+      .eq('id', numericId);
+    
+    if (error) {
+      console.error('Error deleting complaint:', error);
+      return res.status(500).json({ error: 'Failed to delete complaint' });
+    }
+    
+    res.json({ message: 'Ticket deleted successfully' });
+  } catch (error) {
+    console.error('Error in deleteComplaint:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  
-  tickets.splice(ticketIndex, 1);
-  res.json({ message: 'Ticket deleted successfully' });
 };
