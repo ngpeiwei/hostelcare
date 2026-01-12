@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../../../supabaseClient';
 import './FeedbackForm.css';
 
 const StarRating = ({ rating, setRating }) => {
@@ -37,34 +38,42 @@ export default function FeedbackModal({ open, onClose, complaintId, onSubmitSucc
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+  
     if (!satisfaction || !professionalism || !effectiveness || !easeOfUse) {
       setError('Please fill required fields.');
       return;
-    };
+    }
+  
     setLoading(true);
-
-    const feedbackData = {
-      complaintId,
-      satisfaction,
-      professionalism,
-      effectiveness,
-      easeOfUse,
-      comments,
-    };
-    
+  
     try {
-    console.log('Submitting feedback:', feedbackData);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log('Feedback submitted successfully!');
-    // handleClose();
-    onSubmitSuccess(feedbackData);
-  } catch (apiError) {
-    console.error('Failed to submit feedback:', apiError);
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError) throw authError;
+  
+      const userId = authData.user.id;
+  
+      const { error } = await supabase.from('feedback').insert({
+        complaint_id: complaintId,
+        user_id: userId,
+        overall_rating: satisfaction,
+        timeliness_rating: professionalism,
+        effectiveness_rating: effectiveness,
+        ease_of_use_rating: easeOfUse,
+        comment: comments,
+      });
+  
+      if (error) throw error;
+  
+      onSubmitSuccess(); // open success modal, refresh, etc.
+  
+    } catch (apiError) {
+      console.error('Failed to submit feedback:', apiError);
       setError(apiError.message || 'An error occurred. Please try again.');
+  
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   const handleClose = () => {
     setSatisfaction(0);
