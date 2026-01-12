@@ -181,8 +181,11 @@ const StaffDashboard = () => {
     const handleLogout = async () => {
         await supabase.auth.signOut();
         localStorage.removeItem('token');
+<<<<<<< HEAD
+=======
         localStorage.removeItem('role');
         localStorage.removeItem('lastActivity');
+>>>>>>> 97e7c0b0e9f170c4ae75b8e241681fd1516c58bf
         navigate('/auth/login');
     };
 
