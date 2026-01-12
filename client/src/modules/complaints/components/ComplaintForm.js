@@ -118,9 +118,9 @@ function ComplaintForm({ open, onClose, onSubmitSuccess }) {
 
       // Submit complaint via service
       const result = await submitComplaint(complaintData);
-
       console.log('Complaint submitted successfully:', result);
-      onSubmitSuccess(result); // Pass result back to parent
+      // Tell parent: complaint submitted successfully
+      onSubmitSuccess && onSubmitSuccess(result); 
       handleClose(); // Close modal and reset form
     } catch (err) {
       console.error('Failed to submit complaint:', err);

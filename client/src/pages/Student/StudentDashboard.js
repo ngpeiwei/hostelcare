@@ -12,50 +12,6 @@ import StudentDetailsModal from '../../modules/tracking/components/StudentDetail
 import StudentTracker from '../../modules/tracking/components/StudentTracker';
 import { supabase } from '../../supabaseClient';
 
-const sampleComplaints = [
-    {
-        id: 'C005',
-        title: 'Corridor Lamp spoil',
-        status: 'New',
-        feedback: null,
-        dateCreated: '2025-07-12', category: 'Shared', subCategory: 'Lamp', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'L5-03-12', attachments: 'N/A', name: 'Student A',
-    },
-    {
-        id: 'C004',
-        title: 'Mattress old and spoiled',
-        status: 'Pending',
-        feedback: null,
-        dateCreated: '2025-07-14', category: 'Individual', subCategory: 'Mattress', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'L5-03-07', attachments: 'N/A', name: 'Student B',
-    },
-    {
-        id: 'C003',
-        title: 'Aircond not functioning',
-        status: 'InProgress',
-        feedback: null,
-        dateCreated: '2025-07-10', category: 'Individual', subCategory: 'Air Conditioner', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'M04-09-12A', attachments: 'N/A', name: 'Student C',
-    },
-    {
-        id: 'C002',
-        title: 'Washing machine is broken',
-        status: 'Resolved',
-        feedback: null,
-        dateCreated: '2025-07-09', category: 'Shared', subCategory: 'Washing Machine', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'M04-09-12A', attachments: 'N/A', name: 'Student D',
-    },
-    {
-        id: 'C001',
-        title: 'Drying rack wire is loose',
-        status: 'Resolved',
-        feedback: null,
-        dateCreated: '2025-07-08', category: 'Shared', subCategory: 'Drying Rack', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'L5-03-03', attachments: 'N/A', name: 'Student E',
-    },
-];
-
-
 const StudentDashboard = () => {
     const [complaints, setComplaints] = useState([]);
     const navigate = useNavigate();
@@ -82,6 +38,7 @@ const StudentDashboard = () => {
     const handleComplaintSuccess = () => {
         setIsComplaintOpen(false); 
         setIsComplaintSuccessOpen(true); 
+        fetchComplaints(); // refresh list
     };
 
     const handleFeedbackSuccess = (feedbackData) => {setComplaints(currentComplaints => currentComplaints.map(c =>
@@ -104,7 +61,7 @@ const StudentDashboard = () => {
     };
 
     const renderActionButtons = (c) => {
-        const status = c.status.toLowerCase();
+        const status = c.status;
         
         if (status === 'resolved') {
             return (
@@ -136,7 +93,6 @@ const StudentDashboard = () => {
                 </>
             );
         } else if (status === 'new' || status === 'pending' || status === 'inprogress') {
-            // Track Progress button for all non-resolved statuses (redirects to page)
             return (
                 <button 
                     className="btn btn-trackProgress"
@@ -150,13 +106,61 @@ const StudentDashboard = () => {
         return null;
     };
 
-    useEffect(() => {setComplaints(sampleComplaints);}, []);
+    const fetchComplaints = async () => {
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { data, error } = await supabase
+            .from('complaints')
+            .select(`
+                id,
+                issue_title,
+                category,
+                sub_category,
+                hostel,
+                building_room_number,
+                status,
+                created_at,
+                complaint_attachments (
+                file_url,
+                file_type
+                )
+            `)
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            // Map DB → UI format
+            const mapped = data.map(c => ({
+            id: c.id,
+            title: c.issue_title,
+            category: c.category,
+            subCategory: c.sub_category,
+            hostel: c.hostel,
+            buildingRoom: c.building_room_number,
+            status: c.status.replace(/\s/g, '').toLowerCase(),
+            dateCreated: c.created_at,
+            attachments: c.complaint_attachments,
+            feedback: null, // later join feedback table
+            }));
+
+            setComplaints(mapped);
+        } catch (err) {
+            console.error('Failed to fetch complaints:', err);
+        }
+    };
+
+    useEffect(() => {
+        fetchComplaints();
+    }, []);
 
     const total = complaints.length;
-    const newticket = complaints.filter((c) => c.status === 'New').length;
-    const pending = complaints.filter((c) => c.status === 'Pending').length;
-    const inProgress = complaints.filter((c) => c.status === 'InProgress').length;
-    const resolved = complaints.filter((c) => c.status === 'Resolved').length;
+    const newticket = complaints.filter(c => c.status === 'new').length;
+    const pending = complaints.filter(c => c.status === 'pending').length;
+    const inProgress = complaints.filter(c => c.status === 'inprogress').length;
+    const resolved = complaints.filter(c => c.status === 'resolved').length;
 
     return (
         <div className={`student-dashboard`}>
@@ -257,67 +261,45 @@ const StudentDashboard = () => {
 
                 <div className="complaint-list">
                     <h3 className="section-title">Your Complaints</h3>
-                    {complaints.map((c) => (
-                        <div key={c.id} className="complaint-card">
-                            <div className="complaint-main">
-                                <div className="complaint-title">{c.title}</div>
-                                <div className="complaint-id">
-                                    <svg
-                                        className="complaint-id-icon"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                        />
-                                    </svg>
-                                    #{c.id}
+
+                    {complaints.length === 0 ? (
+                        <p className="no-complaints-message">
+                            You haven’t submitted any tickets yet.
+                        </p>
+                    ) : (
+                        complaints.map((c) => (
+                            <div key={c.id} className="complaint-card">
+                                <div className="complaint-main">
+                                    <div className="complaint-title">{c.title}</div>
+                                    <div className="complaint-id">
+                                        <svg
+                                            className="complaint-id-icon"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                            />
+                                        </svg>
+                                        #{c.id.slice(0, 8).toUpperCase()}
+                                    </div>
+                                </div>
+                                <div className="complaint-actions">
+                                    <div className={`pill status-${c.status}`}>
+                                        {c.status === 'inprogress'
+                                            ? 'In Progress'
+                                            : c.status.charAt(0).toUpperCase() + c.status.slice(1)}
+                                    </div>
+
+                                    {renderActionButtons(c)}
                                 </div>
                             </div>
-                            <div className="complaint-actions">
-                                <div className={`pill status-${c.status.toLowerCase()}`}>
-                                {c.status === 'InProgress' ? 'In Progress' : c.status}</div>
-                                {c.status.toLowerCase() === 'resolved' && (
-                                    <button 
-                                        className="btn btn-viewDetails"
-                                        onClick={() => handleViewDetails(c)}
-                                    >
-                                        View Details
-                                    </button>
-                                )}
-                                
-                                {c.status.toLowerCase() === 'resolved' ? (
-                                    c.feedback ? (
-
-                                        <button 
-                                            className="btn btn-view-feedback"
-                                            onClick={() => setViewingFeedback(c.feedback)}
-                                        >
-                                            View Feedback
-                                        </button>
-                                    ) : (
-                                        <button 
-                                            className="btn btn-feedback" 
-                                            onClick={() => setIsFeedbackOpen(c.id)}
-                                        >
-                                            Give Feedback
-                                        </button>
-                                    )
-                                ) : (
-                                    <button 
-                                        className="btn btn-trackProgress"
-                                        onClick={() => handleTrackProgress(c.id)}
-                                    >
-                                        Track Progress
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
         </div>

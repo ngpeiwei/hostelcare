@@ -45,7 +45,29 @@ const StudentDetailsModal = ({ open, onClose, complaintData }) => {
                         {/* SECOND COLUMN */}
                         <p>Hostel: {displayValue(complaintData.hostel)}</p>
                         <p>Building and Room Number: {displayValue(complaintData.buildingRoom)}</p>
-                        <p>Attachments: {displayValue(complaintData.attachments)}</p>
+                        {/* <p>Attachments: {displayValue(complaintData.attachments)}</p> */}
+                        <div className="attachments-section">
+                            <p><strong>Attachments:</strong></p>
+
+                            {complaintData.attachments && complaintData.attachments.length > 0 ? (
+                                <ul className="attachments-list">
+                                {complaintData.attachments.map((a, index) => (
+                                    <li key={index}>
+                                    <a
+                                        href={a.file_url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="attachment-link"
+                                    >
+                                        View Attachment {index + 1}
+                                    </a>
+                                    </li>
+                                ))}
+                                </ul>
+                            ) : (
+                                <p>N/A</p>
+                            )}
+                        </div>
                         <p>Staff: {displayValue(complaintData.staff)}</p> 
                     </div>
                     

@@ -58,7 +58,7 @@ export async function submitComplaint(complaintData) {
 
       if (attachmentError) throw attachmentError;
 
-      uploadedAttachments.push(attachmentRow);
+      uploadedAttachments.push(attachmentRow?.[0]);
     }
 
     return { complaint, attachments: uploadedAttachments };
