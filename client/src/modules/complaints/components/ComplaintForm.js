@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'; 
 import ReactDOM from 'react-dom';
 import { supabase } from '../../../supabaseClient';
-import complaintService from '../services/complaintService';
+import { submitComplaint } from './complaintService';
 import './ComplaintForm.css';
 
 function ComplaintForm({ open, onClose, onSubmitSuccess }) { 
@@ -104,27 +104,20 @@ function ComplaintForm({ open, onClose, onSubmitSuccess }) {
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error('User not logged in');
 
-      // Get user metadata (name, email, phone)
-      const userEmail = user.email;
-      const userName = user.user_metadata?.name || user.user_metadata?.full_name || '';
-      const userPhone = user.user_metadata?.phone || '';
-
-      // Prepare complaint data for backend API
+      // Prepare complaint data
       const complaintData = {
-        description: title, // Backend expects 'description' as the main field
-        detailedDescription: description,
-        category: category === 'individual' ? 'Individual' : 'Shared',
-        subCategory: subCategory,
-        hostel: hostel,
-        floorAndRoom: room,
-        name: userName,
-        email: userEmail,
-        phoneNo: userPhone,
-        attachments: attachments.map(att => att.file.name), // Just file names for now
+        title,
+        category,
+        subCategory,
+        description,
+        hostel,
+        room,
+        userId: user.id,
+        attachments, // Array of File objects from input
       };
 
-      // Submit complaint via backend API
-      const result = await complaintService.createComplaint(complaintData);
+      // Submit complaint via service
+      const result = await submitComplaint(complaintData);
 
       console.log('Complaint submitted successfully:', result);
       onSubmitSuccess(result); // Pass result back to parent
