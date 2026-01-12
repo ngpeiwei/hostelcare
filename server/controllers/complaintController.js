@@ -3,11 +3,16 @@ const supabase = require('../config/supabase');
 // Get all tickets with optional filtering
 exports.getAllComplaints = async (req, res) => {
   try {
-    const { status } = req.query;
+    const { status, email } = req.query;
     
     let query = supabase
       .from('complaints')
       .select('*');
+    
+    // Apply email filter (for students to see only their complaints)
+    if (email) {
+      query = query.eq('email', email);
+    }
     
     // Apply status filter
     if (status && status !== 'All') {
