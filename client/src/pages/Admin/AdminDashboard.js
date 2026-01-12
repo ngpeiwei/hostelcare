@@ -5,6 +5,7 @@ import userImage from '../../assets/admin.png';
 import { submitComplaint } from '../../modules/complaints/components/complaintService';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 import './AdminDashboard.css';
+import { supabase } from '../../supabaseClient';
 
 const NoFeedbackModal = ({ open, onClose }) => {
   if (!open) return null;
@@ -199,10 +200,11 @@ const AdminDashboard = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const handleLogout = () => {
-    // Clear any stored authentication tokens
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem('token');
-    // Navigate to Login page
+    localStorage.removeItem('role');
+    localStorage.removeItem('lastActivity');
     navigate('/auth/login');
   };
 

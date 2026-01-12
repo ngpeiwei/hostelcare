@@ -10,6 +10,7 @@ import SuccessModal from '../../modules/feedback/components/FeedbackSuccess';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 import StudentDetailsModal from '../../modules/tracking/components/StudentDetailsModal';
 import StudentTracker from '../../modules/tracking/components/StudentTracker';
+import { supabase } from '../../supabaseClient';
 
 const sampleComplaints = [
     {
@@ -63,8 +64,11 @@ const StudentDashboard = () => {
 
     const handleDropdownToggle = () => setShowDropdown((s) => !s);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
         localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('lastActivity');
         navigate('/auth/login');
     };
 

@@ -30,15 +30,17 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // 1️. Sign in with Supabase Auth
-      const { data: { user }, error: authError } = await supabase.auth.signInWithPassword({
+      // Sign in with Supabase Auth (Authenticate user)
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password
       });
 
       if (authError) throw authError;
 
-      // 2️. Fetch user info from users table
+      const { user, session } = data;
+
+      // Fetch user role for authorization
       const { data: userData, error: dbError } = await supabase
         .from('users')
         .select('*')
@@ -47,14 +49,14 @@ export default function Login() {
 
       if (dbError) throw dbError;
 
-      // 3️. Store session token if needed
-      const { data: { session }, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-      localStorage.setItem('token', session?.access_token || '');
+      // Store token and role in localStorage for session tracking 
+      localStorage.setItem('token', session.access_token);
+      localStorage.setItem('role', userData.role);
 
-      // 4️. Redirect based on role
+      // Track last activity for session timeout
+      localStorage.setItem('lastActivity', Date.now());
+
+      // Role-based redirection (Authorization)
       switch (userData.role) {
         case 'student': navigate('/student/dashboard'); break;
         case 'staff': navigate('/staff/dashboard'); break;
