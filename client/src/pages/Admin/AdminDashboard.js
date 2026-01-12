@@ -203,7 +203,7 @@ const AdminDashboard = () => {
     // Clear any stored authentication tokens
     localStorage.removeItem('token');
     // Navigate to LoginAdmin page
-    navigate('/auth/LoginAdmin');
+    navigate('/auth/login');
   };
 
   // Summary stats for admin dashboard

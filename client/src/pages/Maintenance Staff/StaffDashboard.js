@@ -179,7 +179,7 @@ const StaffDashboard = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        navigate('/auth/LoginStaff');
+        navigate('/auth/login');
     };
 
     // Calculate counts based on the PERSISTENT state (allMockTickets)
