@@ -2,9 +2,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/admin.png';
-import complaintService from '../../modules/complaints/components/complaintService';
+import complaintService from '../../modules/complaints/services/complaintService';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 import './AdminDashboard.css';
+import { supabase } from '../../supabaseClient';
 
 const NoFeedbackModal = ({ open, onClose }) => {
   if (!open) return null;
@@ -199,10 +200,15 @@ const AdminDashboard = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const handleLogout = () => {
-    // Clear any stored authentication tokens
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem('token');
+<<<<<<< HEAD
     // Navigate to LoginAdmin page
+=======
+    localStorage.removeItem('role');
+    localStorage.removeItem('lastActivity');
+>>>>>>> 97e7c0b0e9f170c4ae75b8e241681fd1516c58bf
     navigate('/auth/login');
   };
 

@@ -10,61 +10,25 @@ import SuccessModal from '../../modules/feedback/components/FeedbackSuccess';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 import StudentDetailsModal from '../../modules/tracking/components/StudentDetailsModal';
 import StudentTracker from '../../modules/tracking/components/StudentTracker';
-
-const sampleComplaints = [
-    {
-        id: 'C005',
-        title: 'Corridor Lamp spoil',
-        status: 'New',
-        feedback: null,
-        dateCreated: '2025-07-12', category: 'Shared', subCategory: 'Lamp', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'L5-03-12', attachments: 'N/A', name: 'Student A',
-    },
-    {
-        id: 'C004',
-        title: 'Mattress old and spoiled',
-        status: 'Pending',
-        feedback: null,
-        dateCreated: '2025-07-14', category: 'Individual', subCategory: 'Mattress', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'L5-03-07', attachments: 'N/A', name: 'Student B',
-    },
-    {
-        id: 'C003',
-        title: 'Aircond not functioning',
-        status: 'InProgress',
-        feedback: null,
-        dateCreated: '2025-07-10', category: 'Individual', subCategory: 'Air Conditioner', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'M04-09-12A', attachments: 'N/A', name: 'Student C',
-    },
-    {
-        id: 'C002',
-        title: 'Washing machine is broken',
-        status: 'Resolved',
-        feedback: null,
-        dateCreated: '2025-07-09', category: 'Shared', subCategory: 'Washing Machine', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'M04-09-12A', attachments: 'N/A', name: 'Student D',
-    },
-    {
-        id: 'C001',
-        title: 'Drying rack wire is loose',
-        status: 'Resolved',
-        feedback: null,
-        dateCreated: '2025-07-08', category: 'Shared', subCategory: 'Drying Rack', hostel: 'Desasiswa Tekun',
-        phone: '+60102355511', buildingRoom: 'L5-03-03', attachments: 'N/A', name: 'Student E',
-    },
-];
+import { supabase } from '../../supabaseClient';
+import complaintService from '../../modules/complaints/services/complaintService';
 
 
 const StudentDashboard = () => {
     const [complaints, setComplaints] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [userEmail, setUserEmail] = useState(null);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
     const [showDropdown, setShowDropdown] = useState(false);
 
     const handleDropdownToggle = () => setShowDropdown((s) => !s);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
         localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('lastActivity');
         navigate('/auth/login');
     };
 
@@ -75,9 +39,73 @@ const StudentDashboard = () => {
     const [viewingFeedback, setViewingFeedback] = useState(null);
     const [viewingDetails, setViewingDetails] = useState(null);
 
-    const handleComplaintSuccess = () => {
+    // Load user email and complaints
+    useEffect(() => {
+        const loadUserAndComplaints = async () => {
+            try {
+                // Get user email from Supabase auth or localStorage
+                const { data: { user } } = await supabase.auth.getUser();
+                const email = user?.email || localStorage.getItem('userEmail');
+                
+                if (email) {
+                    setUserEmail(email);
+                    await loadComplaints(email);
+                } else {
+                    console.error('No user email found');
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.error('Error loading user:', error);
+                setLoading(false);
+            }
+        };
+
+        loadUserAndComplaints();
+    }, []);
+
+    const loadComplaints = async (email) => {
+        try {
+            setLoading(true);
+            const response = await complaintService.getComplaintsByEmail(email);
+            if (response.data) {
+                // Transform backend data to match frontend format
+                const transformedComplaints = response.data.map(complaint => ({
+                    id: complaint.id,
+                    title: complaint.description,
+                    status: complaint.status === 'Open' ? 'New' : 
+                           complaint.status === 'In Progress' ? 'InProgress' : 
+                           complaint.status,
+                    feedback: complaint.feedback || null,
+                    dateCreated: complaint.dateCreated,
+                    category: complaint.category,
+                    subCategory: complaint.subCategory,
+                    hostel: complaint.hostel,
+                    phone: complaint.phoneNo,
+                    buildingRoom: complaint.floorAndRoom || complaint.buildingAndRoom,
+                    attachments: complaint.attachments || [],
+                    name: complaint.name,
+                    email: complaint.email,
+                    staffInCharge: complaint.staffInCharge,
+                    actionsToBeTaken: complaint.actionsToBeTaken,
+                    estimatedServiceDate: complaint.estimatedServiceDate,
+                    detailedDescription: complaint.detailedDescription || complaint.description
+                }));
+                setComplaints(transformedComplaints);
+            }
+        } catch (error) {
+            console.error('Error loading complaints:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleComplaintSuccess = async () => {
         setIsComplaintOpen(false); 
-        setIsComplaintSuccessOpen(true); 
+        setIsComplaintSuccessOpen(true);
+        // Reload complaints after successful submission
+        if (userEmail) {
+            await loadComplaints(userEmail);
+        }
     };
 
     const handleFeedbackSuccess = (feedbackData) => {setComplaints(currentComplaints => currentComplaints.map(c =>
@@ -146,7 +174,6 @@ const StudentDashboard = () => {
         return null;
     };
 
-    useEffect(() => {setComplaints(sampleComplaints);}, []);
 
     const total = complaints.length;
     const newticket = complaints.filter((c) => c.status === 'New').length;
@@ -253,7 +280,16 @@ const StudentDashboard = () => {
 
                 <div className="complaint-list">
                     <h3 className="section-title">Your Complaints</h3>
-                    {complaints.map((c) => (
+                    {loading ? (
+                        <div className="empty-state">
+                            <p className="empty-state-text">Loading...</p>
+                        </div>
+                    ) : complaints.length === 0 ? (
+                        <div className="empty-state">
+                            <p className="empty-state-text">No complaints found. Submit a ticket to get started!</p>
+                        </div>
+                    ) : (
+                        complaints.map((c) => (
                         <div key={c.id} className="complaint-card">
                             <div className="complaint-main">
                                 <div className="complaint-title">{c.title}</div>
@@ -313,7 +349,7 @@ const StudentDashboard = () => {
                                 )}
                             </div>
                         </div>
-                    ))}
+                    )))}
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/admin.png';
 import complaintService from '../../modules/complaints/components/complaintService';
 import './StaffDashboard.css';
+import { supabase } from '../../supabaseClient';
 
 // Import the modal components
 import TicketModal_Pending from '../../modules/tracking/components/TicketModal_Pending';
@@ -177,8 +178,14 @@ const StaffDashboard = () => {
         setShowDropdown(!showDropdown);
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
         localStorage.removeItem('token');
+<<<<<<< HEAD
+=======
+        localStorage.removeItem('role');
+        localStorage.removeItem('lastActivity');
+>>>>>>> 97e7c0b0e9f170c4ae75b8e241681fd1516c58bf
         navigate('/auth/login');
     };
 

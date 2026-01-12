@@ -1,57 +1,69 @@
-import api from '../../../services/api';
+// complaintService.js
+import { supabase } from '../../../supabaseClient';
 
-const createComplaint = async (payload) => {
-	try {
-		const res = await api.post('/api/complaints', payload);
-		return res;
-	} catch (err) {
-		throw err;
-	}
-};
+export async function submitComplaint(complaintData) {
+  try {
+    const { title, category, subCategory, description, hostel, room, attachments } = complaintData;
 
-const getAllComplaints = async (status = null) => {
-	try {
-		const url = status ? `/api/complaints?status=${status}` : '/api/complaints';
-		const res = await api.get(url);
-		return res;
-	} catch (err) {
-		throw err;
-	}
-};
+    // 1. Get logged-in user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) throw new Error('User not logged in');
 
-const getComplaintById = async (id) => {
-	try {
-		const res = await api.get(`/api/complaints/${id}`);
-		return res;
-	} catch (err) {
-		throw err;
-	}
-};
+    // 2. Insert complaint
+    const { data: complaint, error: complaintError } = await supabase
+      .from('complaints')
+      .insert([
+        {
+          user_id: user.id,
+          issue_title: title,
+          category,
+          sub_category: subCategory,
+          description,
+          hostel,
+          building_room_number: room,
+        },
+      ])
+      .select()
+      .single();
 
-const updateComplaint = async (id, payload) => {
-	try {
-		const res = await api.put(`/api/complaints/${id}`, payload);
-		return res;
-	} catch (err) {
-		throw err;
-	}
-};
+    if (complaintError) throw complaintError;
 
-const deleteComplaint = async (id) => {
-	try {
-		const res = await api.delete(`/api/complaints/${id}`);
-		return res;
-	} catch (err) {
-		throw err;
-	}
-};
+    // 3. Upload attachments
+    const uploadedAttachments = [];
 
-const complaintService = {
-	createComplaint,
-	getAllComplaints,
-	getComplaintById,
-	updateComplaint,
-	deleteComplaint,
-};
+    for (const att of attachments) {
+      const file = att.file;
+      const fileName = `${complaint.id}/${Date.now()}_${file.name}`;
+      const { data: storageData, error: storageError } = await supabase.storage
+        .from('complaint-attachments')
+        .upload(fileName, file);
 
-export default complaintService;
+      if (storageError) throw storageError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('complaint-attachments')
+        .getPublicUrl(fileName);
+
+      // Insert attachment row
+      const { data: attachmentRow, error: attachmentError } = await supabase
+        .from('complaint_attachments')
+        .insert([
+          {
+            complaint_id: complaint.id,
+            file_url: publicUrl,
+            file_type: file.type.startsWith('image') ? 'image' : file.type.startsWith('video') ? 'video' : 'file',
+          },
+        ]);
+
+      if (attachmentError) throw attachmentError;
+
+      uploadedAttachments.push(attachmentRow);
+    }
+
+    return { complaint, attachments: uploadedAttachments };
+  } catch (err) {
+    console.error('Error submitting complaint:', err);
+    throw err;
+  }
+}
