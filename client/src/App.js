@@ -14,6 +14,7 @@ import StaffUpdatePage from './pages/Maintenance Staff/StaffUpdatePage';
 import InProgressDetails from './pages/Admin/InProgressDetails';
 import StudentTracker from './modules/tracking/components/StudentTracker';
 
+//const SESSION_TIMEOUT = 60; // 60s for demo purpose 
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
 
 function AppRoutes() {

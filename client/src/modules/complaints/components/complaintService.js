@@ -24,44 +24,51 @@ export async function submitComplaint(complaintData) {
         },
       ])
       .select()
-      .single();
 
     if (complaintError) throw complaintError;
+
+   const complaintRow = complaint[0];
 
     // 3. Upload attachments
     const uploadedAttachments = [];
 
-    for (const att of attachments) {
-      const file = att.file;
-      const fileName = `${complaint.id}/${Date.now()}_${file.name}`;
-      const { data: storageData, error: storageError } = await supabase.storage
-        .from('complaint-attachments')
-        .upload(fileName, file);
+    for (const att of attachments || []) {
+    const file = att.file;
+    if (!file) continue; // skip if file is missing
 
-      if (storageError) throw storageError;
+    const sanitizedFileName = file.name.replace(/\s+/g, '_');
+    const fileName = `${complaintRow.id}/${Date.now()}_${Math.random().toString(36).substring(2,8)}_${sanitizedFileName}`;
+    
+    const { data: storageData, error: storageError } = await supabase.storage
+      .from('complaint-attachments')
+      .upload(fileName, file);
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('complaint-attachments')
-        .getPublicUrl(fileName);
-
-      // Insert attachment row
-      const { data: attachmentRow, error: attachmentError } = await supabase
-        .from('complaint_attachments')
-        .insert([
-          {
-            complaint_id: complaint.id,
-            file_url: publicUrl,
-            file_type: file.type.startsWith('image') ? 'image' : file.type.startsWith('video') ? 'video' : 'file',
-          },
-        ]);
-
-      if (attachmentError) throw attachmentError;
-
-      uploadedAttachments.push(attachmentRow?.[0]);
+    if (storageError) {
+      console.error('Error uploading file:', fileName, storageError);
+      throw storageError;
     }
 
-    return { complaint, attachments: uploadedAttachments };
+    const { data: { publicUrl } } = supabase.storage
+      .from('complaint-attachments')
+      .getPublicUrl(fileName);
+
+    const { data: attachmentRow, error: attachmentError } = await supabase
+      .from('complaint_attachments')
+      .insert([
+        {
+          complaint_id: complaintRow.id,
+          file_url: publicUrl,
+          file_type: file.type?.startsWith('image') ? 'image' :
+                    file.type?.startsWith('video') ? 'video' : 'file',
+        },
+      ]);
+
+    if (attachmentError) throw attachmentError;
+
+    uploadedAttachments.push(attachmentRow?.[0]);
+  }
+
+    return {  complaint: complaintRow, attachments: uploadedAttachments };
   } catch (err) {
     console.error('Error submitting complaint:', err);
     throw err;
