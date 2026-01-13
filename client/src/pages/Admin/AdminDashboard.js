@@ -72,7 +72,6 @@ const AdminDashboard = () => {
     };
   }, [showDropdown]);
 
-  /* -------------------- Load Tickets -------------------- */
   const loadTickets = async () => {
     try {
       setLoading(true);
@@ -165,47 +164,36 @@ const AdminDashboard = () => {
     setActiveTab(tab);
   };
 
-  /* -------------------- Realtime INSERT -------------------- */
-  useEffect(() => {
-    const channel = supabase
-      .channel('admin-complaints-insert')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'complaints' },
-        (payload) => {
-          if (payload.new.status === activeTab) {
-            setTickets((prev) => [payload.new, ...prev]);
-          }
-        }
-      )
-      .subscribe();
-
-    return () => supabase.removeChannel(channel);
-  }, [activeTab]);
-
-  /* -------------------- UI Handlers -------------------- */
-  // const handleTabClick = (tab) => setActiveTab(tab);
-
-  const handleAssignStaff = (id) => navigate(`/admin/ticket/${id}`);
-  const handleViewProgress = (id) => navigate(`/admin/ticket/${id}`);
-  const handleViewInProgress = (id) => navigate(`/admin/inprogress/${id}`);
-
-  const handleDropdownToggle = () => setShowDropdown(!showDropdown);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('lastActivity');
-    navigate('/auth/login');
+  const handleOpenTicket = (ticketId) => {
+    navigate(`/admin/ticket/${ticketId}`);
   };
 
-  /* -------------------- Status Badge -------------------- */
-  const getStatusBadge = (status) => (
-    <span className={`status-badge status-${status.toLowerCase().replace(' ', '')}`}>
-      {status}
-    </span>
-  );
+  const handleAssignStaff = (ticketId) => {
+    navigate(`/admin/ticket/${ticketId}`);
+  };
+
+  const handleViewInProgress = (ticketId) => {
+    navigate(`/admin/inprogress/${ticketId}`);
+  };
+
+  const handleViewProgress = (ticketId) => {
+    navigate(`/admin/ticket/${ticketId}`);
+  };
+
+  const getStatusBadge = (status) => {
+    if (!status) return null;
+    const statusLower = status.toLowerCase();
+    if (statusLower === 'new') {
+      return <span className="status-badge status-new">New</span>;
+    } else if (statusLower === 'pending') {
+      return <span className="status-badge status-pending">Pending</span>;
+    } else if (statusLower === 'inprogress' || statusLower === 'in progress') {
+      return <span className="status-badge status-inprogress">In Progress</span>;
+    } else if (statusLower === 'resolved') {
+      return <span className="status-badge status-resolved">Resolved</span>;
+    }
+    return <span className="status-badge">{status}</span>;
+  };
 
   const renderActionButton = (ticket) => {
     if (ticket.status === 'Open') {
@@ -281,24 +269,27 @@ const AdminDashboard = () => {
     return `${day}-${month}-${year}`;
   };
 
-  // const handleDropdownToggle = () => {
-  //   setShowDropdown(!showDropdown);
-  // };
+  const handleDropdownToggle = () => {
+    setShowDropdown(!showDropdown);
+  };
 
-  // const handleLogout = async () => {
-  //   await supabase.auth.signOut();
-  //   localStorage.removeItem('token');
-  //   localStorage.removeItem('role');
-  //   localStorage.removeItem('lastActivity');
-  // };
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('lastActivity');
+    navigate('/auth/LoginAdmin');
+  };
 
   // Summary stats for admin dashboard
   const total = tickets.length;
-  const newticket = tickets.filter((c) => c.status === 'Open').length;
-  const pending = tickets.filter((c) => c.status === 'Pending').length;
-  const inProgress = tickets.filter((c) => c.status === 'In Progress').length;
-  const resolved = tickets.filter((c) => c.status === 'Resolved').length;
-  
+  const newticket = tickets.filter((c) => c.status?.toLowerCase() === 'new').length;
+  const pending = tickets.filter((c) => c.status?.toLowerCase() === 'pending').length;
+  const inProgress = tickets.filter((c) => {
+    const status = c.status?.toLowerCase();
+    return status === 'inprogress' || status === 'in progress';
+  }).length;
+  const resolved = tickets.filter((c) => c.status?.toLowerCase() === 'resolved').length;
 
   return (
     <div className="admin-dashboard">
@@ -356,6 +347,30 @@ const AdminDashboard = () => {
                       <div className="stat-value green">{resolved}</div>
                   </div>
               </div>
+      {/* Dashboard */}
+      <div className="content-section">
+        <h3 className="section-title">Dashboard</h3>
+        <div className="stats-row">
+          <div className="stat-card">
+            <div className="stat-label">Total Complaints Received</div>
+            <div className="stat-value">{total}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">New</div>
+            <div className="stat-value blue">{newticket}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Pending</div>
+            <div className="stat-value yellow">{pending}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">In Progress</div>
+            <div className="stat-value orange">{inProgress}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Resolved</div>
+            <div className="stat-value green">{resolved}</div>
+          </div>
         </div>
       </div>
 
@@ -464,6 +479,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Modals */}
+      
       <ViewFeedbackModal 
         open={!!viewFeedback} 
         feedback={viewFeedback}
