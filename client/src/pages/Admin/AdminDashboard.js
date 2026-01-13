@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logoImage from '../../assets/logo.png';
 import userImage from '../../assets/admin.png';
+import { submitComplaint } from '../../modules/complaints/components/complaintService';
 import ViewFeedbackModal from '../../modules/feedback/components/ViewFeedback';
 import './AdminDashboard.css';
 import { supabase } from '../../supabaseClient';
@@ -195,11 +196,7 @@ const AdminDashboard = () => {
   };
 
   const renderActionButton = (ticket) => {
-    if (!ticket.status) return null;
-    
-    const statusLower = ticket.status.toLowerCase();
-    
-    if (statusLower === 'new') {
+    if (ticket.status === 'Open') {
       return (
         <>
           {getStatusBadge(ticket.status)}
@@ -211,7 +208,7 @@ const AdminDashboard = () => {
           </button>
         </>
       );
-    } else if (statusLower === 'pending') {
+    } else if (ticket.status === 'Pending') {
       return (
         <>
           {getStatusBadge(ticket.status)}
@@ -223,7 +220,7 @@ const AdminDashboard = () => {
           </button>
         </>
       );
-    } else if (statusLower === 'inprogress' || statusLower === 'in progress') {
+    } else if (ticket.status === 'In Progress') {
       return (
         <>
           {getStatusBadge(ticket.status)}
@@ -235,7 +232,7 @@ const AdminDashboard = () => {
           </button>
         </>
       );
-    } else if (statusLower === 'resolved') {
+    } else if (ticket.status === 'Resolved') {
       return (
         <>
           {getStatusBadge(ticket.status)}
@@ -251,14 +248,16 @@ const AdminDashboard = () => {
           >
             View Feedback
           </button>
+          <button
+            className="action-button button-primary"
+            onClick={() => setNoFeedback(true)}
+          >
+            View Feedback
+          </button>
         </>
       );
     }
-    return (
-      <>
-        {getStatusBadge(ticket.status)}
-      </>
-    );
+    return null;
   };
 
   const formatDate = (dateString) => {
@@ -293,176 +292,178 @@ const AdminDashboard = () => {
   const resolved = tickets.filter((c) => c.status?.toLowerCase() === 'resolved').length;
 
   return (
-    <div className="admin-dashboard">
-      {/* Header */}
-      <div className="dashboard-header">
-        <div className="header-left">
-          <div className="logo-container">
-            <img src={logoImage} alt="HostelCare Logo" className="logo-icon" />
+      <div className="admin-dashboard">
+        {/* Header */}
+        <div className="dashboard-header">
+          <div className="header-left">
+            <div className="logo-container">
+              <img src={logoImage} alt="HostelCare Logo" className="logo-icon" />
+            </div>
+            <div className="header-title">
+              <h2 className="main-title">Hostel Facilities Management System</h2>
+              <p className="subtitle">Track and manage your complaints</p>
+            </div>
           </div>
-          <div className="header-title">
-            <h2 className="main-title">Hostel Facilities Management System</h2>
-            <p className="subtitle">Track and manage your complaints</p>
+          <div className="header-right" ref={dropdownRef}>
+            <div className="user-profile-container" onClick={handleDropdownToggle}>
+              <img src={userImage} alt="User" className="user-profile" />
+              <span className="dropdown-arrow">▼</span>
+            </div>
+            {showDropdown && (
+              <div className="dropdown-menu">
+                <button className="dropdown-item" onClick={handleLogout}>
+                  <svg className="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
-        <div className="header-right" ref={dropdownRef}>
-          <div className="user-profile-container" onClick={handleDropdownToggle}>
-            <img src={userImage} alt="User" className="user-profile" />
-            <span className="dropdown-arrow">▼</span>
+
+          {/* Dashboard */}
+          <div className="content-section">
+              <h3 className="section-title">Dashboard</h3>
+              <div className="stats-row">
+                    <div className="stat-card">
+                        <div className="stat-label">Total Complaints Received</div>
+                        <div className="stat-value">{total}</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-label">New</div>
+                        <div className="stat-value blue">{newticket}</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-label">Pending</div>
+                        <div className="stat-value yellow">{pending}</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-label">In Progress</div>
+                        <div className="stat-value orange">{inProgress}</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-label">Resolved</div>
+                        <div className="stat-value green">{resolved}</div>
+                    </div>
+                </div>
+              </div>
+        
+        {/* Navigation Tabs */}
+          <div className="navigation-tabs">
+            <button
+              className={`tab-button ${activeTab === 'new' ? 'active' : ''}`}
+              onClick={() => handleTabClick('new')}
+            >
+              New Tickets
+            </button>
+            <button
+              className={`tab-button ${activeTab === 'pending' ? 'active' : ''}`}
+              onClick={() => handleTabClick('pending')}
+            >
+              Pending Tickets
+            </button>
+            <button
+              className={`tab-button ${activeTab === 'inprogress' ? 'active' : ''}`}
+              onClick={() => handleTabClick('inprogress')}
+            >
+              In Progress Tickets
+            </button>
+            <button
+              className={`tab-button ${activeTab === 'resolved' ? 'active' : ''}`}
+              onClick={() => handleTabClick('resolved')}
+            >
+              Resolved Tickets
+            </button>
+            <button
+              className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
+              onClick={() => handleTabClick('all')}
+            >
+              All Tickets
+            </button>
           </div>
-          {showDropdown && (
-            <div className="dropdown-menu">
-              <button className="dropdown-item" onClick={handleLogout}>
-                <svg className="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Logout
-              </button>
+
+        {/* Content Section */}
+        <div className="content-section">
+          <h3 className="section-title">
+            {activeTab === 'all' || activeTab === 'All Tickets' 
+              ? 'All Tickets' 
+              : `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Tickets`}
+          </h3>
+          
+          {/* Debug Info */}
+          <div style={{ padding: '10px', background: '#f0f0f0', marginBottom: '10px', fontSize: '12px' }}>
+            <strong>Debug Info:</strong> 
+            Loading: {loading ? 'Yes' : 'No'} | 
+            Error: {error || 'None'} | 
+            Tickets Count: {tickets.length} | 
+            Active Tab: {activeTab}
+          </div>
+
+          {loading ? (
+            <div className="empty-state">
+              <p className="empty-state-text">Loading tickets...</p>
+            </div>
+          ) : error ? (
+            <div className="empty-state">
+              <p className="empty-state-text" style={{ color: 'red' }}>
+                ❌ Error: {error}
+                <br />
+                <small>Check console for details (Press F12)</small>
+              </p>
+            </div>
+          ) : tickets.length === 0 ? (
+            <div className="empty-state">
+              <p className="empty-state-text">
+                📭 No {activeTab !== 'all' ? activeTab : ''} tickets found
+                <br />
+                <small>Try selecting a different tab or check your database</small>
+              </p>
+            </div>
+          ) : (
+            <div className="tickets-list">
+              {tickets.map((ticket) => (
+                <div key={ticket.id} className="ticket-card">
+                  <div className="ticket-info">
+                    <div className="ticket-description">{ticket.description}</div>
+                    <div className="ticket-id">
+                      <svg
+                        className="ticket-id-icon"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      #{ticket.id}
+                    </div>
+                  </div>
+                  <div className="ticket-actions">
+                    {renderActionButton(ticket)}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
-      </div>
 
-      {/* Dashboard */}
-      <div className="content-section">
-        <h3 className="section-title">Dashboard</h3>
-        <div className="stats-row">
-          <div className="stat-card">
-            <div className="stat-label">Total Complaints Received</div>
-            <div className="stat-value">{total}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">New</div>
-            <div className="stat-value blue">{newticket}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">Pending</div>
-            <div className="stat-value yellow">{pending}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">In Progress</div>
-            <div className="stat-value orange">{inProgress}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">Resolved</div>
-            <div className="stat-value green">{resolved}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Tabs */}
-      <div className="navigation-tabs">
-        <button
-          className={`tab-button ${activeTab === 'new' ? 'active' : ''}`}
-          onClick={() => handleTabClick('new')}
-        >
-          New Tickets
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'pending' ? 'active' : ''}`}
-          onClick={() => handleTabClick('pending')}
-        >
-          Pending Tickets
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'inprogress' ? 'active' : ''}`}
-          onClick={() => handleTabClick('inprogress')}
-        >
-          In Progress Tickets
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'resolved' ? 'active' : ''}`}
-          onClick={() => handleTabClick('resolved')}
-        >
-          Resolved Tickets
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
-          onClick={() => handleTabClick('all')}
-        >
-          All Tickets
-        </button>
-      </div>
-
-      {/* Content Section */}
-      <div className="content-section">
-        <h3 className="section-title">
-          {activeTab === 'all' || activeTab === 'All Tickets' 
-            ? 'All Tickets' 
-            : `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Tickets`}
-        </h3>
+        {/* Modals */}
         
-        {/* Debug Info */}
-        <div style={{ padding: '10px', background: '#f0f0f0', marginBottom: '10px', fontSize: '12px' }}>
-          <strong>Debug Info:</strong> 
-          Loading: {loading ? 'Yes' : 'No'} | 
-          Error: {error || 'None'} | 
-          Tickets Count: {tickets.length} | 
-          Active Tab: {activeTab}
-        </div>
-
-        {loading ? (
-          <div className="empty-state">
-            <p className="empty-state-text">Loading tickets...</p>
-          </div>
-        ) : error ? (
-          <div className="empty-state">
-            <p className="empty-state-text" style={{ color: 'red' }}>
-              ❌ Error: {error}
-              <br />
-              <small>Check console for details (Press F12)</small>
-            </p>
-          </div>
-        ) : tickets.length === 0 ? (
-          <div className="empty-state">
-            <p className="empty-state-text">
-              📭 No {activeTab !== 'all' ? activeTab : ''} tickets found
-              <br />
-              <small>Try selecting a different tab or check your database</small>
-            </p>
-          </div>
-        ) : (
-          <div className="tickets-list">
-            {tickets.map((ticket) => (
-              <div key={ticket.id} className="ticket-card">
-                <div className="ticket-info">
-                  <div className="ticket-description">{ticket.description}</div>
-                  <div className="ticket-id">
-                    <svg
-                      className="ticket-id-icon"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                    #{ticket.id}
-                  </div>
-                </div>
-                <div className="ticket-actions">
-                  {renderActionButton(ticket)}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <ViewFeedbackModal 
+          open={!!viewFeedback} 
+          feedback={viewFeedback}
+          onClose={() => setViewFeedback(null)} 
+        />
+        <NoFeedbackModal
+          open={noFeedback}
+          onClose={() => setNoFeedback(false)}
+        />
       </div>
-      
-      <ViewFeedbackModal 
-        open={!!viewFeedback} 
-        feedback={viewFeedback}
-        onClose={() => setViewFeedback(null)} 
-      />
-      <NoFeedbackModal
-        open={noFeedback}
-        onClose={() => setNoFeedback(false)}
-      />
-    </div>
   );
 };
 
