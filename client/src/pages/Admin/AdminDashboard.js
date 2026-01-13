@@ -24,12 +24,20 @@ const NoFeedbackModal = ({ open, onClose }) => {
 
 /* ==================== Admin Dashboard ==================== */
 const AdminDashboard = () => {
+<<<<<<< HEAD
   const [activeTab, setActiveTab] = useState('new');
+=======
+  const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
+  const [activeTab, setActiveTab] = useState('New');
+>>>>>>> 5c4292046d7ff40891c5fc6f19b45a9338bc5c93
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
   const [viewFeedback, setViewFeedback] = useState(null);
   const [noFeedback, setNoFeedback] = useState(false);
+<<<<<<< HEAD
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -53,11 +61,14 @@ const AdminDashboard = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showDropdown]);
+=======
+>>>>>>> 5c4292046d7ff40891c5fc6f19b45a9338bc5c93
 
   /* -------------------- Load Tickets -------------------- */
   const loadTickets = async () => {
     try {
       setLoading(true);
+<<<<<<< HEAD
       setError(null);
       
       console.log('🔍 Loading tickets for tab:', activeTab);
@@ -135,6 +146,21 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('💥 Error loading tickets:', error);
       setError(error.message || 'Failed to load tickets');
+=======
+
+      let query = supabase.from('complaints').select('*');
+
+      if (activeTab !== 'All') {
+        query = query.eq('status', activeTab);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setTickets(data || []);
+    } catch (err) {
+      console.error('Error loading tickets:', err);
+>>>>>>> 5c4292046d7ff40891c5fc6f19b45a9338bc5c93
       setTickets([]);
     } finally {
       setLoading(false);
@@ -142,10 +168,16 @@ const AdminDashboard = () => {
     }
   };
 
+<<<<<<< HEAD
   const handleTabClick = (tab) => {
     console.log('📑 Tab clicked:', tab);
     setActiveTab(tab);
   };
+=======
+  useEffect(() => {
+    loadTickets();
+  }, [activeTab]);
+>>>>>>> 5c4292046d7ff40891c5fc6f19b45a9338bc5c93
 
   /* -------------------- Realtime INSERT -------------------- */
   useEffect(() => {
@@ -172,6 +204,7 @@ const AdminDashboard = () => {
   const handleViewProgress = (id) => navigate(`/admin/ticket/${id}`);
   const handleViewInProgress = (id) => navigate(`/admin/inprogress/${id}`);
 
+<<<<<<< HEAD
   const getStatusBadge = (status) => {
     if (!status) return null;
     const statusLower = status.toLowerCase();
@@ -266,12 +299,16 @@ const AdminDashboard = () => {
   const handleDropdownToggle = () => {
     setShowDropdown(!showDropdown);
   };
+=======
+  const handleDropdownToggle = () => setShowDropdown(!showDropdown);
+>>>>>>> 5c4292046d7ff40891c5fc6f19b45a9338bc5c93
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('lastActivity');
+<<<<<<< HEAD
     navigate('/auth/LoginAdmin');
   };
 
@@ -284,6 +321,17 @@ const AdminDashboard = () => {
     return status === 'inprogress' || status === 'in progress';
   }).length;
   const resolved = tickets.filter((c) => c.status?.toLowerCase() === 'resolved').length;
+=======
+    navigate('/auth/login');
+  };
+
+  /* -------------------- Status Badge -------------------- */
+  const getStatusBadge = (status) => (
+    <span className={`status-badge status-${status.toLowerCase().replace(' ', '')}`}>
+      {status}
+    </span>
+  );
+>>>>>>> 5c4292046d7ff40891c5fc6f19b45a9338bc5c93
 
   const renderActionButton = (ticket) => {
     if (ticket.status === 'New') {
@@ -372,6 +420,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Dashboard */}
       <div className="content-section">
         <h3 className="section-title">Dashboard</h3>
@@ -396,6 +445,35 @@ const AdminDashboard = () => {
             <div className="stat-label">Resolved</div>
             <div className="stat-value green">{resolved}</div>
           </div>
+=======
+        {/* Dashboard */}
+        <div className="content-section">
+            <h3 className="section-title">Dashboard</h3>
+
+            {/* Summary Cards */}
+            <div className="stats-row">
+                  <div className="stat-card">
+                      <div className="stat-label">Total Complaints Received</div>
+                      <div className="stat-value">{total}</div>
+                  </div>
+                  <div className="stat-card">
+                      <div className="stat-label">New</div>
+                      <div className="stat-value blue">{newticket}</div>
+                  </div>
+                  <div className="stat-card">
+                      <div className="stat-label">Pending</div>
+                      <div className="stat-value yellow">{pending}</div>
+                  </div>
+                  <div className="stat-card">
+                      <div className="stat-label">In Progress</div>
+                      <div className="stat-value orange">{inProgress}</div>
+                  </div>
+                  <div className="stat-card">
+                      <div className="stat-label">Resolved</div>
+                      <div className="stat-value green">{resolved}</div>
+                  </div>
+              </div>
+>>>>>>> 5c4292046d7ff40891c5fc6f19b45a9338bc5c93
         </div>
       </div>
 
@@ -509,7 +587,12 @@ const AdminDashboard = () => {
 
         )}
       </div>
+<<<<<<< HEAD
       
+=======
+
+      {/* Modals */}
+>>>>>>> 5c4292046d7ff40891c5fc6f19b45a9338bc5c93
       <ViewFeedbackModal 
         open={!!viewFeedback} 
         feedback={viewFeedback}
