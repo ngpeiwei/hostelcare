@@ -205,6 +205,7 @@ const AdminDashboard = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('lastActivity');
+    navigate('/auth/LoginAdmin');
   };
 
   // Summary stats for admin dashboard
