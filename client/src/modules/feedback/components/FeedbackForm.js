@@ -35,6 +35,46 @@ export default function FeedbackModal({ open, onClose, complaintId, onSubmitSucc
 
   if (!open) return null;
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError(null);
+  
+  //   if (!satisfaction || !professionalism || !effectiveness || !easeOfUse) {
+  //     setError('Please fill required fields.');
+  //     return;
+  //   }
+  
+  //   setLoading(true);
+  
+  //   try {
+  //     const { data: authData, error: authError } = await supabase.auth.getUser();
+  //     if (authError) throw authError;
+  
+  //     const userId = authData.user.id;
+  
+  //     const { error } = await supabase.from('feedback').insert({
+  //       complaint_id: complaintId,
+  //       user_id: userId,
+  //       overall_rating: satisfaction,
+  //       timeliness_rating: professionalism,
+  //       effectiveness_rating: effectiveness,
+  //       ease_of_use_rating: easeOfUse,
+  //       comment: comments,
+  //     });
+  
+  //     if (error) throw error;
+  
+  //     onSubmitSuccess(); // open success modal, refresh, etc.
+  
+  //   } catch (apiError) {
+  //     console.error('Failed to submit feedback:', apiError);
+  //     setError(apiError.message || 'An error occurred. Please try again.');
+  
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -50,7 +90,19 @@ export default function FeedbackModal({ open, onClose, complaintId, onSubmitSucc
       const { data: authData, error: authError } = await supabase.auth.getUser();
       if (authError) throw authError;
   
-      const userId = authData.user.id;
+      console.log("Auth user:", authData.user);
+  
+      const userId = authData.user?.id;
+      console.log("Using user_id:", userId);
+      console.log("Using complaint_id:", complaintId);
+  
+      const { data: complaintRow } = await supabase
+        .from('complaints')
+        .select('id,status')
+        .eq('id', complaintId)
+        .single();
+  
+      console.log("Complaint row:", complaintRow);
   
       const { error } = await supabase.from('feedback').insert({
         complaint_id: complaintId,
@@ -64,17 +116,16 @@ export default function FeedbackModal({ open, onClose, complaintId, onSubmitSucc
   
       if (error) throw error;
   
-      onSubmitSuccess(); // open success modal, refresh, etc.
+      onSubmitSuccess();
   
     } catch (apiError) {
       console.error('Failed to submit feedback:', apiError);
       setError(apiError.message || 'An error occurred. Please try again.');
-  
     } finally {
       setLoading(false);
     }
-  };  
-
+  };
+  
   const handleClose = () => {
     setSatisfaction(0);
     setProfessionalism(0);

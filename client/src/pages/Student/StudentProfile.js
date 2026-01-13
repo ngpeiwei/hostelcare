@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { supabase } from '../../supabaseClient';
 // import { auth } from '../../services/firebase';
 // import { updateProfile, updateEmail, updatePassword } from 'firebase/auth';
 import './StudentProfile.css';
@@ -7,25 +8,66 @@ import { useNavigate } from 'react-router-dom';
 
 export default function StudentProfile() {
     // initial values
-    const [name, setName] = useState('Tan Xiao Hui');
-    const [phone, setPhone] = useState('+60 12-345 7788');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [isSuccessOpen, setIsSuccessOpen] = useState(false);
     const navigate = useNavigate();
 
     // Email is not editable
-    const email = 'tanxiaohui@student.usm.my';
+    useEffect(() => {
+        const fetchProfile = async () => {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+      
+          if (!user) return;
+      
+          setEmail(user.email);
+      
+          const { data, error } = await supabase
+            .from('users')
+            .select('name, phone')
+            .eq('id', user.id)
+            .single();
+      
+          if (!error && data) {
+            setName(data.name || '');
+            setPhone(data.phone || '');
+          }
+        };
+      
+        fetchProfile();
+      }, []);
 
-    const handleUpdate = (e) => {
+      const handleUpdate = async (e) => {
         e.preventDefault();
-
-        // simulate async save
         setLoading(true);
-        setTimeout(() => {
+      
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+      
+        if (!user) {
             setLoading(false);
-            setIsSuccessOpen(true);
-        }, 700);
-    };
+            return;
+        }
+      
+        const { error } = await supabase
+          .from('users')
+          .update({ name, phone })
+          .eq('id', user.id);
+      
+        setLoading(false);
+      
+        if (!error) {
+          setIsSuccessOpen(true);
+        } else {
+          alert(error.message);
+        }
+      };
+      
 
     const handleSuccessClose = () => {
         setIsSuccessOpen(false);
