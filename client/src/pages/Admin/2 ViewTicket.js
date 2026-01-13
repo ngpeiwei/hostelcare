@@ -190,7 +190,7 @@ const ViewTicket = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('lastActivity');
-    navigate('/auth/LoginAdmin');
+    navigate('/auth/login');
   };
 
   return (
