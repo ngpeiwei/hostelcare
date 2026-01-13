@@ -81,8 +81,23 @@ const AdminDashboard = () => {
       
       // Build the query
       let query = supabase
-        .from('complaints')
-        .select('*');
+      .from('complaints')
+      .select(`
+        id,
+        issue_title,
+        status,
+        created_at,
+        user_id,
+        feedback:feedback!feedback_complaint_id_fkey (
+          id,
+          overall_rating,
+          timeliness_rating,
+          effectiveness_rating,
+          ease_of_use_rating,
+          comment,
+          created_at
+        )
+      `);
 
       // Filter by status based on active tab
       // Database might store "New", "Pending", "In Progress", "Resolved"
@@ -139,7 +154,8 @@ const AdminDashboard = () => {
           category: ticket.category,
           location: ticket.location,
           priority: ticket.priority,
-          userId: ticket.user_id
+          userId: ticket.user_id,
+          feedback: ticket.feedback && ticket.feedback.length > 0 ? ticket.feedback[0] : null,
         };
         return mapped;
       });
@@ -242,11 +258,11 @@ const AdminDashboard = () => {
           <button
             className="action-button button-primary"
             onClick={() => {
-              const sampleFeedback = {
-                satisfaction: 4, professionalism: 5, effectiveness: 3, easeOfUse: 5,
-                comments: 'The staff was very polite and fixed the issue quickly.'
-              };
-              setViewFeedback(sampleFeedback);
+              if (ticket.feedback) {
+                setViewFeedback(ticket.feedback);
+              } else {
+                setNoFeedback(true);
+              }
             }}
           >
             View Feedback
