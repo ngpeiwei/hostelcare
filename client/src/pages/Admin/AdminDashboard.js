@@ -42,12 +42,13 @@ const NoFeedbackModal = ({ open, onClose }) => {
 };
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('Open');
+  const [activeTab, setActiveTab] = useState('new');
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
   const [viewFeedback, setViewFeedback] = useState(null);
   const [noFeedback, setNoFeedback] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -71,56 +72,140 @@ const AdminDashboard = () => {
     };
   }, [showDropdown]);
 
+  /* -------------------- Load Tickets -------------------- */
   const loadTickets = async () => {
     try {
       setLoading(true);
-      const status = activeTab === 'Open' ? 'Open' : activeTab === 'All Tickets' ? 'All' : activeTab;
-      const response = await submitComplaint.getAllComplaints(status);
-      if (response.data) {
-        // Use response directly; remove any hardcoded exclusions so all matching
-        // tickets are shown for the selected status.
-        const results = response.data;
-        setTickets(results);
+      setError(null);
+      
+      console.log('🔍 Loading tickets for tab:', activeTab);
+      console.log('📊 Supabase client:', supabase ? 'Connected' : 'Not connected');
+      
+      // Build the query
+      let query = supabase
+        .from('complaints')
+        .select('*');
+
+      // Filter by status based on active tab
+      // Database might store "New", "Pending", "In Progress", "Resolved"
+      // We need to query the actual DB format, then normalize to lowercase
+      if (activeTab !== 'All Tickets' && activeTab !== 'all') {
+        console.log('🔎 Filtering by status:', activeTab);
+        
+        // Map our lowercase tabs to potential database formats
+        let dbStatus = activeTab;
+        if (activeTab === 'new') dbStatus = 'New';
+        if (activeTab === 'pending') dbStatus = 'Pending';
+        if (activeTab === 'inprogress') dbStatus = 'In Progress';
+        if (activeTab === 'resolved') dbStatus = 'Resolved';
+        
+        console.log('🔎 Querying database with status:', dbStatus);
+        query = query.eq('status', dbStatus);
       }
+
+      // Order by created date
+      query = query.order('created_at', { ascending: false });
+
+      console.log('🚀 Executing query...');
+      const { data, error: fetchError } = await query;
+
+      console.log('📦 Supabase response:', { 
+        dataCount: data?.length, 
+        hasError: !!fetchError,
+        error: fetchError 
+      });
+
+      if (fetchError) {
+        console.error('❌ Supabase error:', fetchError);
+        throw new Error(`Database error: ${fetchError.message}`);
+      }
+
+      if (!data) {
+        console.log('⚠️ No data returned from Supabase');
+        setTickets([]);
+        return;
+      }
+
+      console.log('✅ Raw data from Supabase:', data);
+      console.log('📝 Sample ticket structure:', data[0]);
+
+      // Map Supabase column names to your UI expectations
+      const mappedTickets = data.map(ticket => {
+        const mapped = {
+          id: ticket.id,
+          description: ticket.issue_title || ticket.description || 'No description available',
+          status: ticket.status ? ticket.status.replace(/\s/g, '').toLowerCase() : 'new',
+          staffInCharge: ticket.staff_in_charge || ticket.staffInCharge || null,
+          createdAt: ticket.created_at,
+          updatedAt: ticket.updated_at,
+          category: ticket.category,
+          location: ticket.location,
+          priority: ticket.priority,
+          userId: ticket.user_id
+        };
+        return mapped;
+      });
+
+      console.log('✨ Mapped tickets:', mappedTickets);
+      console.log('📊 Number of tickets to display:', mappedTickets.length);
+      
+      setTickets(mappedTickets);
     } catch (error) {
-      console.error('Error loading tickets:', error);
+      console.error('💥 Error loading tickets:', error);
+      setError(error.message || 'Failed to load tickets');
+      setTickets([]);
     } finally {
       setLoading(false);
+      console.log('✅ Loading complete');
     }
   };
 
   const handleTabClick = (tab) => {
+    console.log('📑 Tab clicked:', tab);
     setActiveTab(tab);
   };
 
-  const handleOpenTicket = (ticketId) => {
-    navigate(`/admin/ticket/${ticketId}`);
+  /* -------------------- Realtime INSERT -------------------- */
+  useEffect(() => {
+    const channel = supabase
+      .channel('admin-complaints-insert')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'complaints' },
+        (payload) => {
+          if (payload.new.status === activeTab) {
+            setTickets((prev) => [payload.new, ...prev]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
+  }, [activeTab]);
+
+  /* -------------------- UI Handlers -------------------- */
+  // const handleTabClick = (tab) => setActiveTab(tab);
+
+  const handleAssignStaff = (id) => navigate(`/admin/ticket/${id}`);
+  const handleViewProgress = (id) => navigate(`/admin/ticket/${id}`);
+  const handleViewInProgress = (id) => navigate(`/admin/inprogress/${id}`);
+
+  const handleDropdownToggle = () => setShowDropdown(!showDropdown);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('lastActivity');
+    navigate('/auth/login');
   };
 
-  const handleAssignStaff = (ticketId) => {
-    navigate(`/admin/ticket/${ticketId}`);
-  };
-
-  const handleViewInProgress = (ticketId) => {
-    navigate(`/admin/inprogress/${ticketId}`);
-  };
-
-  const handleViewProgress = (ticketId) => {
-    navigate(`/admin/ticket/${ticketId}`);
-  };
-
-  const getStatusBadge = (status) => {
-    if (status === 'Open') {
-      return <span className="status-badge status-new">New</span>;
-    } else if (status === 'Pending') {
-      return <span className="status-badge status-pending">Pending</span>;
-    } else if (status === 'In Progress') {
-      return <span className="status-badge status-inprogress">In Progress</span>;
-    } else if (status === 'Resolved') {
-      return <span className="status-badge status-resolved">Resolved</span>;
-    }
-    return null;
-  };
+  /* -------------------- Status Badge -------------------- */
+  const getStatusBadge = (status) => (
+    <span className={`status-badge status-${status.toLowerCase().replace(' ', '')}`}>
+      {status}
+    </span>
+  );
 
   const renderActionButton = (ticket) => {
     if (ticket.status === 'Open') {
@@ -196,16 +281,16 @@ const AdminDashboard = () => {
     return `${day}-${month}-${year}`;
   };
 
-  const handleDropdownToggle = () => {
-    setShowDropdown(!showDropdown);
-  };
+  // const handleDropdownToggle = () => {
+  //   setShowDropdown(!showDropdown);
+  // };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('lastActivity');
-  };
+  // const handleLogout = async () => {
+  //   await supabase.auth.signOut();
+  //   localStorage.removeItem('token');
+  //   localStorage.removeItem('role');
+  //   localStorage.removeItem('lastActivity');
+  // };
 
   // Summary stats for admin dashboard
   const total = tickets.length;
@@ -272,47 +357,79 @@ const AdminDashboard = () => {
                   </div>
               </div>
         </div>
+      </div>
 
       {/* Navigation Tabs */}
-      <div className="navigation-tabs">
-        <button
-          className={`tab-button ${activeTab === 'Open' ? 'active' : ''}`}
-          onClick={() => handleTabClick('Open')}
-        >
-          New Tickets
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'Pending' ? 'active' : ''}`}
-          onClick={() => handleTabClick('Pending')}
-        >
-          Pending Tickets
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'In Progress' ? 'active' : ''}`}
-          onClick={() => handleTabClick('In Progress')}
-        >
-          In Progress Tickets
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'Resolved' ? 'active' : ''}`}
-          onClick={() => handleTabClick('Resolved')}
-        >
-          Resolved Tickets
-        </button>
-      </div>
+        tab-button ${activeTab === 'pending' ? 'active' : ''}`}
+            onClick={() => handleTabClick('pending')}
+          >
+            Pending Tickets
+          </button>
+          <button<div className="navigation-tabs">
+          <button
+            className={`tab-button ${activeTab === 'new' ? 'active' : ''}`}
+            onClick={() => handleTabClick('new')}
+          >
+            New Tickets
+          </button>
+          <button
+            className={
+            className={`tab-button ${activeTab === 'inprogress' ? 'active' : ''}`}
+            onClick={() => handleTabClick('inprogress')}
+          >
+            In Progress Tickets
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'resolved' ? 'active' : ''}`}
+            onClick={() => handleTabClick('resolved')}
+          >
+            Resolved Tickets
+          </button>
+          <button
+            className={`tab-button ${activeTab === 'all' ? 'active' : ''}`}
+            onClick={() => handleTabClick('all')}
+          >
+            All Tickets
+          </button>
+        </div>
+    }
 
       {/* Content Section */}
       <div className="content-section">
-      <h3 className="section-title">
-      {activeTab === 'All Tickets' ? 'All Tickets' : `${activeTab === 'Open' ? 'New' : activeTab} Tickets`}
-      </h3>
+        <h3 className="section-title">
+          {activeTab === 'all' || activeTab === 'All Tickets' 
+            ? 'All Tickets' 
+            : `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Tickets`}
+        </h3>
+        
+        {/* Debug Info */}
+        <div style={{ padding: '10px', background: '#f0f0f0', marginBottom: '10px', fontSize: '12px' }}>
+          <strong>Debug Info:</strong> 
+          Loading: {loading ? 'Yes' : 'No'} | 
+          Error: {error || 'None'} | 
+          Tickets Count: {tickets.length} | 
+          Active Tab: {activeTab}
+        </div>
+
         {loading ? (
           <div className="empty-state">
-            <p className="empty-state-text">Loading...</p>
+            <p className="empty-state-text">Loading tickets...</p>
+          </div>
+        ) : error ? (
+          <div className="empty-state">
+            <p className="empty-state-text" style={{ color: 'red' }}>
+              ❌ Error: {error}
+              <br />
+              <small>Check console for details (Press F12)</small>
+            </p>
           </div>
         ) : tickets.length === 0 ? (
           <div className="empty-state">
-            <p className="empty-state-text">No tickets found</p>
+            <p className="empty-state-text">
+              📭 No {activeTab !== 'all' ? activeTab : ''} tickets found
+              <br />
+              <small>Try selecting a different tab or check your database</small>
+            </p>
           </div>
         ) : (
           <div className="tickets-list">
@@ -345,13 +462,17 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
+
+      {/* Modals */}
       <ViewFeedbackModal 
-          open={!!viewFeedback} 
-          feedback={viewFeedback}
-          onClose={() => setViewFeedback(null)} />
+        open={!!viewFeedback} 
+        feedback={viewFeedback}
+        onClose={() => setViewFeedback(null)} 
+      />
       <NoFeedbackModal
-          open={noFeedback}
-          onClose={() => setNoFeedback(false)}/>
+        open={noFeedback}
+        onClose={() => setNoFeedback(false)}
+      />
     </div>
   );
 };
