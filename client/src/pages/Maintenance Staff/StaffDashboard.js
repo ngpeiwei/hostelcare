@@ -108,13 +108,16 @@ const StaffDashboard = () => {
         loadTickets();
     };
 
+
     const handleDropdownToggle = () => {
         setShowDropdown(!showDropdown);
     };
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
-        localStorage.clear();
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('lastActivity');
         navigate('/auth/login');
     };
 

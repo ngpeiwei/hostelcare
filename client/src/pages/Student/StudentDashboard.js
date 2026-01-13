@@ -182,6 +182,34 @@ const StudentDashboard = () => {
         fetchComplaints();
     }, []);
 
+    useEffect(() => {
+        const channel = supabase
+            .channel('complaint-status-changes')
+            .on(
+            'postgres_changes',
+            {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'complaints'
+            },
+            (payload) => {
+                setComplaints((prev) =>
+                prev.map((c) =>
+                    c.id === payload.new.id
+                    ? { ...c, status: payload.new.status }
+                    : c
+                )
+                );
+            }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+        }, []);
+
+
     const total = complaints.length;
     const newticket = complaints.filter(c => c.status === 'new').length;
     const pending = complaints.filter(c => c.status === 'pending').length;

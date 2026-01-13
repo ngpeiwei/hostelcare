@@ -172,7 +172,7 @@
 
 
 /* --- Comments & Action --- */
-.comments-section label { font-size: 0.95em; font-weight: 600; color: #374151; margin-bottom: 8px; display: block; }
+.comments-section label { font-size: 0.95em; font-weight: 600; color: #374151; margin-bottom: 8px; display: block; margin-top: 8px; }
 .comments-section textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; min-height: 100px; resize: vertical; font-size: 14px; font-family: inherit;; margin-bottom: 30px; }
 
 .action-footer {
