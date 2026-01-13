@@ -151,48 +151,27 @@ const TicketDetails = () => {
         return;
       }
 
-      console.log('💾 Saving ticket assignment:', formData);
+      console.log('💾 Saving ticket changes:', formData);
       console.log('📝 Ticket ID:', id);
       
-      // First, update the complaint status
-      const { data: complaintData, error: complaintError } = await supabase
+      // Update the ticket in Supabase
+      const { data, error } = await supabase
         .from('complaints')
         .update({
+          actions_to_be_taken: formData.actionsToBeTaken,
+          estimated_service_date: formData.estimatedServiceDate,
           status: formData.status,
           updated_at: new Date().toISOString()
         })
         .eq('id', id)
-        .select()
-        .single();
-
-      if (complaintError) {
-        console.error('❌ Error updating complaint:', complaintError);
-        throw complaintError;
-      }
-
-      console.log('✅ Complaint updated:', complaintData);
-
-      // Get the user_id from the complaint
-      const userId = complaintData.user_id;
-
-      // Insert into ticket_assignment table
-      const { data: assignmentData, error: assignmentError } = await supabase
-        .from('ticket_assignment')
-        .insert({
-          user_id: userId,
-          complaint_id: id,
-          staff_id: formData.staffInCharge, // Assuming this is the staff ID or use a separate staffId field
-          staffName: formData.staffInCharge, // The staff name selected
-          assigned_at: new Date().toISOString()
-        })
         .select();
 
-      if (assignmentError) {
-        console.error('❌ Error creating assignment:', assignmentError);
-        throw assignmentError;
+      if (error) {
+        console.error('❌ Update error:', error);
+        throw error;
       }
 
-      console.log('✅ Assignment created successfully:', assignmentData);
+      console.log('✅ Ticket updated successfully:', data);
       
       setShowSuccess(true);
       setTimeout(() => {
@@ -200,8 +179,8 @@ const TicketDetails = () => {
         navigate('/admin/dashboard');
       }, 2000);
     } catch (error) {
-      console.error('💥 Error saving ticket assignment:', error);
-      alert(`Failed to save assignment: ${error.message}. Please try again.`);
+      console.error('💥 Error updating ticket:', error);
+      alert(`Failed to update ticket: ${error.message}. Please try again.`);
     }
   };
 
