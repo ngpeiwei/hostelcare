@@ -99,7 +99,7 @@ const StudentTracker = () => {
                     ← Back to Dashboard
                 </button>
 
-                <h3 className="section-title-update">Tracking Complaint: #{ticket.id}</h3>
+                <h3 className="section-title-update">Tracking Complaint: #{ticket.id.slice(0, 8).toUpperCase()}</h3>
 
                 <div className="ticket-details-block">
                     <ProgressBar history={history} currentStatus={ticket.status} />
