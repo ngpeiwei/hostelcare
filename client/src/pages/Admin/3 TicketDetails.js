@@ -42,7 +42,7 @@ const TicketDetails = () => {
     const { data, error } = await supabase
       .from('users')
       .select('id, name')
-      .eq('role', 'Staff');
+      .eq('role', 'staff');
 
     if (error) {
       console.error('❌ Error loading staff:', error);
