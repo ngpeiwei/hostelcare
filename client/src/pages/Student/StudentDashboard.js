@@ -132,6 +132,15 @@ const StudentDashboard = () => {
                 complaint_attachments (
                 file_url,
                 file_type
+                ),
+                feedback:feedback!feedback_complaint_id_fkey (
+                id,
+                overall_rating,
+                timeliness_rating,
+                effectiveness_rating,
+                ease_of_use_rating,
+                comment,
+                created_at
                 )
             `)
             .eq('user_id', user.id)
@@ -141,19 +150,29 @@ const StudentDashboard = () => {
 
             // Map DB → UI format
             const mapped = data.map(c => ({
-            id: c.id,
-            title: c.issue_title,
-            category: c.category,
-            subCategory: c.sub_category,
-            hostel: c.hostel,
-            buildingRoom: c.building_room_number,
-            status: c.status.replace(/\s/g, '').toLowerCase(),
-            dateCreated: c.created_at,
-            attachments: c.complaint_attachments,
-            feedback: null, // later join feedback table
-            }));
-
+                id: c.id,
+                title: c.issue_title,
+                category: c.category,
+                subCategory: c.sub_category,
+                hostel: c.hostel,
+                buildingRoom: c.building_room_number,
+                status: c.status.replace(/\s/g, '').toLowerCase(),
+                dateCreated: c.created_at,
+                attachments: c.complaint_attachments,
+                feedback: c.feedback && c.feedback.length > 0
+                    ? {
+                        id: c.feedback[0].id,
+                        overall_rating: c.feedback[0].overall_rating,
+                        timeliness_rating: c.feedback[0].timeliness_rating,
+                        effectiveness_rating: c.feedback[0].effectiveness_rating,
+                        ease_of_use_rating: c.feedback[0].ease_of_use_rating,
+                        comment: c.feedback[0].comment,
+                        created_at: c.feedback[0].created_at,
+                    }
+                    : null,
+            }));            
             setComplaints(mapped);
+
         } catch (err) {
             console.error('Failed to fetch complaints:', err);
         }
@@ -168,7 +187,7 @@ const StudentDashboard = () => {
     const pending = complaints.filter(c => c.status === 'pending').length;
     const inProgress = complaints.filter(c => c.status === 'inprogress').length;
     const resolved = complaints.filter(c => c.status === 'resolved').length;
-
+    
     return (
         <div className={`student-dashboard`}>
             {/* Header */}
