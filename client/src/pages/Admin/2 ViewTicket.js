@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ViewTicket.css';
-import complaintService from '../../modules/complaints/components/complaintService';
+import { supabase } from '../../supabaseClient';
 import userImage from '../../assets/admin.png';
 import logoImage from '../../assets/logo.png';
 
@@ -10,6 +10,7 @@ const ViewTicket = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -36,13 +37,45 @@ const ViewTicket = () => {
   const loadTickets = async () => {
     try {
       setLoading(true);
-      const status = activeTab === 'New' ? 'New' : activeTab === 'All Tickets' ? 'All' : activeTab;
-      const response = await complaintService.getAllComplaints(status);
-      if (response.data) {
-        setTickets(response.data);
+      setError(null);
+      
+      console.log('🔍 Loading tickets for tab:', activeTab);
+      
+      let query = supabase
+        .from('complaints')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      // Filter by status based on active tab
+      if (activeTab !== 'All Tickets') {
+        console.log('🔎 Filtering by status:', activeTab);
+        query = query.eq('status', activeTab);
       }
+
+      const { data, error: fetchError } = await query;
+
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      // Map Supabase column names to your UI expectations
+      const mappedTickets = data.map(ticket => ({
+        id: ticket.id,
+        description: ticket.issue_title || ticket.description || 'No description available',
+        status: ticket.status,
+        staffInCharge: ticket.staff_in_charge || ticket.staffInCharge || null,
+        createdAt: ticket.created_at,
+        updatedAt: ticket.updated_at,
+        category: ticket.category,
+        location: ticket.location,
+        priority: ticket.priority,
+        userId: ticket.user_id
+      }));
+
+      setTickets(mappedTickets);
     } catch (error) {
       console.error('Error loading tickets:', error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -69,10 +102,12 @@ const ViewTicket = () => {
   };
 
   const getStatusBadge = (status) => {
-    if (status === 'Open') {
-      return <span className="status-badge status-open">Open</span>;
+    if (status === 'Open' || status === 'New') {
+      return <span className="status-badge status-open">New</span>;
     } else if (status === 'Pending') {
       return <span className="status-badge status-pending">Pending</span>;
+    } else if (status === 'In Progress') {
+      return <span className="status-badge status-inprogress">In Progress</span>;
     } else if (status === 'Resolved') {
       return <span className="status-badge status-resolved">Resolved</span>;
     }
@@ -80,7 +115,7 @@ const ViewTicket = () => {
   };
 
   const renderActionButton = (ticket) => {
-    if (ticket.status === 'Open') {
+    if (ticket.status === 'Open' || ticket.status === 'New') {
       return (
         <>
           <button
@@ -106,6 +141,18 @@ const ViewTicket = () => {
             onClick={() => handleViewProgress(ticket.id)}
           >
             {ticket.staffInCharge ? 'View Progress' : 'View Details'}
+          </button>
+        </>
+      );
+    } else if (ticket.status === 'In Progress') {
+      return (
+        <>
+          {getStatusBadge(ticket.status)}
+          <button
+            className="action-button button-primary"
+            onClick={() => handleViewProgress(ticket.id)}
+          >
+            View Progress
           </button>
         </>
       );
@@ -138,10 +185,11 @@ const ViewTicket = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const handleLogout = () => {
-    // Clear any stored authentication tokens
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem('token');
-    // Navigate to LoginAdmin page
+    localStorage.removeItem('role');
+    localStorage.removeItem('lastActivity');
     navigate('/auth/LoginAdmin');
   };
 
@@ -191,6 +239,12 @@ const ViewTicket = () => {
           Pending Tickets
         </button>
         <button
+          className={`tab-button ${activeTab === 'In Progress' ? 'active' : ''}`}
+          onClick={() => handleTabClick('In Progress')}
+        >
+          In Progress Tickets
+        </button>
+        <button
           className={`tab-button ${activeTab === 'Resolved' ? 'active' : ''}`}
           onClick={() => handleTabClick('Resolved')}
         >
@@ -212,6 +266,10 @@ const ViewTicket = () => {
         {loading ? (
           <div className="empty-state">
             <p className="empty-state-text">Loading...</p>
+          </div>
+        ) : error ? (
+          <div className="empty-state">
+            <p className="empty-state-text" style={{ color: 'red' }}>Error: {error}</p>
           </div>
         ) : tickets.length === 0 ? (
           <div className="empty-state">
@@ -253,5 +311,3 @@ const ViewTicket = () => {
 };
 
 export default ViewTicket;
-
-
