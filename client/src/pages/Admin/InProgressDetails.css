@@ -198,6 +198,22 @@
     background-color: #15803d;
 }
 
+/* Reopen Button*/
+.btn-reopen-ticket {
+    background-color: #16a34a; 
+    color: white;
+    padding: 10px 25px;
+    border: 1px solid #16a34a;
+    border-radius: 8px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-reopen-ticket:hover {
+    background-color: #15803d;
+}
+
 /* Save Button */
 .btn-save-progress {
     background-color: #ffffff; 
