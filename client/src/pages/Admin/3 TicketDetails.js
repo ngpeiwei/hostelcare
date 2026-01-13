@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './TicketDetails.css';
-import { submitComplaint } from '../../modules/complaints/components/complaintService';
+import { supabase } from '../../supabaseClient';
 import userImage from '../../assets/admin.png';
 import logoImage from '../../assets/logo.png';
 
@@ -19,13 +19,16 @@ const TicketDetails = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  
   const handleDropdownToggle = () => {
     setShowDropdown(!showDropdown);
   };
-  const handleLogout = () => {
-    // Clear any stored authentication tokens
+  
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem('token');
-    // Navigate to LoginAdmin page
+    localStorage.removeItem('role');
+    localStorage.removeItem('lastActivity');
     navigate('/auth/LoginAdmin');
   };
 
@@ -53,18 +56,70 @@ const TicketDetails = () => {
   const loadTicket = async () => {
     try {
       setLoading(true);
-      const response = await submitComplaint.getComplaintById(id);
-      if (response.data) {
-        setTicket(response.data);
-        setFormData({
-          staffInCharge: response.data.staffInCharge || '',
-          actionsToBeTaken: response.data.actionsToBeTaken || '',
-          estimatedServiceDate: convertDateToInputFormat(response.data.estimatedServiceDate) || '',
-          status: response.data.status || 'Open'
-        });
+      console.log('🔍 Loading ticket with ID:', id);
+      
+      // Fetch ticket with related data
+      // Note: If you have multiple foreign keys to users, specify which one to use
+      const { data, error } = await supabase
+        .from('complaints')
+        .select(`
+          *,
+          complaint_attachments (
+            file_url,
+            file_type
+          )
+        `)
+        .eq('id', id)
+        .single();
+      
+      // Fetch user data separately if needed
+      let userData = null;
+      if (data && data.user_id) {
+        const { data: user } = await supabase
+          .from('users')
+          .select('name, email, phone')
+          .eq('id', data.user_id)
+          .single();
+        userData = user;
       }
+
+      if (error) {
+        console.error('❌ Supabase error:', error);
+        throw error;
+      }
+
+      console.log('✅ Ticket data:', data);
+
+      // Map Supabase data to UI format
+      const mappedTicket = {
+        id: data.id,
+        description: data.issue_title || data.description || 'No description',
+        detailedDescription: data.detailed_description || data.description,
+        dateCreated: data.created_at,
+        name: userData?.name || 'N/A',
+        email: userData?.email || 'N/A',
+        phoneNumber: userData?.phone || 'N/A',
+        category: data.category || 'N/A',
+        subCategory: data.sub_category || 'N/A',
+        hostel: data.hostel || 'Desasiswa Tekun',
+        buildingRoom: data.building_room_number || 'N/A',
+        attachments: data.complaint_attachments?.map(att => att.file_url) || [],
+        staffInCharge: data.staff_in_charge || '',
+        actionsToBeTaken: data.actions_to_be_taken || '',
+        estimatedServiceDate: data.estimated_service_date || '',
+        status: data.status || 'New'
+      };
+
+      setTicket(mappedTicket);
+      setFormData({
+        staffInCharge: mappedTicket.staffInCharge,
+        actionsToBeTaken: mappedTicket.actionsToBeTaken,
+        estimatedServiceDate: convertDateToInputFormat(mappedTicket.estimatedServiceDate),
+        status: mappedTicket.status
+      });
     } catch (error) {
-      console.error('Error loading ticket:', error);
+      console.error('💥 Error loading ticket:', error);
+      alert('Failed to load ticket details. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -80,19 +135,73 @@ const TicketDetails = () => {
 
   const handleSave = async () => {
     try {
-      const updateData = {
-        ...ticket,
-        ...formData
-      };
-      await submitComplaint.updateComplaint(id, updateData);
+      // Validation: Make sure staff is assigned
+      if (!formData.staffInCharge) {
+        alert('Please assign a Staff-In-Charge before saving.');
+        return;
+      }
+
+      if (!formData.actionsToBeTaken) {
+        alert('Please enter Actions to be taken before saving.');
+        return;
+      }
+
+      if (!formData.estimatedServiceDate) {
+        alert('Please select an Estimated Service Date before saving.');
+        return;
+      }
+
+      console.log('💾 Saving ticket assignment:', formData);
+      console.log('📝 Ticket ID:', id);
+      
+      // First, update the complaint status
+      const { data: complaintData, error: complaintError } = await supabase
+        .from('complaints')
+        .update({
+          status: formData.status,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (complaintError) {
+        console.error('❌ Error updating complaint:', complaintError);
+        throw complaintError;
+      }
+
+      console.log('✅ Complaint updated:', complaintData);
+
+      // Get the user_id from the complaint
+      const userId = complaintData.user_id;
+
+      // Insert into ticket_assignment table
+      const { data: assignmentData, error: assignmentError } = await supabase
+        .from('ticket_assignment')
+        .insert({
+          user_id: userId,
+          complaint_id: id,
+          staff_id: formData.staffInCharge, // Assuming this is the staff ID or use a separate staffId field
+          staffName: formData.staffInCharge, // The staff name selected
+          assigned_at: new Date().toISOString()
+        })
+        .select();
+
+      if (assignmentError) {
+        console.error('❌ Error creating assignment:', assignmentError);
+        throw assignmentError;
+      }
+
+      console.log('✅ Assignment created successfully:', assignmentData);
+      
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
         navigate('/admin/dashboard');
       }, 2000);
     } catch (error) {
-      console.error('Error updating ticket:', error);
-      alert('Failed to update ticket. Please try again.');
+      console.error('💥 Error saving ticket assignment:', error);
+      alert(`Failed to save assignment: ${error.message}. Please try again.`);
     }
   };
 
@@ -105,17 +214,19 @@ const TicketDetails = () => {
     return `${day}-${month}-${year}`;
   };
 
-  const handleDownload = (filename) => {
-    // In a real application, this would download the file from the server
-    console.log('Downloading:', filename);
-    alert(`Downloading ${filename}`);
+  const handleDownload = (fileUrl) => {
+    if (fileUrl) {
+      window.open(fileUrl, '_blank');
+    } else {
+      alert('File not available');
+    }
   };
 
   if (loading) {
     return (
       <div className="ticket-details-page">
         <div className="ticket-details-content">
-          <p>Loading...</p>
+          <p>Loading ticket details...</p>
         </div>
       </div>
     );
@@ -126,6 +237,7 @@ const TicketDetails = () => {
       <div className="ticket-details-page">
         <div className="ticket-details-content">
           <p>Ticket not found</p>
+          <button onClick={() => navigate('/admin/dashboard')}>Back to Dashboard</button>
         </div>
       </div>
     );
@@ -283,7 +395,7 @@ const TicketDetails = () => {
               <input
                 type="text"
                 className="form-input"
-                value={"Desasiswa Tekun"}
+                value={ticket.hostel}
                 disabled
               />
             </div>
@@ -298,7 +410,7 @@ const TicketDetails = () => {
               <input
                 type="text"
                 className="form-input"
-                value={"+60102355511"}
+                value={ticket.phoneNumber}
                 disabled
               />
             </div>
@@ -314,7 +426,7 @@ const TicketDetails = () => {
               <input
                 type="text"
                 className="form-input"
-                value={"M04-09-12A"}
+                value={ticket.buildingRoom}
                 disabled
               />
             </div>
@@ -342,14 +454,18 @@ const TicketDetails = () => {
               </label>
               {ticket.attachments && ticket.attachments.length > 0 ? (
                 <div className="attachment-group">
-                  <span className="attachment-name">{ticket.attachments[0]}</span>
-                  <button
-                    type="button"
-                    className="download-button"
-                    onClick={() => handleDownload(ticket.attachments[0])}
-                  >
-                    Download
-                  </button>
+                  {ticket.attachments.map((fileUrl, index) => (
+                    <div key={index} style={{ marginBottom: '10px' }}>
+                      <span className="attachment-name">Attachment {index + 1}</span>
+                      <button
+                        type="button"
+                        className="download-button"
+                        onClick={() => handleDownload(fileUrl)}
+                      >
+                        Download
+                      </button>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <span className="attachment-name">No attachments</span>
