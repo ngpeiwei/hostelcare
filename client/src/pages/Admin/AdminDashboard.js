@@ -408,14 +408,14 @@ const AdminDashboard = () => {
             : `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Tickets`}
         </h3>
         
-        {/* Debug Info */}
+        {/* Debug Info
         <div style={{ padding: '10px', background: '#f0f0f0', marginBottom: '10px', fontSize: '12px' }}>
           <strong>Debug Info:</strong> 
           Loading: {loading ? 'Yes' : 'No'} | 
           Error: {error || 'None'} | 
           Tickets Count: {tickets.length} | 
           Active Tab: {activeTab}
-        </div>
+        </div> */}
 
         {loading ? (
           <div className="empty-state">
