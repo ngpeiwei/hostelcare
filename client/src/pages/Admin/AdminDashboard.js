@@ -109,7 +109,7 @@ const AdminDashboard = () => {
         let dbStatus = activeTab;
         if (activeTab === 'new') dbStatus = 'New';
         if (activeTab === 'pending') dbStatus = 'Pending';
-        if (activeTab === 'inprogress') dbStatus = 'In Progress';
+        if (activeTab === 'In Progress') dbStatus = 'In Progress';
         if (activeTab === 'resolved') dbStatus = 'Resolved';
         
         console.log('🔎 Querying database with status:', dbStatus);
@@ -188,7 +188,7 @@ const AdminDashboard = () => {
   };
 
   const handleViewInProgress = (ticketId) => {
-    navigate(`/admin/inprogress/${ticketId}`);
+    navigate(`/admin/In Progress/${ticketId}`);
   };
 
   const handleViewProgress = (ticketId) => {
@@ -202,8 +202,8 @@ const AdminDashboard = () => {
       return <span className="status-badge status-new">New</span>;
     } else if (statusLower === 'pending') {
       return <span className="status-badge status-pending">Pending</span>;
-    } else if (statusLower === 'inprogress' || statusLower === 'in progress') {
-      return <span className="status-badge status-inprogress">In Progress</span>;
+    } else if (statusLower === 'In Progress' || statusLower === 'In Progress') {
+      return <span className="status-badge status-In Progress">In Progress</span>;
     } else if (statusLower === 'resolved') {
       return <span className="status-badge status-resolved">Resolved</span>;
     }
@@ -239,7 +239,7 @@ const AdminDashboard = () => {
           </button>
         </>
       );
-    } else if (statusLower === 'inprogress' || statusLower === 'in progress') {
+    } else if (statusLower === 'In Progress' || statusLower === 'In Progress') {
       return (
         <>
           {getStatusBadge(ticket.status)}
@@ -304,7 +304,7 @@ const AdminDashboard = () => {
   const pending = tickets.filter((c) => c.status?.toLowerCase() === 'pending').length;
   const inProgress = tickets.filter((c) => {
     const status = c.status?.toLowerCase();
-    return status === 'inprogress' || status === 'in progress';
+    return status === 'In Progress' || status === 'In Progress';
   }).length;
   const resolved = tickets.filter((c) => c.status?.toLowerCase() === 'resolved').length;
 
@@ -381,8 +381,8 @@ const AdminDashboard = () => {
           Pending Tickets
         </button>
         <button
-          className={`tab-button ${activeTab === 'inprogress' ? 'active' : ''}`}
-          onClick={() => handleTabClick('inprogress')}
+          className={`tab-button ${activeTab === 'In Progress' ? 'active' : ''}`}
+          onClick={() => handleTabClick('In Progress')}
         >
           In Progress Tickets
         </button>
@@ -408,14 +408,14 @@ const AdminDashboard = () => {
             : `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Tickets`}
         </h3>
         
-        {/* Debug Info */}
+        {/* Debug Info
         <div style={{ padding: '10px', background: '#f0f0f0', marginBottom: '10px', fontSize: '12px' }}>
           <strong>Debug Info:</strong> 
           Loading: {loading ? 'Yes' : 'No'} | 
           Error: {error || 'None'} | 
           Tickets Count: {tickets.length} | 
           Active Tab: {activeTab}
-        </div>
+        </div> */}
 
         {loading ? (
           <div className="empty-state">
@@ -432,9 +432,9 @@ const AdminDashboard = () => {
         ) : tickets.length === 0 ? (
           <div className="empty-state">
             <p className="empty-state-text">
-              📭 No {activeTab !== 'all' ? activeTab : ''} tickets found
+              📭 No tickets found
               <br />
-              <small>Try selecting a different tab or check your database</small>
+              {/* <small>Try selecting a different tab or check your database</small> */}
             </p>
           </div>
         ) : (
