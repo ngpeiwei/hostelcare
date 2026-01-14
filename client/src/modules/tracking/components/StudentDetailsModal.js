@@ -20,7 +20,7 @@ const StudentDetailsModal = ({ open, onClose, complaintData }) => {
         <div className="modal-backdrop-student">
             <div className="modal-content-student">
                 <div className="modal-header-student">
-                    <h3 className="modal-title-student">Complaint Details: #{complaintData.id}</h3>
+                    <h3 className="modal-title-student">Complaint Details: #{complaintData.id.slice(0, 8).toUpperCase()}</h3>
                     <button className="close-btn-student" onClick={onClose}>&times;</button>
                 </div>
 
