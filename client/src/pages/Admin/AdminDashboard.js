@@ -432,9 +432,9 @@ const AdminDashboard = () => {
         ) : tickets.length === 0 ? (
           <div className="empty-state">
             <p className="empty-state-text">
-              📭 No {activeTab !== 'all' ? activeTab : ''} tickets found
+              📭 No tickets found
               <br />
-              <small>Try selecting a different tab or check your database</small>
+              {/* <small>Try selecting a different tab or check your database</small> */}
             </p>
           </div>
         ) : (
