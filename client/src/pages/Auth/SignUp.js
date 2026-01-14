@@ -38,7 +38,8 @@ export default function SignUp() {
 		email,
 		password,
 		options: {
-			data: { name, phone } // optional metadata in Auth
+			data: { name, phone }, // optional metadata in Auth
+			emailRedirectTo: 'https://hostelcare-green.vercel.app/login'
 		}
 		});
 
