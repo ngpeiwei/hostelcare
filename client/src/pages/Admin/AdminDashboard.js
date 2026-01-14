@@ -88,7 +88,7 @@ const AdminDashboard = () => {
         status,
         created_at,
         user_id,
-        feedback:feedback!feedback_complaint_id_fkey (
+        feedback (
           id,
           overall_rating,
           timeliness_rating,
@@ -142,8 +142,8 @@ const AdminDashboard = () => {
       console.log('✅ Raw data from Supabase:', data);
       console.log('📝 Sample ticket structure:', data[0]);
 
-      // Map Supabase column names to your UI expectations
       const mappedTickets = data.map(ticket => {
+        const feedbackData = Array.isArray(ticket.feedback) ? ticket.feedback[0] : ticket.feedback;
         const mapped = {
           id: ticket.id,
           description: ticket.issue_title || ticket.description || 'No description available',
@@ -155,7 +155,7 @@ const AdminDashboard = () => {
           location: ticket.location,
           priority: ticket.priority,
           userId: ticket.user_id,
-          feedback: ticket.feedback && ticket.feedback.length > 0 ? ticket.feedback[0] : null,
+          feedback: feedbackData ? feedbackData : null,
         };
         return mapped;
       });
