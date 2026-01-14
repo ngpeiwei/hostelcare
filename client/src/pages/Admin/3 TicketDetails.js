@@ -185,7 +185,7 @@ const TicketDetails = () => {
       const { data: assignmentData, error: assignmentError } = await supabase
         .from('ticket_assignments')
         .insert({
-          complaint_id: ticket.id,
+          ticket_id: id, // Link to complaints.id
           staff_id: formData.staffInCharge,
           actions_to_be_taken: formData.actionsToBeTaken,
           estimated_service_date: formData.estimatedServiceDate,
