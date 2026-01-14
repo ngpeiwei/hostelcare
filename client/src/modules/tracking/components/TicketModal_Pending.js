@@ -180,7 +180,7 @@ const TicketModal_Pending = ({ open, onClose, ticketData, onUpdateStatus }) => {
             {/* Row 2 */}
             <div className="detail-group">
               <label>Ticket ID</label>
-              <input type="text" value={`#${t.id}`} readOnly />
+              <input type="text" value={`#${t.id.slice(0, 8).toUpperCase()}`} readOnly />
             </div>
 
             <div className="detail-group">

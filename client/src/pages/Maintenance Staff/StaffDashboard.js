@@ -264,7 +264,8 @@ const StaffDashboard = () => {
                             <div key={ticket.id} className="ticket-card">
                                 <div className="ticket-info">
                                     <div className="ticket-description">{ticket.title}</div>
-                                    <div className="ticket-id">#{ticket.id}</div>
+                                    {/* <div className="ticket-id">#{ticket.id}</div> */}
+                                    <div className="ticket-id">#{ticket.id.slice(0, 8).toUpperCase()}</div>
                                 </div>
                                 {renderActionButton(ticket)}
                             </div>
