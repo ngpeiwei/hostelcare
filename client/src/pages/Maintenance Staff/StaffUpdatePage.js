@@ -167,9 +167,9 @@ const StaffUpdatePage = () => {
     setIsSuccessOpen(true);
   };
 
-  if (!ticket) {
-    return <div className="loading-state">Loading Ticket #{id}...</div>;
-  }
+  // if (!ticket) {return <div className="loading-state">Loading Ticket #{id}...</div>;}
+  if (!ticket) return null; // nothing shows while loading
+
 
   return (
     <div className="staff-update-page">

@@ -206,7 +206,7 @@ const TicketDetails = () => {
     return (
       <div className="ticket-details-page">
         <div className="ticket-details-content">
-          <p>Loading ticket details...</p>
+          {/* <p>Loading ticket details...</p> */}
         </div>
       </div>
     );

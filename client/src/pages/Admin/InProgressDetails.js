@@ -92,7 +92,9 @@ const InProgressDetails = () => {
     fetchAll();
   }, [id]);
 
-  if (loading) return <div className="loading-state">Loading Ticket...</div>;
+  // if (loading) return <div className="loading-state">Loading Ticket...</div>;
+  if (loading) return null; // nothing show while loading
+  
   if (!ticket) return <div className="loading-state">Ticket not found.</div>;
 
   /* ===============================

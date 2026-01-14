@@ -88,8 +88,9 @@ const StudentTracker = () => {
         fetchData();
     }, [id]);
 
-    if (!ticket) return <div className="loading-state">Loading Complaint...</div>;
-
+    // if (!ticket) return <div className="loading-state">Loading Complaint...</div>;
+    if (!ticket) return null; // nothing shows while loading
+    
     return (
         <div className="student-tracker-page">
             <Header />
