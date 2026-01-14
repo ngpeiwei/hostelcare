@@ -55,7 +55,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/auth/signUp" element={<SignUp />} />
-      <Route path="/auth/login" element={<Login />} />
+      <Route path="/auth/Login" element={<Login />} />
 
       <Route path="/student/dashboard" element={<ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>} />
       <Route path="/student/StudentProfile" element={<ProtectedRoute role="student"><StudentProfile /></ProtectedRoute>} />
