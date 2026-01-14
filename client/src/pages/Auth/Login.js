@@ -15,44 +15,44 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const handleMagicLinkLogin = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+  // useEffect(() => {
+  //   const handleMagicLinkLogin = async () => {
+  //     const { data: { session } } = await supabase.auth.getSession();
 
-      if (session) {
-        // Fetch user role
-        const { data: userData, error } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
+  //     if (session) {
+  //       // Fetch user role
+  //       const { data: userData, error } = await supabase
+  //         .from('users')
+  //         .select('*')
+  //         .eq('id', session.user.id)
+  //         .single();
 
-        if (error) return;
+  //       if (error) return;
 
-        // Store session info
-        localStorage.setItem('token', session.access_token);
-        localStorage.setItem('role', userData.role);
-        localStorage.setItem('lastActivity', Date.now());
+  //       // Store session info
+  //       localStorage.setItem('token', session.access_token);
+  //       localStorage.setItem('role', userData.role);
+  //       localStorage.setItem('lastActivity', Date.now());
 
-        // Role-based redirect
-        switch (userData.role) {
-          case 'student':
-            navigate('/student/dashboard', { replace: true });
-            break;
-          case 'staff':
-            navigate('/staff/dashboard', { replace: true });
-            break;
-          case 'admin':
-            navigate('/admin/dashboard', { replace: true });
-            break;
-          default:
-            navigate('/', { replace: true });
-        }
-      }
-    };
+  //       // Role-based redirect
+  //       switch (userData.role) {
+  //         case 'student':
+  //           navigate('/student/dashboard', { replace: true });
+  //           break;
+  //         case 'staff':
+  //           navigate('/staff/dashboard', { replace: true });
+  //           break;
+  //         case 'admin':
+  //           navigate('/admin/dashboard', { replace: true });
+  //           break;
+  //         default:
+  //           navigate('/', { replace: true });
+  //       }
+  //     }
+  //   };
 
-    handleMagicLinkLogin();
-  }, [navigate]);
+  //   handleMagicLinkLogin();
+  // }, [navigate]);
   
   const validate = () => {
     if (!email) return 'Please enter your email.';
